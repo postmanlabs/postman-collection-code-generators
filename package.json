@@ -20,5 +20,23 @@
   "bugs": {
     "url": "https://github.com/umeshp7/postman-collection-code-generators/issues"
   },
-  "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme"
+  "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme",
+  "dependencies": {
+    "async": "^3.2.0",
+    "node-fetch": "^2.6.0",
+    "postman-collection": "^3.6.2",
+    "shelljs": "^0.8.4"
+  },
+  "devDependencies": {
+    "chalk": "^4.0.0",
+    "eslint": "^7.1.0",
+    "eslint-plugin-jsdoc": "^27.0.4",
+    "eslint-plugin-lodash": "^7.1.0",
+    "eslint-plugin-security": "^1.4.0",
+    "istanbul": "^0.4.5",
+    "lodash": "^4.17.15",
+    "mocha": "^7.2.0",
+    "nyc": "^15.1.0",
+    "recursive-readdir": "^2.2.2"
+  }
 }
