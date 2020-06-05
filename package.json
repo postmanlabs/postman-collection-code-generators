@@ -4,7 +4,8 @@
   "description": "Repository for generating code from Postman Collection.",
   "main": "index.js",
   "scripts": {
-    "test": "node npm/test.js"
+    "test": "node npm/test.js",
+    "boilerplate": "node npm/boilerplate.js"
   },
   "repository": {
     "type": "git",
