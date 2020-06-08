@@ -20,7 +20,7 @@ if (!args[2]) {
 
 if (codegens.includes(args[2])) {
     console.log(chalk.red('SDKGEN with same name already exists. ' +
-        'Please follow the naming convention(language-library(variant)) and choose a unique name.\n'));
+        'Please follow the naming convention(language-library eg; nodejs-fetch) and choose a unique name.\n'));
     return;
 }
 
