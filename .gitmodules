@@ -1,4 +1,0 @@
-[submodule "postman-code-generators"]
-	path = postman-code-generators
-	url = https://github.com/someshkoli/postman-code-generators.git
-	branch = sdkGenrator
