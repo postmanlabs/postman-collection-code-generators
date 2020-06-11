@@ -1,7 +1,8 @@
 const codegen = require('postman-code-generators'),
     _ = require('lodash'),
     sdk = require('postman-collection'),
-    async = require('async');
+    async = require('async'),
+    shelljs = require('shelljs');
 
 /**
  * Generates snippet for a function declaration
@@ -29,16 +30,19 @@ function generateFunctionSnippet(requestSnippet, options) {
  */
 async function processCollection(collectionItemMember, options, depth) {
     var snippet = '',
-        error;
+        error,
+        indent = options.indentType === 'Tab' ? '\t'.repeat(4) : ' '.repeat(4);
+    // indent = indent.repeat(options.indentCount);
+    // options.indentCount += depth;
     if (sdk.Item.isItem(collectionItemMember)) {
         codegen.convert('NodeJs', 'Request', collectionItemMember.request, options, function (err, requestSnippet) {
             if (err) {
                 error = err;
                 return;
             }
-            snippet += `"${collectionItemMember.name}": `;
+            snippet += `${indent.repeat(depth)}"${collectionItemMember.name}": `;
             snippet += generateFunctionSnippet(requestSnippet, options);
-            snippet += ',\n';
+            snippet += indent.repeat(depth) + ',\n';
         });
         return new Promise((resolve, reject) => {
             if (error) {
@@ -48,7 +52,7 @@ async function processCollection(collectionItemMember, options, depth) {
             }
         });
     }
-    snippet = `"${collectionItemMember.name}": {\n`;
+    snippet = `${indent.repeat(depth)}"${collectionItemMember.name}": {\n`;
     const collItemMemberPromises = collectionItemMember.items.members.map((element) => {
         return processCollection(element, options, depth + 1)
             .then((itemSnippet) => {
@@ -59,7 +63,7 @@ async function processCollection(collectionItemMember, options, depth) {
             });
     });
     await Promise.all(collItemMemberPromises);
-    snippet += '},\n';
+    snippet += `${indent.repeat(depth)}},\n`;
     return new Promise((resolve, reject) => {
         if (error) {
             reject(error);

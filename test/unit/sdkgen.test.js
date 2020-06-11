@@ -20,7 +20,7 @@ describe('Generate functon', () => {
         });
     });
 
-    it('should generate sdk snippet with source as collectio json', () => {
+    it('should generate sdk snippet with source as collection json', () => {
         sdkgen.generate(postmanEchoCollection, {}, {}, (err, snippet) => {
             expect(err).to.be.null;
             expect(snippet).to.include('request = require(\'nodejs-request\')');
@@ -42,6 +42,14 @@ describe('Generate functon', () => {
         });
     });
 
+    it('should generate sdk snippet with source as file path', () => {
+        sdkgen.generate('/home/wolf/development/codegen/postman-collection-code-generators/test/fixtures/Postman Echo.postman_collection.json',
+            {}, {}, (err, snippet) => {
+                expect(err).to.be.null;
+                expect(snippet).to.include('request = require(\'nodejs-request\')');
+            });
+    });
+
     it('should throw an error if invalid colleciton source is provided', () => {
         sdkgen.generate('random letters', {}, {}, (err, snippet) => {
             expect(snippet).to.be.null;
@@ -58,7 +66,6 @@ describe('Generate functon', () => {
             requestTimeout: 0,
             SDKGEN_enabled: true
         };
-
         sdkgen.generate(postmanEchoCollection, {}, options, (err, snippet) => {
             expect(err).to.be.null;
             expect(snippet).to.include('\t\t');
