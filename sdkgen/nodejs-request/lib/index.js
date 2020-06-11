@@ -30,7 +30,9 @@ async function generate (collection, options, callback) {
         snippet += 'var ';
     }
     snippet += 'request = require(\'request\');\n';
-    snippet += `function ${sdkname}(environment) {\n`;
+    snippet += `function ${sdkname}(environment = null) {\n\n`;
+    snippet += options.ES6_enabled ? 'const ' : 'var ';
+    snippet += 'self = this;\n\n';
     snippet += indent + 'this.requests = {\n';
     try {
         snippet += await processCollection(collection, options, 1);
@@ -38,18 +40,22 @@ async function generate (collection, options, callback) {
     catch (error) {
         return callback(error, null);
     }
-    snippet += indent + '};\n';
+    snippet += indent + '};\n\n';
     snippet += indent + 'this.variables = {\n';
     await collectionVariables.forEach((item) => {
         snippet += indent.repeat(2) + `${item.key}: '${item.value}',\n`;
     });
-    snippet += indent + '}\n';
-    snippet += indent + `${sdkname}.prototype.setVariabes = function(variables) {\n`;
+    snippet += indent + '}\n\n';
+    snippet += indent + `${sdkname}.prototype.setVariables = function(variables) {\n`;
     snippet += indent.repeat(2) + 'Object.keys(variables).forEach((key) => {\n';
-    snippet += indent.repeat(3) + 'this.variables[key] = variables.key;\n';
+    snippet += indent.repeat(3) + 'this.variables[key] = variables[key];\n';
     snippet += indent.repeat(2) + '});\n';
-    snippet += indent + '}\n';
-    snippet += '}\n';
+    snippet += indent.repeat(2) + 'return this.variables;\n';
+    snippet += indent + '}\n\n';
+
+    snippet += indent + 'this.variables = environment ? this.setVariables(environment) : this.variables;\n';
+    snippet += '}\n\n';
+    snippet += 'module.exports = SDKNAME;\n';
     return callback(null, snippet);
 }
 
