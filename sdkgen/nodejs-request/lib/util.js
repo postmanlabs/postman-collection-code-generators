@@ -1,5 +1,5 @@
 const codegen = require('postman-code-generators'),
-    sdk = require('postman-collection');
+  sdk = require('postman-collection');
 
 /**
  * [Description]
@@ -8,15 +8,15 @@ const codegen = require('postman-code-generators'),
  * @returns {String} - Request snippet string with replaced collection variables
  */
 function replaceVariables (requestSnippet) {
-    var variableDeclarations = requestSnippet.match(/{{.*}}/g);
-    if (variableDeclarations) {
-        variableDeclarations.forEach((element) => {
-            // replacing {{variable_name}} with ' + this.variables.variable_name + '
-            requestSnippet = requestSnippet
-                .replace(element, '\' + self.variables.' + element.substring(2, element.length - 2) + ' + \'');
-        });
-    }
-    return requestSnippet;
+  var variableDeclarations = requestSnippet.match(/{{.*}}/g);
+  if (variableDeclarations) {
+    variableDeclarations.forEach((element) => {
+      // replacing {{variable_name}} with ' + this.variables.variable_name + '
+      requestSnippet = requestSnippet
+        .replace(element, '\' + self.variables.' + element.substring(2, element.length - 2) + ' + \'');
+    });
+  }
+  return requestSnippet;
 }
 
 /**
@@ -27,12 +27,12 @@ function replaceVariables (requestSnippet) {
  * @returns {String} - returns a snippet of function declaration of of a request
  */
 function generateFunctionSnippet (requestSnippet, options) {
-    var snippet = '';
-    snippet += options.ES6_enabled ? '(callback) => {\n' : 'function(callback){\n';
-    snippet += replaceVariables(requestSnippet);
-    // snippet += requestSnippet;
-    snippet += '}';
-    return snippet;
+  var snippet = '';
+  snippet += options.ES6_enabled ? '(callback) => {\n' : 'function(callback){\n';
+  snippet += replaceVariables(requestSnippet);
+  // snippet += requestSnippet;
+  snippet += '}';
+  return snippet;
 }
 
 /**
@@ -41,57 +41,39 @@ function generateFunctionSnippet (requestSnippet, options) {
 
  * @param {Object} collectionItemMember - PostmanItem or PostmanItemGroup instance
  * @param {Object} options - postman-code-gen options (for specific language)
- * @param {Number} depth - Depth of the graph/tree(PostmanItem/PostmanItemGroup). Used to set proper indentation.
+ * @param {Functionn} callback - returns response // TODO describe this
  * @returns {Promise} - promise containing snippet for collection requests or error
+ * TODO fix issue with indent
  */
-async function processCollection (collectionItemMember, options, depth) {
-    var snippet = '',
-        error,
-        indent = options.indentType === 'Tab' ? '\t'.repeat(4) : ' '.repeat(4);
-    // indent = indent.repeat(options.indentCount);
-    // options.indentCount += depth;
-    if (sdk.Item.isItem(collectionItemMember)) {
-        codegen.convert('NodeJs', 'Request', collectionItemMember.request, options, function (err, requestSnippet) {
-            if (err) {
-                error = err;
-                return;
-            }
-            snippet += `${indent.repeat(depth)}"${collectionItemMember.name}": `;
-            snippet += generateFunctionSnippet(requestSnippet, options);
-            snippet += indent.repeat(depth) + ',\n';
-        });
-        return new Promise((resolve, reject) => {
-            if (error) {
-                reject(error);
-            }
-            else {
-                resolve(snippet);
-            }
-        });
-    }
-    snippet = `${indent.repeat(depth)}"${collectionItemMember.name}": {\n`;
-    const collItemMemberPromises = collectionItemMember.items.members.map((element) => {
-        return processCollection(element, options, depth + 1)
-            .then((itemSnippet) => {
-                snippet += itemSnippet;
-            })
-            .catch((err) => {
-                error = err;
-            });
+function processCollection (collectionItemMember, options, callback) {
+  var snippet = '',
+    error = null;
+  if (sdk.Item.isItem(collectionItemMember)) {
+    codegen.convert('NodeJs', 'Request', collectionItemMember.request, options, function (err, requestSnippet) {
+      if (err) {
+        error = err;
+        return;
+      }
+      snippet += `"${collectionItemMember.name}": \n`;
+      snippet += generateFunctionSnippet(requestSnippet, options);
+      snippet += ',\n';
     });
-    await Promise.all(collItemMemberPromises);
-    snippet += `${indent.repeat(depth)}},\n`;
-    return new Promise((resolve, reject) => {
-        if (error) {
-            reject(error);
-        }
-        else {
-            resolve(snippet);
-        }
+    return callback(error, snippet);
+  }
+  snippet = `"${collectionItemMember.name}": {\n`;
+  collectionItemMember.items.members.forEach((element) => {
+    processCollection(element, options, (err, snippetr) => {
+      if (err) {
+        return callback(err, null);
+      }
+      snippet += snippetr;
     });
+  });
+  snippet += '},\n';
+  return callback(error, snippet);
 }
 
 module.exports = {
-    generateFunctionSnippet,
-    processCollection
+  generateFunctionSnippet,
+  processCollection
 };
