@@ -6,7 +6,7 @@
  * @returns {String} - sdk snippet for input collection
  */
 function generate (collection, options) {
-    // Add generate function here. Refer existing codegen for usage guide
+  // Add generate function here. Refer existing codegen for usage guide
 }
 
 /**
@@ -14,10 +14,10 @@ function generate (collection, options) {
  * TODO update and test this
  */
 function getOptions () {
-    // Add options here
+  // Add options here
 }
 
 module.exports = {
-    generate,
-    getOptions
+  generate,
+  getOptions
 };

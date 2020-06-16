@@ -1,27 +1,27 @@
 var exec = require('shelljs').exec,
-    fs = require('fs'),
-    chalk = require('chalk'),
-    codegens,
-    path = require('path'),
-    getSubfolders = (folder) => {
-        return fs.readdirSync(folder)
-            .map((subfolder) => { return subfolder; });
-    };
+  fs = require('fs'),
+  chalk = require('chalk'),
+  codegens,
+  path = require('path'),
+  getSubfolders = (folder) => {
+    return fs.readdirSync(folder)
+      .map((subfolder) => { return subfolder; });
+  };
 const args = process.argv,
-    BOILERPLATE = path.resolve(__dirname, '../npm/boilerplate'),
-    SDKGEN_FOLDER = path.resolve(__dirname, '../sdkgen') + '/';
+  BOILERPLATE = path.resolve(__dirname, '../npm/boilerplate'),
+  SDKGEN_FOLDER = path.resolve(__dirname, '../sdkgen') + '/';
 
 codegens = getSubfolders(SDKGEN_FOLDER);
 
 if (!args[2]) {
-    console.log(chalk.red('Please provide a name for the codegen.'));
-    return;
+  console.log(chalk.red('Please provide a name for the codegen.'));
+  return;
 }
 
 if (codegens.includes(args[2])) {
-    console.log(chalk.red('SDKGEN with same name already exists. ' +
+  console.log(chalk.red('SDKGEN with same name already exists. ' +
         'Please follow the naming convention(language-library eg; nodejs-fetch) and choose a unique name.\n'));
-    return;
+  return;
 }
 
 exec('cp -a ' + BOILERPLATE + '/. ' + SDKGEN_FOLDER + args[2] + '/');
