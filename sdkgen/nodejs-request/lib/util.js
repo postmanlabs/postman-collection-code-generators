@@ -41,7 +41,7 @@ function generateFunctionSnippet (requestSnippet, options) {
 
  * @param {Object} collectionItemMember - PostmanItem or PostmanItemGroup instance
  * @param {Object} options - postman-code-gen options (for specific language)
- * @param {Functionn} callback - returns response // TODO describe this
+ * @param {Functionn} callback - Callback function to return response (err, snippet)
  * @returns {Promise} - promise containing snippet for collection requests or error
  * TODO fix issue with indent
  */
@@ -55,12 +55,14 @@ function processCollection (collectionItemMember, options, callback) {
         return;
       }
       snippet += `"${collectionItemMember.name}": \n`;
+      snippet += `/**\n${collectionItemMember.request.description}\n*/\n`;
       snippet += generateFunctionSnippet(requestSnippet, options);
       snippet += ',\n';
     });
     return callback(error, snippet);
   }
   snippet = `"${collectionItemMember.name}": {\n`;
+  snippet += `/**\n${collectionItemMember.description}\n*/\n`;
   collectionItemMember.items.members.forEach((element) => {
     processCollection(element, options, (err, snippetr) => {
       if (err) {
