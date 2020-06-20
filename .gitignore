@@ -63,5 +63,5 @@ typings/
 # next.js build output
 .next
 
-out/
+output/
 yarn.lock
