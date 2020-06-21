@@ -12,8 +12,7 @@ function replaceVariables (requestSnippet) {
   if (variableDeclarations) {
     variableDeclarations.forEach((element) => {
       // replacing {{variable_name}} with ' + this.variables.variable_name + '
-      requestSnippet = requestSnippet
-        .replace(element, '\' + self.variables.' + element.substring(2, element.length - 2) + ' + \'');
+      requestSnippet = requestSnippet.replace(element, '\' + ' + element.substring(2, element.length - 2) + ' + \'');
     });
   }
   return requestSnippet;
@@ -27,8 +26,13 @@ function replaceVariables (requestSnippet) {
  * @returns {String} - returns a snippet of function declaration of of a request
  */
 function generateFunctionSnippet (requestSnippet, options) {
-  var snippet = '';
-  snippet += options.ES6_enabled ? '(callback) => {\n' : 'function(callback){\n';
+  var snippet = '',
+    variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
+  snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
+  variableDeclarations.forEach((element) => {
+    var varName = element.substring(2, element.length - 2);
+    snippet += `let ${varName} = variables.${varName} ? variables.${varName} : self.variables.${varName};\n`;
+  });
   snippet += replaceVariables(requestSnippet);
   // snippet += requestSnippet;
   snippet += '}';

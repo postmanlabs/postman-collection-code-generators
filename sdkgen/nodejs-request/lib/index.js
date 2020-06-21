@@ -28,32 +28,22 @@ function generate (collection, options, callback) {
     else {
       snippet += 'var ';
     }
-    snippet += 'request = require(\'request\');\n';
-    snippet += `function ${sdkname}(environment = null) {\n\n`;
+    snippet += 'request = require(\'request\');\n\n';
+    snippet += `function ${sdkname}(environment = {}) {\n\n`;
+    snippet += indent + 'const collectionVariables = {\n';
+    collection.variables.each((item) => {
+      snippet += indent.repeat(2) + `${item.key}: '${item.value}',\n`;
+    });
+    snippet += indent + '};\n\n';
     snippet += options.ES6_enabled ? 'const ' : 'var ';
     snippet += 'self = this;\n\n';
     snippet += indent + 'this.requests = {\n';
     snippet += collectionSnippet;
     snippet += indent + '};\n\n';
-    snippet += indent + 'this.variables = {\n';
-    collection.variables.each((item) => {
-      snippet += indent.repeat(2) + `${item.key}: '${item.value}',\n`;
-    });
-    snippet += indent + '}\n\n';
-    if (options.ES6_enabled) {
-      snippet += indent + `${sdkname}.prototype.setVariables = (variables) => {\n`;
-      snippet += indent.repeat(2) + 'Object.keys(variables).forEach((key) => {\n';
-    }
-    else {
-      snippet += indent + `${sdkname}.prototype.setVariables = function (variables) {\n`;
-      snippet += indent.repeat(2) + 'Object.keys(variables).forEach(function (key) {\n';
-    }
-    snippet += indent.repeat(3) + 'this.variables[key] = variables[key];\n';
-    snippet += indent.repeat(2) + '});\n';
-    snippet += indent.repeat(2) + 'return this.variables;\n';
-    snippet += indent + '}\n\n';
-
-    snippet += indent + 'this.variables = environment ? this.setVariables(environment) : this.variables;\n';
+    snippet += indent + 'this.variables = collectionVariables;\n\n';
+    snippet += indent + 'Object.keys(environment).forEach(function (key) {\n';
+    snippet += indent.repeat(2) + 'self.variables[key] = environment[key];\n';
+    snippet += indent + '});\n';
     snippet += '}\n\n';
     snippet += 'module.exports = SDKNAME;\n';
     return callback(null, snippet);
