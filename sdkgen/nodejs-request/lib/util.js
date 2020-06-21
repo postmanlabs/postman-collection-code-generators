@@ -31,7 +31,7 @@ function generateFunctionSnippet (requestSnippet, options) {
   snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
   variableDeclarations.forEach((element) => {
     var varName = element.substring(2, element.length - 2);
-    snippet += `let ${varName} = variables.${varName} ? variables.${varName} : self.variables.${varName};\n`;
+    snippet += `let ${varName} = variables.${varName} ? variables.${varName} : self.environmentVariables.${varName};\n`;
   });
   snippet += replaceVariables(requestSnippet);
   // snippet += requestSnippet;

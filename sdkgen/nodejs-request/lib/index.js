@@ -40,9 +40,9 @@ function generate (collection, options, callback) {
     snippet += indent + 'this.requests = {\n';
     snippet += collectionSnippet;
     snippet += indent + '};\n\n';
-    snippet += indent + 'this.variables = collectionVariables;\n\n';
+    snippet += indent + 'this.environmentVariables = collectionVariables;\n\n';
     snippet += indent + 'Object.keys(environment).forEach(function (key) {\n';
-    snippet += indent.repeat(2) + 'self.variables[key] = environment[key];\n';
+    snippet += indent.repeat(2) + 'self.environmentVariables[key] = environment[key];\n';
     snippet += indent + '});\n';
     snippet += '}\n\n';
     snippet += 'module.exports = SDKNAME;\n';
