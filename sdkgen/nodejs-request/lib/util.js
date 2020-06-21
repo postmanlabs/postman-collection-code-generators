@@ -8,7 +8,7 @@ const codegen = require('postman-code-generators'),
  * @returns {String} - Request snippet string with replaced collection variables
  */
 function replaceVariables (requestSnippet) {
-  var variableDeclarations = requestSnippet.match(/{{[^{\s\n]}}/g);
+  var variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
   if (variableDeclarations) {
     variableDeclarations.forEach((element) => {
       // replacing {{variable_name}} with ' + this.variables.variable_name + '
