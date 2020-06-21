@@ -13,7 +13,6 @@ const getCodegenOptions = require('postman-code-generators').getOptions,
  */
 function generate (collection, options, callback) {
   var snippet = '',
-    collectionVariables = collection.variables ? collection.variables.members : [],
     // sdkname = collection.name.split(' ').join('_'),
     sdkname = 'SDKNAME',
     indent = options.indentType === 'Tab' ? '\t' : ' ';
@@ -37,7 +36,7 @@ function generate (collection, options, callback) {
     snippet += collectionSnippet;
     snippet += indent + '};\n\n';
     snippet += indent + 'this.variables = {\n';
-    collectionVariables.forEach((item) => {
+    collection.variables.each((item) => {
       snippet += indent.repeat(2) + `${item.key}: '${item.value}',\n`;
     });
     snippet += indent + '}\n\n';
