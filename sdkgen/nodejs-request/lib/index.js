@@ -1,6 +1,7 @@
 // TODO add options and fetch options
 const getCodegenOptions = require('postman-code-generators').getOptions,
-  processCollection = require('./util').processCollection;
+  processCollection = require('./util').processCollection,
+  sanitize = require('./util').sanitize;
 
 /**
  * Generates sdk for nodejs-request
@@ -32,7 +33,7 @@ function generate (collection, options, callback) {
     snippet += `function ${sdkname}(environment = {}) {\n\n`;
     snippet += indent + 'const collectionVariables = {\n';
     collection.variables.each((item) => {
-      snippet += indent.repeat(2) + `${item.key}: '${item.value}',\n`;
+      snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
     });
     snippet += indent + '};\n\n';
     snippet += options.ES6_enabled ? 'const ' : 'var ';
