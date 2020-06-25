@@ -86,18 +86,17 @@ function generateFunctionSnippet (collectionItem, options) {
  * TODO merge all function related stuff to generateFunctionSnippet method
  */
 function processCollection (collectionItemMember, options, callback) {
-  var snippet = '',
-    error = null;
+  var snippet = '';
   if (sdk.Item.isItem(collectionItemMember)) {
     snippet += `"${collectionItemMember.name}": \n`;
     try {
       snippet += generateFunctionSnippet(collectionItemMember, options);
     }
     catch (err) {
-      error = err;
+      return callback(err, null);
     }
     snippet += ',\n';
-    return callback(error, snippet);
+    return callback(null, snippet);
   }
   snippet += `/**\n${collectionItemMember.description}\n*/\n`;
   snippet += `"${collectionItemMember.name}": {\n`;
@@ -110,7 +109,7 @@ function processCollection (collectionItemMember, options, callback) {
     });
   });
   snippet += '},\n';
-  return callback(error, snippet);
+  return callback(null, snippet);
 }
 
 module.exports = {
