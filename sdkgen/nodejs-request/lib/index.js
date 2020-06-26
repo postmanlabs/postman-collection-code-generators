@@ -39,6 +39,10 @@ function generate (collection, options, callback) {
     snippet += indent + 'this.requests = {\n';
     snippet += collectionSnippet;
     snippet += indent + '};\n\n';
+    snippet += '/**\n';
+    snippet += 'Function to set environment variables. These variables will override the collection variables\n\n';
+    snippet += '@param {Object} env Object containing env variables\n';
+    snippet += '*/\n';
     snippet += indent + 'SDK.prototype.setEnvironment = function (env) {\n';
     snippet += indent.repeat(2) + 'let environmentVariables = collectionVariables;\n';
     snippet += indent + 'Object.keys(env).forEach(function (key) {\n';
