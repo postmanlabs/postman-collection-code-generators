@@ -37,14 +37,15 @@ function replaceVariables (requestSnippet) {
 
  * @param {String} collectionItem - PostmanItem Instance
  * @param {Object} options - postman-code-gen options (for specific language)
+ * @param {Function} callback - Callback function to return response  (err, snippet)
  * @returns {String} - returns a snippet of function declaration of of a request
  */
-function generateFunctionSnippet (collectionItem, options) {
+function generateFunctionSnippet (collectionItem, options, callback) {
   let snippet = '',
     variableDeclarations;
   codegen.convert('NodeJs', 'Request', collectionItem.request, options, function (err, requestSnippet) {
     if (err) {
-      throw err;
+      return callback(err, null);
     }
 
     variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
@@ -70,8 +71,8 @@ function generateFunctionSnippet (collectionItem, options) {
 
     snippet += replaceVariables(requestSnippet);
     snippet += '}';
+    return callback(null, snippet);
   });
-  return snippet;
 }
 
 /**
@@ -88,15 +89,16 @@ function generateFunctionSnippet (collectionItem, options) {
 function processCollection (collectionItemMember, options, callback) {
   var snippet = '';
   if (sdk.Item.isItem(collectionItemMember)) {
-    snippet += `"${collectionItemMember.name}": \n`;
-    try {
-      snippet += generateFunctionSnippet(collectionItemMember, options);
-    }
-    catch (err) {
-      return callback(err, null);
-    }
-    snippet += ',\n';
-    return callback(null, snippet);
+    generateFunctionSnippet(collectionItemMember, options, (err, funcSnippet) => {
+      if (err) {
+        return callback(err, null);
+      }
+      snippet += `"${collectionItemMember.name}": \n`;
+      snippet += funcSnippet;
+      snippet += ',\n';
+      return callback(null, snippet);
+    });
+    return;
   }
   snippet += `/**\n${collectionItemMember.description}\n*/\n`;
   snippet += `"${collectionItemMember.name}": {\n`;
@@ -109,7 +111,7 @@ function processCollection (collectionItemMember, options, callback) {
     });
   });
   snippet += '},\n';
-  return callback(null, snippet);
+  callback(null, snippet);
 }
 
 module.exports = {
