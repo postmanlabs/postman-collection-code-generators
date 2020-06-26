@@ -14,8 +14,6 @@ const getCodegenOptions = require('postman-code-generators').getOptions,
  */
 function generate (collection, options, callback) {
   var snippet = '',
-    // sdkname = collection.name.split(' ').join('_'),
-    sdkname = 'SDKNAME',
     indent = options.indentType === 'Tab' ? '\t' : ' ';
   indent = indent.repeat(options.indentCount);
   processCollection(collection, options, (err, collectionSnippet) => {
@@ -30,7 +28,7 @@ function generate (collection, options, callback) {
       snippet += 'var ';
     }
     snippet += 'request = require(\'request\');\n\n';
-    snippet += `function ${sdkname}(environment = {}) {\n\n`;
+    snippet += 'function SDK(environment = {}) {\n\n';
     snippet += indent + 'const collectionVariables = {\n';
     collection.variables.each((item) => {
       snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
@@ -41,12 +39,17 @@ function generate (collection, options, callback) {
     snippet += indent + 'this.requests = {\n';
     snippet += collectionSnippet;
     snippet += indent + '};\n\n';
-    snippet += indent + 'this.environmentVariables = collectionVariables;\n\n';
-    snippet += indent + 'Object.keys(environment).forEach(function (key) {\n';
-    snippet += indent.repeat(2) + 'self.environmentVariables[key] = environment[key];\n';
+    snippet += indent + 'SDK.prototype.setEnvironment = function (env) {\n';
+    snippet += indent.repeat(2) + 'let environmentVariables = collectionVariables;\n';
+    snippet += indent + 'Object.keys(env).forEach(function (key) {\n';
+    snippet += indent.repeat(2) + 'environmentVariables[key] = env[key];\n';
     snippet += indent + '});\n';
+    snippet += indent + 'self.environmentVariables = environmentVariables;\n';
+    snippet += indent + 'return environmentVariables;\n';
+    snippet += indent + '};\n\n';
+    snippet += indent + 'this.setEnvironment(environment);\n\n';
     snippet += '}\n\n';
-    snippet += 'module.exports = SDKNAME;\n';
+    snippet += 'module.exports = SDK;\n';
     return callback(null, snippet);
   });
 }
