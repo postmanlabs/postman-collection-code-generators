@@ -61,14 +61,18 @@ function generateFunctionSnippet (collectionItem, options, callback) {
 
     // Function declaration
     snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
-
+    snippet += 'if (typeof variables !== \'Object\') {\n';
+    snippet += 'callback = variables;\n';
+    snippet += 'variables = {};\n';
+    snippet += '}\n';
     // Request level variable declaration
     variableDeclarations.forEach((element) => {
       let varName = element.substring(2, element.length - 2);
       snippet += options.ES6_enabled ? 'let ' : 'var ';
-      snippet += `${varName} = variables.${varName} ? variables.${varName} : self.environmentVariables.${varName};\n`;
+      snippet += `${varName} = variables.${varName} ? variables.${varName} : self.variables.${varName};\n`;
     });
 
+    // Request call and request config
     snippet += replaceVariables(requestSnippet);
     snippet += '}';
     return callback(null, snippet);
@@ -84,7 +88,7 @@ function generateFunctionSnippet (collectionItem, options, callback) {
  * @param {Functionn} callback - Callback function to return response (err, snippet)
  * @returns {Promise} - promise containing snippet for collection requests or error
  * TODO fix issue with indent
- * TODO merge all function related stuff to generateFunctionSnippet method
+ * TODO merge process collection functino with root utils and make a wrapper for the same
  */
 function processCollection (collectionItemMember, options, callback) {
   var snippet = '';
@@ -98,20 +102,21 @@ function processCollection (collectionItemMember, options, callback) {
       snippet += ',\n';
       return callback(null, snippet);
     });
-    return;
   }
-  snippet += `/**\n${collectionItemMember.description}\n*/\n`;
-  snippet += `"${collectionItemMember.name}": {\n`;
-  collectionItemMember.items.members.forEach((element) => {
-    processCollection(element, options, (err, snippetr) => {
-      if (err) {
-        return callback(err, null);
-      }
-      snippet += snippetr;
+  else {
+    snippet += `/**\n${collectionItemMember.description}\n*/\n`;
+    snippet += `"${collectionItemMember.name}": {\n`;
+    collectionItemMember.items.members.forEach((element) => {
+      processCollection(element, options, (err, snippetr) => {
+        if (err) {
+          return callback(err, null);
+        }
+        snippet += snippetr;
+      });
     });
-  });
-  snippet += '},\n';
-  callback(null, snippet);
+    snippet += '},\n';
+    return callback(null, snippet);
+  }
 }
 
 module.exports = {
