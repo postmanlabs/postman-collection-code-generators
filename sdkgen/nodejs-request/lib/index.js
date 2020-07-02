@@ -1,20 +1,22 @@
 // TODO add options and fetch options
-const getCodegenOptions = require('postman-code-generators').getOptions,
-  processCollection = require('./util').processCollection,
-  sanitize = require('./util').sanitize;
+const processCollection = require('./util').processCollection,
+  sanitize = require('./util').sanitize,
+  combineVariablesLists = require('../../../lib/utils').combineVariablesLists;
 
 /**
  * Generates sdk for nodejs-request
 
  * @param {PostmanCollection} collection - Postman collection Instance
+ * @param {PostmamVariableList} variables - Postman Variable List (environment or global variables)
  * @param {Object} options - postman-code-generators options
  * @param {Function} callback - callback functio to return results (err, response)
  * @returns {String} - sdk snippet for input collection
  * TODO add indentation to entire snippet
  */
-function generate (collection, options, callback) {
+function generate (collection, variables, options, callback) {
   var snippet = '',
-    indent = options.indentType === 'Tab' ? '\t' : ' ';
+    indent = options.indentType === 'Tab' ? '\t' : ' ',
+    variablesList = combineVariablesLists([variables, collection.variables]);
   indent = indent.repeat(options.indentCount);
   processCollection(collection, options, (err, collectionSnippet) => {
     if (err) {
@@ -28,9 +30,8 @@ function generate (collection, options, callback) {
       snippet += 'var ';
     }
     snippet += 'request = require(\'request\');\n\n';
-    snippet += 'function SDK(environment = {}) {\n\n';
-    snippet += indent + 'const collectionVariables = {\n';
-    collection.variables.each((item) => {
+    snippet += indent + 'const configVariables = {\n';
+    variablesList.each((item) => {
       snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
     });
     snippet += indent + '};\n\n';
@@ -58,23 +59,6 @@ function generate (collection, options, callback) {
   });
 }
 
-/**
- * Gives a list of possible options for nodejs-request sdk generator
- * TODO update and test this function
- */
-function getOptions () {
-  var result;
-  getCodegenOptions('NodeJs', 'Request', (err, codegenOptions) => {
-    if (err) {
-      result = err;
-      return;
-    }
-    result = codegenOptions;
-  });
-  return result;
-}
-
 module.exports = {
-  generate,
-  getOptions
+  generate
 };
