@@ -7,7 +7,7 @@ const processCollection = require('./util').processCollection,
  * Generates sdk for nodejs-request
 
  * @param {PostmanCollection} collection - Postman collection Instance
- * @param {PostmamVariableList} variables - Postman Variable List (environment or global variables)
+ * @param {PostmamVariableList} variables - Postman Variable List with resolved scope
  * @param {Object} options - postman-code-generators options
  * @param {Function} callback - callback functio to return results (err, response)
  * @returns {String} - sdk snippet for input collection
@@ -15,9 +15,9 @@ const processCollection = require('./util').processCollection,
  */
 function generate (collection, variables, options, callback) {
   var snippet = '',
-    indent = options.indentType === 'Tab' ? '\t' : ' ',
-    variablesList = combineVariablesLists([variables, collection.variables]);
+    indent = options.indentType === 'Tab' ? '\t' : ' ';
   indent = indent.repeat(options.indentCount);
+
   processCollection(collection, options, (err, collectionSnippet) => {
     if (err) {
       return callback(err, null);
@@ -31,7 +31,7 @@ function generate (collection, variables, options, callback) {
     }
     snippet += 'request = require(\'request\');\n\n';
     snippet += indent + 'const configVariables = {\n';
-    variablesList.each((item) => {
+    variables.each((item) => {
       snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
     });
     snippet += indent + '};\n\n';
