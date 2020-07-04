@@ -46,7 +46,10 @@ module.exports = {
         }]
       }
     }),
+<<<<<<< HEAD
     // if only api key is given with input type as header
+=======
+>>>>>>> 3edcc7e... Completes API key authorizer
     'KEY_HEADER': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -79,7 +82,10 @@ module.exports = {
         }]
       }
     }),
+<<<<<<< HEAD
     // if api key is not given and input type is header
+=======
+>>>>>>> 3edcc7e... Completes API key authorizer
     'HEADER': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -112,7 +118,10 @@ module.exports = {
         }]
       }
     }),
+<<<<<<< HEAD
     // if api key and value are given with in type as query params
+=======
+>>>>>>> 3edcc7e... Completes API key authorizer
     'KEY_VAL_QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -145,7 +154,10 @@ module.exports = {
         }]
       }
     }),
+<<<<<<< HEAD
     // if only api key is given with input type as query param
+=======
+>>>>>>> 3edcc7e... Completes API key authorizer
     'KEY_QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -178,7 +190,10 @@ module.exports = {
         }]
       }
     }),
+<<<<<<< HEAD
     // if neither api key or value is given with in type as query param
+=======
+>>>>>>> 3edcc7e... Completes API key authorizer
     'QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -210,6 +225,7 @@ module.exports = {
           'key': 'value'
         }]
       }
+<<<<<<< HEAD
     })
   },
 
@@ -360,6 +376,8 @@ module.exports = {
           'key': 'username'
         }]
       }
+=======
+>>>>>>> 3edcc7e... Completes API key authorizer
     })
   }
 };
