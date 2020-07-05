@@ -1,5 +1,7 @@
 const codegen = require('postman-code-generators'),
-  sdk = require('postman-collection');
+  sdk = require('postman-collection'),
+  _ = require('lodash'),
+  authorizeRequest = require('../../../lib/auth');
 
 /**
  * sanitizes input string by handling escape characters eg: converts '''' to '\'\''
@@ -42,8 +44,13 @@ function replaceVariables (requestSnippet) {
  */
 function generateFunctionSnippet (collectionItem, options, callback) {
   let snippet = '',
-    variableDeclarations;
-  codegen.convert('NodeJs', 'Request', collectionItem.request, options, function (err, requestSnippet) {
+    variableDeclarations,
+    request = collectionItem.request;
+
+  // Add auth headers / params to request before generating request snippet
+  request = _.has(request, 'auth') ? authorizeRequest(request) : request;
+
+  codegen.convert('NodeJs', 'Request', request, options, function (err, requestSnippet) {
     if (err) {
       return callback(err, null);
     }
@@ -51,8 +58,7 @@ function generateFunctionSnippet (collectionItem, options, callback) {
     variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
 
     // JSDocs declaration
-    snippet += `/**\n${collectionItem.request.description}\n`;
-    snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
+    snippet += `/**\n${request.description}\n`;
     variableDeclarations.forEach((element) => {
       let varName = element.substring(2, element.length - 2);
       snippet += `@param {String} variables.${varName}\n`;
@@ -61,10 +67,11 @@ function generateFunctionSnippet (collectionItem, options, callback) {
 
     // Function declaration
     snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
-    snippet += 'if (typeof variables !== \'Object\') {\n';
+    snippet += 'if (typeof variables === \'function\') {\n';
     snippet += 'callback = variables;\n';
     snippet += 'variables = {};\n';
     snippet += '}\n';
+
     // Request level variable declaration
     variableDeclarations.forEach((element) => {
       let varName = element.substring(2, element.length - 2);
@@ -73,6 +80,7 @@ function generateFunctionSnippet (collectionItem, options, callback) {
     });
 
     // Request call and request config
+    // replaceVariable replaces all the postman variables and returns the resulting snippet
     snippet += replaceVariables(requestSnippet);
     snippet += '}';
     return callback(null, snippet);
