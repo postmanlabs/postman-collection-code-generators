@@ -194,5 +194,145 @@ module.exports = {
         }]
       }
     })
+  },
+  'BEARER_TOKEN': {
+    'TOKEN': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'bearer',
+        'bearer': [{
+          'type': 'any',
+          'value': 'testbearertoken',
+          'key': 'token'
+        }]
+      }
+    })
+  },
+  'BASIC': {
+    'USERNAME_PASSWORD': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'basic',
+        'basic': [{
+          'type': 'any',
+          'value': 'test',
+          'key': 'password'
+        }, {
+          'type': 'any',
+          'value': 'test',
+          'key': 'username'
+        }]
+      }
+    }),
+    'USERNAME': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'basic',
+        'basic': [{
+          'type': 'any',
+          'value': '',
+          'key': 'password'
+        }, {
+          'type': 'any',
+          'value': 'test',
+          'key': 'username'
+        }]
+      }
+    }),
+    'PASSWORD': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'basic',
+        'basic': [{
+          'type': 'any',
+          'value': 'test',
+          'key': 'password'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'username'
+        }]
+      }
+    }),
+    'NO_USERNAME_NO_PASS': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'basic',
+        'basic': [{
+          'type': 'any',
+          'value': '',
+          'key': 'password'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'username'
+        }]
+      }
+    })
   }
 };
