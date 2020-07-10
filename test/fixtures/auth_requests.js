@@ -47,9 +47,13 @@ module.exports = {
       }
     }),
 <<<<<<< HEAD
+<<<<<<< HEAD
     // if only api key is given with input type as header
 =======
 >>>>>>> 3edcc7e... Completes API key authorizer
+=======
+    // if only api key is given with input type as header
+>>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'KEY_HEADER': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -83,9 +87,13 @@ module.exports = {
       }
     }),
 <<<<<<< HEAD
+<<<<<<< HEAD
     // if api key is not given and input type is header
 =======
 >>>>>>> 3edcc7e... Completes API key authorizer
+=======
+    // if api key is not given and input type is header
+>>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'HEADER': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -119,9 +127,13 @@ module.exports = {
       }
     }),
 <<<<<<< HEAD
+<<<<<<< HEAD
     // if api key and value are given with in type as query params
 =======
 >>>>>>> 3edcc7e... Completes API key authorizer
+=======
+    // if api key and value are given with in type as query params
+>>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'KEY_VAL_QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -155,9 +167,13 @@ module.exports = {
       }
     }),
 <<<<<<< HEAD
+<<<<<<< HEAD
     // if only api key is given with input type as query param
 =======
 >>>>>>> 3edcc7e... Completes API key authorizer
+=======
+    // if only api key is given with input type as query param
+>>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'KEY_QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -191,9 +207,13 @@ module.exports = {
       }
     }),
 <<<<<<< HEAD
+<<<<<<< HEAD
     // if neither api key or value is given with in type as query param
 =======
 >>>>>>> 3edcc7e... Completes API key authorizer
+=======
+    // if neither api key or value is given with in type as query param
+>>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -380,7 +400,10 @@ module.exports = {
 >>>>>>> 3edcc7e... Completes API key authorizer
     })
   },
+
+  // bearer token authorization
   'BEARER_TOKEN': {
+    // when bearer token is given
     'TOKEN': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -406,7 +429,10 @@ module.exports = {
       }
     })
   },
+
+  // basic authorization
   'BASIC': {
+    // if username password are given
     'USERNAME_PASSWORD': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -435,6 +461,7 @@ module.exports = {
         }]
       }
     }),
+    // if only username is given
     'USERNAME': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -463,6 +490,7 @@ module.exports = {
         }]
       }
     }),
+    // if only password is given
     'PASSWORD': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -491,6 +519,8 @@ module.exports = {
         }]
       }
     }),
+
+    // if neither username nor password is given
     'NO_USERNAME_NO_PASS': new sdk.Request({
       'url': {
         'protocol': 'https',
