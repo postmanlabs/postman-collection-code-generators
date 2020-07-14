@@ -35,7 +35,7 @@ function replaceVariables (requestSnippet) {
 /**
  * Generates snippet for a function declaration
 
- * @param {String} collectionItem - PostmanItem Instance
+ * @param {sdk.Item} collectionItem - PostmanItem Instance
  * @param {Object} options - postman-code-gen options (for specific language)
  * @param {Function} callback - Callback function to return response  (err, snippet)
  * @returns {String} - returns a snippet of function declaration of of a request
@@ -76,47 +76,46 @@ function generateFunctionSnippet (collectionItem, options, callback) {
 }
 
 /**
- * Extracts requests and generats snipepts collection members
- * Algorithm used : Reccursive dfs function which uses promises to traverse the postman-collection
-
- * @param {Object} collectionItemMember - PostmanItem or PostmanItemGroup instance
- * @param {Object} options - postman-code-gen options (for specific language)
- * @param {Functionn} callback - Callback function to return response (err, snippet)
- * @returns {Promise} - promise containing snippet for collection requests or error
- * TODO fix issue with indent
- * TODO merge all function related stuff to generateFunctionSnippet method
+ * [Description]
+ *
+ * @param {sdk.Item} collectionItem - Postman Collection Item instance
+ * @param {object} options - postman-code-generator options
+ * @param {function} callback - function to return result (err, snippet)
  */
-function processCollection (collectionItemMember, options, callback) {
-  var snippet = '';
-  if (sdk.Item.isItem(collectionItemMember)) {
-    generateFunctionSnippet(collectionItemMember, options, (err, funcSnippet) => {
-      if (err) {
-        return callback(err, null);
-      }
-      snippet += `"${collectionItemMember.name}": \n`;
-      snippet += funcSnippet;
-      snippet += ',\n';
-      return callback(null, snippet);
-    });
-    return;
-  }
-  snippet += `/**\n${collectionItemMember.description}\n*/\n`;
-  snippet += `"${collectionItemMember.name}": {\n`;
-  collectionItemMember.items.members.forEach((element) => {
-    processCollection(element, options, (err, snippetr) => {
-      if (err) {
-        return callback(err, null);
-      }
-      snippet += snippetr;
-    });
+function itemHandler (collectionItem, options, callback) {
+  let snippet = '';
+  generateFunctionSnippet(collectionItem, options, (err, funcSnippet) => {
+    if (err) {
+      return callback(err, null);
+    }
+    snippet += `"${collectionItem.name}": \n`;
+    snippet += funcSnippet;
+    snippet += ',\n';
+    return callback(null, snippet);
   });
+}
+
+/**
+ * [Description]
+ *
+ * @param {sdk.ItemGroup} collectionItem - Postman Collection Item Member
+ * @param {array }memberResults - Array of result after passing through processCollection method for this ItemGroup
+ * @param {object} options - postman-code-generators options
+ * @param {function} callback - Function to return result (err, result)
+ */
+function itemGroupHandler (collectionItem, memberResults, options, callback) {
+  let snippet = '';
+  snippet += `/**\n${collectionItem.description}\n*/\n`;
+  snippet += `"${collectionItem.name}": {\n`;
+  snippet += memberResults.join('');
   snippet += '},\n';
-  callback(null, snippet);
+  return callback(null, snippet);
 }
 
 module.exports = {
+  sanitize,
   generateFunctionSnippet,
-  processCollection,
-  replaceVariables,
-  sanitize
+  itemHandler,
+  itemGroupHandler,
+  replaceVariables
 };

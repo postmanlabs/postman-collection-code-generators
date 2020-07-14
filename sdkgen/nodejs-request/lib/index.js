@@ -1,7 +1,7 @@
 // TODO add options and fetch options
 const getCodegenOptions = require('postman-code-generators').getOptions,
-  processCollection = require('./util').processCollection,
-  sanitize = require('./util').sanitize;
+  processCollection = require('../../../lib/utils').processCollection,
+  { sanitize, itemGroupHandler, itemHandler} = require('./util');
 
 /**
  * Generates sdk for nodejs-request
@@ -16,7 +16,7 @@ function generate (collection, options, callback) {
   var snippet = '',
     indent = options.indentType === 'Tab' ? '\t' : ' ';
   indent = indent.repeat(options.indentCount);
-  processCollection(collection, options, (err, collectionSnippet) => {
+  processCollection(collection, options, itemHandler, itemGroupHandler, (err, collectionSnippet) => {
     if (err) {
       return callback(err, null);
     }
