@@ -1,5 +1,6 @@
 const codegen = require('postman-code-generators'),
-  sdk = require('postman-collection');
+  sdk = require('postman-collection'),
+  authorizer = require('../../../lib/auth/auth');
 
 /**
  * sanitizes input string by handling escape characters eg: converts '''' to '\'\''
@@ -43,6 +44,15 @@ function replaceVariables (requestSnippet) {
 function generateFunctionSnippet (collectionItem, options, callback) {
   let snippet = '',
     variableDeclarations;
+
+  /**
+   * Authorize request with auth if available else continue with same
+   */
+  collectionItem.request = collectionItem.getAuth() ?
+    authorizer(collectionItem.request, collectionItem.getAuth()) :
+    collectionItem.request;
+
+  // generate snippet for single request and process further to genereate a proper function declaration
   codegen.convert('NodeJs', 'Request', collectionItem.request, options, function (err, requestSnippet) {
     if (err) {
       return callback(err, null);
