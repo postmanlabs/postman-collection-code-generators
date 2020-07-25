@@ -58,6 +58,7 @@ function generateFunctionSnippet (collectionItem, options, callback) {
       let varName = element.substring(2, element.length - 2);
       snippet += `@param {String} variables.${varName}\n`;
     });
+    snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
     snippet += '*/\n';
 
     // Function declaration
