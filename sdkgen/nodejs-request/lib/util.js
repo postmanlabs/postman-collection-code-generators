@@ -1,5 +1,4 @@
-const codegen = require('postman-code-generators'),
-  sdk = require('postman-collection');
+const { convert } = require('postman-code-generators');
 
 /**
  * sanitizes input string by handling escape characters eg: converts '''' to '\'\''
@@ -37,85 +36,84 @@ function replaceVariables (requestSnippet) {
 
  * @param {sdk.Item} collectionItem - PostmanItem Instance
  * @param {Object} options - postman-code-gen options (for specific language)
- * @param {Function} callback - Callback function to return response  (err, snippet)
  * @returns {String} - returns a snippet of function declaration of of a request
  */
-function generateFunctionSnippet (collectionItem, options, callback) {
-  let snippet = '',
-    variableDeclarations;
-  codegen.convert('NodeJs', 'Request', collectionItem.request, options, function (err, requestSnippet) {
-    if (err) {
-      return callback(err, null);
-    }
+function generateFunctionSnippet (collectionItem, options) {
+  return new Promise((resolve, reject) => {
+    let snippet = '',
+      variableDeclarations;
+    convert('Nodejs', 'Request', collectionItem.request, options, (err, requestSnippet) => {
+      if (err) {
+        return reject(err);
+      }
 
-    variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
+      variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
 
-    // JSDocs declaration
-    snippet += `/**\n${collectionItem.request.description}\n`;
-    snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
-    variableDeclarations.forEach((element) => {
-      let varName = element.substring(2, element.length - 2);
-      snippet += `@param {String} variables.${varName}\n`;
+      // JSDocs declaration
+      snippet += `/**\n${collectionItem.request.description}\n`;
+      snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
+      variableDeclarations.forEach((element) => {
+        let varName = element.substring(2, element.length - 2);
+        snippet += `@param {String} variables.${varName}\n`;
+      });
+      snippet += '*/\n';
+
+      // Function declaration
+      snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
+
+      // Request level variable declaration
+      variableDeclarations.forEach((element) => {
+        let varName = element.substring(2, element.length - 2);
+        snippet += options.ES6_enabled ? 'let ' : 'var ';
+        snippet += `${varName} = variables.${varName} ? variables.${varName} : self.environmentVariables.${varName};\n`;
+      });
+
+      snippet += replaceVariables(requestSnippet);
+      snippet += '}';
+      return resolve(snippet);
     });
-    snippet += '*/\n';
-
-    // Function declaration
-    snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
-
-    // Request level variable declaration
-    variableDeclarations.forEach((element) => {
-      let varName = element.substring(2, element.length - 2);
-      snippet += options.ES6_enabled ? 'let ' : 'var ';
-      snippet += `${varName} = variables.${varName} ? variables.${varName} : self.environmentVariables.${varName};\n`;
-    });
-
-    snippet += replaceVariables(requestSnippet);
-    snippet += '}';
-    return callback(null, snippet);
   });
 }
 
 /**
- * [Description]
+ * A handler function used to generate snippet for a pm.Item
  *
  * @param {sdk.Item} collectionItem - Postman Collection Item instance
  * @param {object} options - postman-code-generator options
- * @param {function} callback - function to return result (err, snippet)
+ * @returns {string} - string contaning snippet for input item
  */
-function itemHandler (collectionItem, options, callback) {
+async function itemHandler (collectionItem, options) {
   let snippet = '';
-  generateFunctionSnippet(collectionItem, options, (err, funcSnippet) => {
-    if (err) {
-      return callback(err, null);
-    }
+  try {
     snippet += `"${collectionItem.name}": \n`;
-    snippet += funcSnippet;
+    snippet += await generateFunctionSnippet(collectionItem, options);
     snippet += ',\n';
-    return callback(null, snippet);
-  });
+  }
+  catch (error) {
+    throw error;
+  }
+  return snippet;
 }
 
 /**
- * [Description]
+ * Handler function userd to generate snippet for a pm.ItemGroup
  *
  * @param {sdk.ItemGroup} collectionItem - Postman Collection Item Member
- * @param {array }memberResults - Array of result after passing through processCollection method for this ItemGroup
- * @param {object} options - postman-code-generators options
- * @param {function} callback - Function to return result (err, result)
+ * @param {array } memberResults - Array of result after passing through processCollection method for this ItemGroup
+ * @returns {string} - snippet for input ItemGroup
  */
-function itemGroupHandler (collectionItem, memberResults, options, callback) {
+function itemGroupHandler (collectionItem, memberResults) {
   let snippet = '';
   snippet += `/**\n${collectionItem.description}\n*/\n`;
   snippet += `"${collectionItem.name}": {\n`;
   snippet += memberResults.join('');
   snippet += '},\n';
-  return callback(null, snippet);
+  return snippet;
 }
 
 module.exports = {
   sanitize,
   generateFunctionSnippet,
   itemHandler,
-  itemGroupHandler,
-  replaceVariables
+  itemGroupHandler
 };
