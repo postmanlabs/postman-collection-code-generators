@@ -125,6 +125,7 @@ describe('Postman Request Authorization', function () {
       expect(request.getHeaders('Authorization').Authorization)
         .to.include('HjebOamWWiwrj/MRvyzkTzPPWElVQucNlvPSFpGN1bU=');
     });
+<<<<<<< HEAD
     it('should not add additional auth data if authorization header is already set', function () {
       let request = authRequests.HAWK.ALL_PARAM_EXISTING_HEADER;
 
@@ -139,5 +140,7 @@ describe('Postman Request Authorization', function () {
       expect(request.headers.has('Authorization')).to.be.true;
       expect(request.getHeaders().Authorization).to.be.undefined;
     });
+=======
+>>>>>>> 11f23fb... hawk Auth implementation completed
   });
 });
