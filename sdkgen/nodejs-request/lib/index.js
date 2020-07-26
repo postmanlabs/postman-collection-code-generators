@@ -6,7 +6,8 @@ const processCollection = require('./util').processCollection,
  * Generates sdk for nodejs-request
 
  * @param {PostmanCollection} collection - Postman collection Instance
- * @param {Object} options - postman-code-generators options
+ * @param {Object} options - postman-sdk-generators options
+ * @param {Object} [options.variableList] - variableList to be declared in generated sdk
  * @param {Function} callback - callback functio to return results (err, response)
  * @returns {String} - sdk snippet for input collection
  * TODO add indentation to entire snippet
