@@ -1,7 +1,6 @@
 // TODO add options and fetch options
 const processCollection = require('./util').processCollection,
-  sanitize = require('./util').sanitize,
-  combineVariablesLists = require('../../../lib/utils').combineVariablesLists;
+  sanitize = require('./util').sanitize;
 
 /**
  * Generates sdk for nodejs-request
