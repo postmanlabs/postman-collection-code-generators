@@ -6,13 +6,12 @@ const processCollection = require('./util').processCollection,
  * Generates sdk for nodejs-request
 
  * @param {PostmanCollection} collection - Postman collection Instance
- * @param {PostmamVariableList} variables - Postman Variable List with resolved scope
  * @param {Object} options - postman-code-generators options
  * @param {Function} callback - callback functio to return results (err, response)
  * @returns {String} - sdk snippet for input collection
  * TODO add indentation to entire snippet
  */
-function generate (collection, variables, options, callback) {
+function generate (collection, options, callback) {
   var snippet = '',
     indent = options.indentType === 'Tab' ? '\t' : ' ';
   indent = indent.repeat(options.indentCount);
@@ -30,7 +29,7 @@ function generate (collection, variables, options, callback) {
     }
     snippet += 'request = require(\'request\');\n\n';
     snippet += indent + 'const configVariables = {\n';
-    variables.each((item) => {
+    options.variableList.each((item) => {
       snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
     });
     snippet += indent + '};\n\n';
