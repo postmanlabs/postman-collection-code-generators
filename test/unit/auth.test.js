@@ -96,4 +96,34 @@ describe('Postman Request Authorization', function () {
       expect(request.getHeaders('Authorization').Authorization).to.be.equal('Basic Og==');
     });
   });
+
+  describe('Hawk Authorization', function () {
+    it('should hawk auth headers if key and id is provided', function () {
+      var request = authRequests.HAWK.ID_KEY;
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.include('Hawk');
+      expect(request.getHeaders('Authorization').Authorization)
+        .to.include('bgWcQlrOBD0fpCNMf9PyIOZmMrfCbx9PxDP1LmxT0FE');
+    });
+    it('should hawk auth headers if key id and ext is provided', function () {
+      var request = authRequests.HAWK.ID_KEY_EXT;
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.include('Hawk');
+      expect(request.getHeaders('Authorization').Authorization)
+        .to.include('baHUv5E68M9sxcer3mzLbAEGOKpFR0YgsQkI22BTB74');
+    });
+    it('should hawk auth headers if all params are set is provided', function () {
+      var request = authRequests.HAWK.ALL_PARAM_SET;
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.include('Hawk');
+      expect(request.getHeaders('Authorization').Authorization)
+        .to.include('HjebOamWWiwrj/MRvyzkTzPPWElVQucNlvPSFpGN1bU=');
+    });
+  });
 });
