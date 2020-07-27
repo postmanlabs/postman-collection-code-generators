@@ -31,9 +31,11 @@ function generate (collection, options, callback) {
     snippet += 'request = require(\'request\');\n\n';
     snippet += 'function SDK(environment = {}) {\n\n';
     snippet += indent + 'const configVariables = {\n';
-    options.variableList.each((item) => {
-      snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
-    });
+    if (options.variableList) {
+      options.variableList.each((item) => {
+        snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
+      });
+    }
     snippet += indent + '};\n\n';
     snippet += options.ES6_enabled ? 'const ' : 'var ';
     snippet += 'self = this;\n\n';
