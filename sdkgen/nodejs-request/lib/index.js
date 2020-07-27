@@ -47,7 +47,7 @@ function generate (collection, options, callback) {
     snippet += '@param {Object} env Object containing env variables\n';
     snippet += '*/\n';
     snippet += indent + 'SDK.prototype.setVariables = function (vars) {\n';
-    snippet += indent.repeat(2) + 'let variables = JSON.parse(JSON.stringify(configVariables));\n';
+    snippet += indent.repeat(2) + 'let variables = JSON.parse(JSON.stringify(this.variables || configVariables));\n';
     snippet += indent + 'Object.keys(vars).forEach(function (key) {\n';
     snippet += indent.repeat(2) + 'variables[key] = vars[key];\n';
     snippet += indent + '});\n';
