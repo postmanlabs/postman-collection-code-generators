@@ -56,10 +56,11 @@ function generate (collection, options, callback) {
     snippet += indent + '};\n\n';
     snippet += '/**\n';
     snippet += 'Method to retrieve current variable config\n\n';
+    snippet += '@param {any} [var] - variable name to return \n';
     snippet += '@returns {Object} object containing variables\n';
     snippet += '*/\n';
-    snippet += indent + 'SDK.prototype.getVariables = function (vars) {\n';
-    snippet += indent + 'return this.variables;\n';
+    snippet += indent + 'SDK.prototype.getVariables = function (var) {\n';
+    snippet += indent + 'return var ? this.variables[var] : this.variables;\n';
     snippet += indent + '};\n\n';
     snippet += 'module.exports = SDK;\n';
     return callback(null, snippet);
