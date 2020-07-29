@@ -43,6 +43,7 @@
     "mocha": "^7.2.0",
     "nyc": "^15.1.0",
     "pretty-ms": "^7.0.0",
-    "recursive-readdir": "^2.2.2"
+    "recursive-readdir": "^2.2.2",
+    "postman-collection": "^3.6.4"
   }
 }
