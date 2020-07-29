@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/umeshp7/postman-collection-code-generators/issues"
   },
-  "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme"
+  "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "postman-collection": "^3.6.4"
+  }
 }
