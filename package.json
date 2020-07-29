@@ -23,6 +23,7 @@
   "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme",
   "dependencies": {
     "aws4": "^1.10.0",
+    "chai": "^4.2.0",
     "postman-collection": "^3.6.4"
   }
 }
