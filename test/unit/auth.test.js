@@ -96,4 +96,52 @@ describe('Postman Request Authorization', function () {
       expect(request.getHeaders('Authorization').Authorization).to.be.equal('Basic Og==');
     });
   });
+  
+  describe('AWSv4 Authorization', function() {
+    it('should generate signature if acesskey and secret are not provided', function() {
+      var request = authRequests.AWSV4.NO_ACCESSKEY_NO_SECRET;
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.include('AWS4-HMAC-SHA256');
+    })
+
+    it('should generate signature with accessKey and secret provided', function() {
+      var request = authRequests.AWSV4.ACCESSKEY_SECRET;
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.include('AWS4-HMAC-SHA256');
+    })
+
+    it('should generate signature with optional parameters', function() {
+      var request = authRequests.AWSV4.ACCESS_KEY_ADAVANCE_PARAM;
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.include('AWS4-HMAC-SHA256');
+      expect(request.getHeaders('Authorization').Authorization).to.include('in-east-1');
+      expect(request.getHeaders('Authorization').Authorization).to.include('s4');
+    })
+
+    it('should generate signature with session token', function() {
+      var request = authRequests.AWSV4.ACCESSKEY_SECRET_SESSION;
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.include('AWS4-HMAC-SHA256');
+      expect(request.url.getPathWithQuery()).to.include('X-Amz-Security-Token');
+    })
+
+    it('should generate signature with addToQuery set', function() {
+      var request = authRequests.AWSV4.ALL_PARAM_IN_QUERY;
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.url.getPathWithQuery()).to.include('X-Amz-Algorithm');
+      expect(request.url.getPathWithQuery()).to.include('X-Amz-Credential');
+      expect(request.url.getPathWithQuery()).to.include('X-Amz-Signature');
+      expect(request.url.getPathWithQuery()).to.include('X-Amz-SignedHeaders');
+      expect(request.url.getPathWithQuery()).to.include('X-Amz-Date');
+    })
+  })
 });
