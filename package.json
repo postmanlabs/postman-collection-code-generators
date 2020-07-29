@@ -44,6 +44,5 @@
     "nyc": "^15.1.0",
     "pretty-ms": "^7.0.0",
     "recursive-readdir": "^2.2.2",
-    "postman-collection": "^3.6.4"
   }
 }
