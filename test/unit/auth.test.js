@@ -125,5 +125,19 @@ describe('Postman Request Authorization', function () {
       expect(request.getHeaders('Authorization').Authorization)
         .to.include('HjebOamWWiwrj/MRvyzkTzPPWElVQucNlvPSFpGN1bU=');
     });
+    it('should not add additional auth data if authorization header is already set', function () {
+      let request = authRequests.HAWK.ALL_PARAM_EXISTING_HEADER;
+
+      // adding authorization header
+      request.addHeader({
+        key: 'authorization',
+        value: 'hawk header test'
+      });
+
+      request = authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders().Authorization).to.be.undefined;
+    });
   });
 });
