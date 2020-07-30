@@ -361,5 +361,287 @@ module.exports = {
         }]
       }
     })
+  },
+  'AWSV4': {
+    'NO_ACCESSKEY_NO_SECRET': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['post'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'header': [{
+        'key': 'Content-Length',
+        'value': '22'
+      }],
+      'method': 'POST',
+      'body': {
+        'mode': 'formdata',
+        'formdata': [{
+          'key': 'awdawd',
+          'value': 'awdawd',
+          'type': 'text'
+        }, {
+          'disabled': true,
+          'key': '',
+          'value': '',
+          'type': 'file',
+          'src': '/home/wolf/Pictures/arch.png'
+        }]
+      },
+      'auth': {
+        'type': 'awsv4',
+        'awsv4': [{
+          'type': 'any',
+          'value': '',
+          'key': 'accessKey'
+        }, {
+          'type': 'any',
+          'value': false,
+          'key': 'addAuthDataToQuery'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'region'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'secretKey'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'service'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'sessionToken'
+        }]
+      }
+    }),
+    'ACCESSKEY_SECRET': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['post'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'header': [{
+        'key': 'Content-Length',
+        'value': '22'
+      }],
+      'method': 'POST',
+      'body': {
+        'mode': 'formdata',
+        'formdata': [{
+          'key': 'awdawd',
+          'value': 'awdawd',
+          'type': 'text'
+        }, {
+          'disabled': true,
+          'key': '',
+          'value': '',
+          'type': 'file',
+          'src': '/home/wolf/Pictures/arch.png'
+        }]
+      },
+      'auth': {
+        'type': 'awsv4',
+        'awsv4': [{
+          'type': 'any',
+          'value': 'KEY',
+          'key': 'accessKey'
+        }, {
+          'type': 'any',
+          'value': false,
+          'key': 'addAuthDataToQuery'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'region'
+        }, {
+          'type': 'any',
+          'value': 'SECRET',
+          'key': 'secretKey'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'service'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'sessionToken'
+        }]
+      }
+    }),
+    'ACCESS_KEY_ADAVANCE_PARAM': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['post'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'header': [{
+        'key': 'Content-Length',
+        'value': '22'
+      }],
+      'method': 'POST',
+      'body': {
+        'mode': 'formdata',
+        'formdata': [{
+          'key': 'awdawd',
+          'value': 'awdawd',
+          'type': 'text'
+        }, {
+          'disabled': true,
+          'key': '',
+          'value': '',
+          'type': 'file',
+          'src': '/home/wolf/Pictures/arch.png'
+        }]
+      },
+      'auth': {
+        'type': 'awsv4',
+        'awsv4': [{
+          'type': 'any',
+          'value': 'KEY',
+          'key': 'accessKey'
+        }, {
+          'type': 'any',
+          'value': false,
+          'key': 'addAuthDataToQuery'
+        }, {
+          'type': 'any',
+          'value': 'in-east-1',
+          'key': 'region'
+        }, {
+          'type': 'any',
+          'value': 'SECRET',
+          'key': 'secretKey'
+        }, {
+          'type': 'any',
+          'value': 's4',
+          'key': 'service'
+        }, {
+          'type': 'any',
+          'value': 'session',
+          'key': 'sessionToken'
+        }]
+      }
+    }),
+    'ACCESSKEY_SECRET_SESSION': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['post'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'header': [{
+        'key': 'Content-Length',
+        'value': '22'
+      }],
+      'method': 'POST',
+      'body': {
+        'mode': 'formdata',
+        'formdata': [{
+          'key': 'awdawd',
+          'value': 'awdawd',
+          'type': 'text'
+        }, {
+          'disabled': true,
+          'key': '',
+          'value': '',
+          'type': 'file',
+          'src': '/home/wolf/Pictures/arch.png'
+        }]
+      },
+      'auth': {
+        'type': 'awsv4',
+        'awsv4': [{
+          'type': 'any',
+          'value': 'KEY',
+          'key': 'accessKey'
+        }, {
+          'type': 'any',
+          'value': false,
+          'key': 'addAuthDataToQuery'
+        }, {
+          'type': 'any',
+          'value': 'in-east-1',
+          'key': 'region'
+        }, {
+          'type': 'any',
+          'value': 'SECRET',
+          'key': 'secretKey'
+        }, {
+          'type': 'any',
+          'value': 's4',
+          'key': 'service'
+        }, {
+          'type': 'any',
+          'value': 'session',
+          'key': 'sessionToken'
+        }]
+      }
+    }),
+    'ALL_PARAM_IN_QUERY': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['post'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'header': [{
+        'key': 'Content-Length',
+        'value': '22'
+      }],
+      'method': 'POST',
+      'body': {
+        'mode': 'formdata',
+        'formdata': [{
+          'key': 'awdawd',
+          'value': 'awdawd',
+          'type': 'text'
+        }, {
+          'disabled': true,
+          'key': '',
+          'value': '',
+          'type': 'file',
+          'src': '/home/wolf/Pictures/arch.png'
+        }]
+      },
+      'auth': {
+        'type': 'awsv4',
+        'awsv4': [{
+          'type': 'any',
+          'value': 'KEY',
+          'key': 'accessKey'
+        }, {
+          'type': 'any',
+          'value': true,
+          'key': 'addAuthDataToQuery'
+        }, {
+          'type': 'any',
+          'value': 'in-east-1',
+          'key': 'region'
+        }, {
+          'type': 'any',
+          'value': 'SECRET',
+          'key': 'secretKey'
+        }, {
+          'type': 'any',
+          'value': 's4',
+          'key': 'service'
+        }, {
+          'type': 'any',
+          'value': 'session',
+          'key': 'sessionToken'
+        }]
+      }
+    })
   }
 };

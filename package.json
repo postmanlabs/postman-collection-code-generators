@@ -22,10 +22,12 @@
   },
   "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme",
   "dependencies": {
-    "async": "^3.2.0",
+    "aws4": "^1.10.0",
+    "chai": "^4.2.0",
     "postman-collection": "^3.6.4"
   },
   "devDependencies": {
+    "async": "^3.2.0",
     "chai": "^4.2.0",
     "eslint": "^7.5.0",
     "eslint-plugin-jsdoc": "^30.0.3",
