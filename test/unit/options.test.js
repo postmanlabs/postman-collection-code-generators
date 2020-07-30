@@ -31,8 +31,8 @@ describe('Option: Variables', function () {
       }
     }, (err, snippet) => {
       expect(err).to.be.null;
-      expect(snippet).to.include('variable1: \'value1\'');
-      expect(snippet).to.include('variable2: \'value2\'');
+      expect(snippet).to.include('\'variable1\': \'value1\'');
+      expect(snippet).to.include('\'variable2\': \'value2\'');
     });
   });
 });
