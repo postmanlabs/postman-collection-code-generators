@@ -25,5 +25,18 @@
     "aws4": "^1.10.0",
     "chai": "^4.2.0",
     "postman-collection": "^3.6.4"
+  },
+  "devDependencies": {
+    "async": "^3.2.0",
+    "chai": "^4.2.0",
+    "eslint": "^7.5.0",
+    "eslint-plugin-jsdoc": "^30.0.3",
+    "eslint-plugin-lodash": "^7.1.0",
+    "eslint-plugin-security": "^1.4.0",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "pretty-ms": "^7.0.0",
+    "recursive-readdir": "^2.2.2",
+    "shelljs": "^0.8.4"
   }
 }
