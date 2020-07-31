@@ -1,6 +1,5 @@
 // TODO add options and fetch options
-const getCodegenOptions = require('postman-code-generators').getOptions,
-  processCollection = require('../../../lib/utils').processCollection,
+const processCollection = require('../../../lib/utils').processCollection,
   { sanitize, itemGroupHandler, itemHandler} = require('./util');
 
 /**
@@ -25,7 +24,6 @@ async function generate (collection, options, callback) {
     snippet += 'var ';
   }
   snippet += 'request = require(\'request\');\n\n';
-  snippet += 'function SDK(environment = {}) {\n\n';
   snippet += indent + 'const configVariables = {';
   if (options.variableList) {
     options.variableList.each((item) => {
@@ -33,6 +31,7 @@ async function generate (collection, options, callback) {
     });
   }
   snippet += indent + '};\n\n';
+  snippet += 'function SDK(environment = {}) {\n\n';
   snippet += options.ES6_enabled ? 'const ' : 'var ';
   snippet += 'self = this;\n\n';
   snippet += indent + 'this.requests = {\n';
@@ -43,6 +42,8 @@ async function generate (collection, options, callback) {
     return callback(err, null);
   }
   snippet += indent + `}.${collection.name};\n\n`;
+  snippet += indent + 'this.variables = this.setVariables(environment);\n\n';
+  snippet += '}\n\n';
   snippet += '/**\n';
   snippet += 'Function to set environment variables. These variables will override the collection variables\n\n';
   snippet += '@param {Object} env Object containing env variables\n';
@@ -60,8 +61,8 @@ async function generate (collection, options, callback) {
   snippet += '@param {any} [var] - variable name to return \n';
   snippet += '@returns {Object} object containing variables\n';
   snippet += '*/\n';
-  snippet += indent + 'SDK.prototype.getVariables = function (var) {\n';
-  snippet += indent + 'return var ? this.variables[var] : this.variables;\n';
+  snippet += indent + 'SDK.prototype.getVariables = function (variable) {\n';
+  snippet += indent + 'return variable ? this.variables[variable] : this.variables;\n';
   snippet += indent + '};\n\n';
   snippet += 'module.exports = SDK;\n';
   return callback(null, snippet);

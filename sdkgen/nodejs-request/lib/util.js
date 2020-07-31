@@ -44,10 +44,10 @@ function generateFunctionSnippet (collectionItem, options) {
       variableDeclarations,
       request = collectionItem.request;
 
-    codegen.convert('NodeJs', 'Request', request, {
+    convert('NodeJs', 'Request', request, {
       SDKGEN_enabled: true,
       ...options
-    }, function (err, requestSnippet) {
+    }, function (error, requestSnippet) {
       if (error) {
         return reject(error);
       }
@@ -73,7 +73,7 @@ function generateFunctionSnippet (collectionItem, options) {
       variableDeclarations.forEach((element) => {
         let varName = element.substring(2, element.length - 2);
         snippet += options.ES6_enabled ? 'let ' : 'var ';
-        snippet += `${varName} = variables.${varName} ? variables.${varName} : self.environmentVariables.${varName};\n`;
+        snippet += `${varName} = variables.${varName} ? variables.${varName} : self.variables.${varName};\n`;
       });
   
       // replaceVariable replaces all the postman variables and returns the resulting snippet
@@ -81,7 +81,7 @@ function generateFunctionSnippet (collectionItem, options) {
       snippet += '}';
       return resolve(snippet);
     });
-  }
+  });
 }
 
 /**
