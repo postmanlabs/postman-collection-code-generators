@@ -43,7 +43,10 @@ function replaceVariables (requestSnippet) {
 function generateFunctionSnippet (collectionItem, options, callback) {
   let snippet = '',
     variableDeclarations;
-  codegen.convert('NodeJs', 'Request', collectionItem.request, options, function (err, requestSnippet) {
+  codegen.convert('NodeJs', 'Request', collectionItem.request, {
+    SDKGEN_enabled: true,
+    ...options
+  }, function (err, requestSnippet) {
     if (err) {
       return callback(err, null);
     }
