@@ -42,9 +42,12 @@ function generateFunctionSnippet (collectionItem, options) {
   return new Promise((resolve, reject) => {
     let snippet = '',
       variableDeclarations;
-    convert('Nodejs', 'Request', collectionItem.request, options, (err, requestSnippet) => {
-      if (err) {
-        return reject(err);
+    codegen.convert('NodeJs', 'Request', collectionItem.request, {
+      SDKGEN_enabled: true,
+      ...options
+    }, function (err, requestSnippet) {
+      if (error) {
+        return reject(error);
       }
 
       variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
@@ -72,7 +75,7 @@ function generateFunctionSnippet (collectionItem, options) {
       snippet += '}';
       return resolve(snippet);
     });
-  });
+  }
 }
 
 /**
