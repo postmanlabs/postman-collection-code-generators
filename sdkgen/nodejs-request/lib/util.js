@@ -1,5 +1,4 @@
-const codegen = require('postman-code-generators'),
-  sdk = require('postman-collection');
+const { convert } = require('postman-code-generators');
 
 /**
  * sanitizes input string by handling escape characters eg: converts '''' to '\'\''
@@ -35,91 +34,89 @@ function replaceVariables (requestSnippet) {
 /**
  * Generates snippet for a function declaration
 
- * @param {String} collectionItem - PostmanItem Instance
+ * @param {sdk.Item} collectionItem - PostmanItem Instance
  * @param {Object} options - postman-code-gen options (for specific language)
- * @param {Function} callback - Callback function to return response  (err, snippet)
  * @returns {String} - returns a snippet of function declaration of of a request
  */
-function generateFunctionSnippet (collectionItem, options, callback) {
-  let snippet = '',
-    variableDeclarations;
-  codegen.convert('NodeJs', 'Request', collectionItem.request, {
-    SDKGEN_enabled: true,
-    ...options
-  }, function (err, requestSnippet) {
-    if (err) {
-      return callback(err, null);
-    }
+function generateFunctionSnippet (collectionItem, options) {
+  return new Promise((resolve, reject) => {
+    let snippet = '',
+      variableDeclarations;
+    codegen.convert('NodeJs', 'Request', collectionItem.request, {
+      SDKGEN_enabled: true,
+      ...options
+    }, function (err, requestSnippet) {
+      if (error) {
+        return reject(error);
+      }
 
-    variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
+      variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
 
-    // JSDocs declaration
-    snippet += `/**\n${collectionItem.request.description}\n`;
-    snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
-    variableDeclarations.forEach((element) => {
-      let varName = element.substring(2, element.length - 2);
-      snippet += `@param {String} variables.${varName}\n`;
+      // JSDocs declaration
+      snippet += `/**\n${collectionItem.request.description}\n`;
+      snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
+      variableDeclarations.forEach((element) => {
+        let varName = element.substring(2, element.length - 2);
+        snippet += `@param {String} variables.${varName}\n`;
+      });
+      snippet += '*/\n';
+
+      // Function declaration
+      snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
+
+      // Request level variable declaration
+      variableDeclarations.forEach((element) => {
+        let varName = element.substring(2, element.length - 2);
+        snippet += options.ES6_enabled ? 'let ' : 'var ';
+        snippet += `${varName} = variables.${varName} ? variables.${varName} : self.environmentVariables.${varName};\n`;
+      });
+
+      snippet += replaceVariables(requestSnippet);
+      snippet += '}';
+      return resolve(snippet);
     });
-    snippet += '*/\n';
-
-    // Function declaration
-    snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
-
-    // Request level variable declaration
-    variableDeclarations.forEach((element) => {
-      let varName = element.substring(2, element.length - 2);
-      snippet += options.ES6_enabled ? 'let ' : 'var ';
-      snippet += `${varName} = variables.${varName} ? variables.${varName} : self.environmentVariables.${varName};\n`;
-    });
-
-    snippet += replaceVariables(requestSnippet);
-    snippet += '}';
-    return callback(null, snippet);
-  });
+  }
 }
 
 /**
- * Extracts requests and generats snipepts collection members
- * Algorithm used : Reccursive dfs function which uses promises to traverse the postman-collection
-
- * @param {Object} collectionItemMember - PostmanItem or PostmanItemGroup instance
- * @param {Object} options - postman-code-gen options (for specific language)
- * @param {Functionn} callback - Callback function to return response (err, snippet)
- * @returns {Promise} - promise containing snippet for collection requests or error
- * TODO fix issue with indent
- * TODO merge all function related stuff to generateFunctionSnippet method
+ * A handler function used to generate snippet for a pm.Item
+ *
+ * @param {sdk.Item} collectionItem - Postman Collection Item instance
+ * @param {object} options - postman-code-generator options
+ * @returns {string} - string contaning snippet for input item
  */
-function processCollection (collectionItemMember, options, callback) {
-  var snippet = '';
-  if (sdk.Item.isItem(collectionItemMember)) {
-    generateFunctionSnippet(collectionItemMember, options, (err, funcSnippet) => {
-      if (err) {
-        return callback(err, null);
-      }
-      snippet += `"${collectionItemMember.name}": \n`;
-      snippet += funcSnippet;
-      snippet += ',\n';
-      return callback(null, snippet);
-    });
-    return;
+async function itemHandler (collectionItem, options) {
+  let snippet = '';
+  try {
+    snippet += `"${collectionItem.name}": \n`;
+    snippet += await generateFunctionSnippet(collectionItem, options);
+    snippet += ',\n';
   }
-  snippet += `/**\n${collectionItemMember.description}\n*/\n`;
-  snippet += `"${collectionItemMember.name}": {\n`;
-  collectionItemMember.items.members.forEach((element) => {
-    processCollection(element, options, (err, snippetr) => {
-      if (err) {
-        return callback(err, null);
-      }
-      snippet += snippetr;
-    });
-  });
+  catch (error) {
+    throw error;
+  }
+  return snippet;
+}
+
+/**
+ * Handler function userd to generate snippet for a pm.ItemGroup
+ *
+ * @param {sdk.ItemGroup} collectionItem - Postman Collection Item Member
+ * @param {array } memberResults - Array of result after passing through processCollection method for this ItemGroup
+ * @returns {string} - snippet for input ItemGroup
+ */
+function itemGroupHandler (collectionItem, memberResults) {
+  let snippet = '';
+  snippet += `/**\n${collectionItem.description}\n*/\n`;
+  snippet += `"${collectionItem.name}": {\n`;
+  snippet += memberResults.join('');
   snippet += '},\n';
-  callback(null, snippet);
+  return snippet;
 }
 
 module.exports = {
+  sanitize,
   generateFunctionSnippet,
-  processCollection,
-  replaceVariables,
-  sanitize
+  itemHandler,
+  itemGroupHandler
 };
