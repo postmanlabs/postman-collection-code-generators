@@ -42,21 +42,27 @@ async function generate (collection, options, callback) {
   catch (err) {
     return callback(err, null);
   }
-  snippet += indent + '};\n\n';
+  snippet += indent + `}.${collection.name};\n\n`;
   snippet += '/**\n';
   snippet += 'Function to set environment variables. These variables will override the collection variables\n\n';
   snippet += '@param {Object} env Object containing env variables\n';
   snippet += '*/\n';
-  snippet += indent + 'SDK.prototype.setEnvironment = function (env) {\n';
-  snippet += indent.repeat(2) + 'let environmentVariables = collectionVariables;\n';
-  snippet += indent + 'Object.keys(env).forEach(function (key) {\n';
-  snippet += indent.repeat(2) + 'environmentVariables[key] = env[key];\n';
+  snippet += indent + 'SDK.prototype.setVariables = function (vars) {\n';
+  snippet += indent.repeat(2) + 'let variables = JSON.parse(JSON.stringify(this.variables || configVariables));\n';
+  snippet += indent + 'Object.keys(vars).forEach(function (key) {\n';
+  snippet += indent.repeat(2) + 'variables[key] = vars[key];\n';
   snippet += indent + '});\n';
-  snippet += indent + 'self.environmentVariables = environmentVariables;\n';
-  snippet += indent + 'return environmentVariables;\n';
+  snippet += indent + 'this.variables = variables;\n';
+  snippet += indent + 'return this.variables;\n';
   snippet += indent + '};\n\n';
-  snippet += indent + 'this.setEnvironment(environment);\n\n';
-  snippet += '}\n\n';
+  snippet += '/**\n';
+  snippet += 'Method to retrieve current variable config\n\n';
+  snippet += '@param {any} [var] - variable name to return \n';
+  snippet += '@returns {Object} object containing variables\n';
+  snippet += '*/\n';
+  snippet += indent + 'SDK.prototype.getVariables = function (var) {\n';
+  snippet += indent + 'return var ? this.variables[var] : this.variables;\n';
+  snippet += indent + '};\n\n';
   snippet += 'module.exports = SDK;\n';
   return callback(null, snippet);
 }

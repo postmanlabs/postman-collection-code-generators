@@ -41,8 +41,10 @@ function replaceVariables (requestSnippet) {
 function generateFunctionSnippet (collectionItem, options) {
   return new Promise((resolve, reject) => {
     let snippet = '',
-      variableDeclarations;
-    codegen.convert('NodeJs', 'Request', collectionItem.request, {
+      variableDeclarations,
+      request = collectionItem.request;
+
+    codegen.convert('NodeJs', 'Request', request, {
       SDKGEN_enabled: true,
       ...options
     }, function (err, requestSnippet) {
@@ -53,16 +55,19 @@ function generateFunctionSnippet (collectionItem, options) {
       variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
 
       // JSDocs declaration
-      snippet += `/**\n${collectionItem.request.description}\n`;
-      snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
+      snippet += `/**\n${request.description}\n`;
       variableDeclarations.forEach((element) => {
         let varName = element.substring(2, element.length - 2);
         snippet += `@param {String} variables.${varName}\n`;
       });
+      snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
       snippet += '*/\n';
 
-      // Function declaration
       snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
+      snippet += 'if (typeof variables === \'function\') {\n';
+      snippet += 'callback = variables;\n';
+      snippet += 'variables = {};\n';
+      snippet += '}\n';
 
       // Request level variable declaration
       variableDeclarations.forEach((element) => {
@@ -70,7 +75,8 @@ function generateFunctionSnippet (collectionItem, options) {
         snippet += options.ES6_enabled ? 'let ' : 'var ';
         snippet += `${varName} = variables.${varName} ? variables.${varName} : self.environmentVariables.${varName};\n`;
       });
-
+  
+      // replaceVariable replaces all the postman variables and returns the resulting snippet
       snippet += replaceVariables(requestSnippet);
       snippet += '}';
       return resolve(snippet);
