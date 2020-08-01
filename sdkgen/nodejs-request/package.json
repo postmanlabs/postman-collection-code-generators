@@ -1,13 +1,10 @@
 {
-  "name": "boilerplate",
+  "name": "nodejs-request",
   "version": "1.0.0",
-  "description": "Converts Postman Collection to SDKNAME SDK",
+  "description": "Converts Postman Collection to nodejs-request client SDK",
   "main": "index.js",
   "license": "Apache-2.0",
-  "scripts": {
-    "test": "node npm/test.js",
-    "test-unit": "node npm/test-unit.js",
-    "test-lint": "node npm/test-lint.js",
-    "boilerplate": "node npm/boilerplate.js"
+  "dependencies": {
+    "request": "^2.88.2"
   }
 }

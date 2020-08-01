@@ -1,6 +1,6 @@
 // TODO add options and fetch options
 const processCollection = require('../../../lib/utils').processCollection,
-  { sanitize, itemGroupHandler, itemHandler} = require('./util');
+  { sanitize, itemGroupHandler, itemHandler, getVariableFunctions, getClassDoc} = require('./util');
 
 /**
  * Generates sdk for nodejs-request
@@ -28,7 +28,7 @@ async function generate (collection, options, callback) {
   snippet += 'request = require(\'request\');\n\n';
 
   // initial config variable
-  snippet += indent + 'const configVariables = {';
+  snippet += indent + 'const configVariables = {\n';
   if (options.variableList) {
     options.variableList.each((item) => {
       snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
@@ -36,13 +36,15 @@ async function generate (collection, options, callback) {
   }
   snippet += indent + '};\n\n';
 
+  // class doc
+  snippet += getClassDoc(collection, options.variableList);
+
   // class declaration
-  snippet += 'function SDK(environment = {}) {\n\n';
+  snippet += 'function SDK(config) {\n\n';
   snippet += options.ES6_enabled ? 'const ' : 'var ';
   snippet += 'self = this;\n\n';
-
   // Performing first layer individually to avoid adding additional layer to result
-  await Promise.all(collectionMember.map(async (child) => {
+  await Promise.all(collectionMember.map((child) => {
     return processCollection(child, options, itemHandler, itemGroupHandler)
       .then((str) => {
         snippet += str;
@@ -51,33 +53,12 @@ async function generate (collection, options, callback) {
         callback(error, null);
       });
   }));
-
-  snippet += indent + 'this.variables = this.setVariables(environment);\n\n';
+  snippet += indent + 'this.variables = this.setVariables(config);\n\n';
   snippet += '}\n\n';
 
-  // set variable method
-  snippet += '/**\n';
-  snippet += 'Function to set environment variables. These variables will override the collection variables\n\n';
-  snippet += '@param {Object} env Object containing env variables\n';
-  snippet += '*/\n';
-  snippet += indent + 'SDK.prototype.setVariables = function (vars) {\n';
-  snippet += indent.repeat(2) + 'let variables = JSON.parse(JSON.stringify(this.variables || configVariables));\n';
-  snippet += indent + 'Object.keys(vars).forEach(function (key) {\n';
-  snippet += indent.repeat(2) + 'variables[key] = vars[key];\n';
-  snippet += indent + '});\n';
-  snippet += indent + 'this.variables = variables;\n';
-  snippet += indent + 'return this.variables;\n';
-  snippet += indent + '};\n\n';
-  // get variable method
-  snippet += '/**\n';
-  snippet += 'Method to retrieve current variable config\n\n';
-  snippet += '@param {any} [var] - variable name to return \n';
-  snippet += '@returns {Object} object containing variables\n';
-  snippet += '*/\n';
-  snippet += indent + 'SDK.prototype.getVariables = function (variable) {\n';
-  snippet += indent + 'return variable ? this.variables[variable] : this.variables;\n';
-  snippet += indent + '};\n\n';
-  snippet += 'module.exports = SDK;\n';
+  // get/set variable methods
+  snippet += getVariableFunctions();
+
   return callback(null, snippet);
 }
 

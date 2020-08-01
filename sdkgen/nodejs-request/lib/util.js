@@ -105,7 +105,7 @@ function generateFunctionSnippet (collectionItem, options) {
 async function itemHandler (collectionItem, options) {
   let snippet = '';
   snippet += await generateFunctionSnippet(collectionItem, options);
-  snippet += sdk.Collection.isCollection(collectionItem.__parent.__parent) ? ';\n\n' : ',\n';
+  snippet += sdk.Collection.isCollection(collectionItem.__parent.__parent) ? ';\n\n' : '\n';
   return snippet;
 }
 
@@ -123,14 +123,74 @@ function itemGroupHandler (collectionItem, memberResults) {
   snippet += `/**\n${collectionItem.description}\n*/\n`;
   if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
     snippet += `this.${collectionItemName} =  {\n`;
-    snippet += memberResults.join('');
+    snippet += memberResults.join(',');
     snippet += '};\n\n';
   }
   else {
     snippet += `"${collectionItemName}":  {\n`;
-    snippet += memberResults.join('');
-    snippet += '},\n';
+    snippet += memberResults.join(',');
+    snippet += '}\n';
   }
+  return snippet;
+}
+
+/**
+ * [Description]
+ */
+function getVariableFunctions () {
+  let getVariable = '',
+    setVariable = '';
+
+  // set variable method
+  setVariable += '/**\n';
+  setVariable += 'Function to set variables for entire SDK. ';
+  setVariable += 'Thse variables will override existing/default values.\n\n';
+  setVariable += '@param {Object} Object containing env variables\n';
+  setVariable += '*/\n';
+  setVariable += 'SDK.prototype.setVariables = function (vars) {\n';
+  setVariable += 'let variables = JSON.parse(JSON.stringify(this.variables || configVariables));\n';
+  setVariable += 'Object.keys(vars).forEach(function (key) {\n';
+  setVariable += 'variables[key] = vars[key];\n';
+  setVariable += '});\n';
+  setVariable += 'this.variables = variables;\n';
+  setVariable += 'return this.variables;\n';
+  setVariable += '};\n\n';
+
+  // get variable method
+  getVariable += '/**\n';
+  getVariable += 'Method to retrieve current variable.\n\n';
+  getVariable += '@param {string} [var] - Variable name\n';
+  getVariable += '@returns {Object} object containing variables\n';
+  getVariable += '*/\n';
+  getVariable += 'SDK.prototype.getVariables = function (variable) {\n';
+  getVariable += 'return variable ? this.variables[variable] : this.variables;\n';
+  getVariable += '};\n\n';
+  getVariable += 'module.exports = SDK;\n';
+
+  return setVariable + getVariable;
+}
+
+/**
+ * Generates snippet for class docs
+ *
+ * @param {sdk.Collection} collection - Collection Instance
+ * @param {sdk.VariableList} [variables] - Variable list to be added to the sdk
+ */
+function getClassDoc (collection, variables) {
+  let snippet = '';
+
+  snippet += '/**\n';
+  snippet += collection.description + '\n';
+  snippet += '@param {object} config - Variables to used in SDK. \n';
+
+  if (variables) {
+    variables.each((variable) => {
+      snippet += `@param {String} config.${variable.key}\n`;
+    });
+  }
+
+  snippet += '*/\n';
+
   return snippet;
 }
 
@@ -138,5 +198,7 @@ module.exports = {
   sanitize,
   generateFunctionSnippet,
   itemHandler,
-  itemGroupHandler
+  itemGroupHandler,
+  getVariableFunctions,
+  getClassDoc
 };
