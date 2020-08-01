@@ -1,4 +1,5 @@
-const { convert } = require('postman-code-generators');
+const { convert } = require('postman-code-generators'),
+  sdk = require('postman-collection');
 
 /**
  * sanitizes input string by handling escape characters eg: converts '''' to '\'\''
@@ -42,7 +43,8 @@ function generateFunctionSnippet (collectionItem, options) {
   return new Promise((resolve, reject) => {
     let snippet = '',
       variableDeclarations,
-      request = collectionItem.request;
+      request = collectionItem.request,
+      collectionItemName = collectionItem.name.toUpperCase().split(' ').join('_');
 
     convert('NodeJs', 'Request', request, {
       SDKGEN_enabled: true,
@@ -63,6 +65,15 @@ function generateFunctionSnippet (collectionItem, options) {
       snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
       snippet += '*/\n';
 
+      // class property name declaration
+      if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
+        snippet += `this.${collectionItemName} = `;
+      }
+      else {
+        snippet += `"${collectionItemName}": `;
+      }
+
+      // function signature declaration
       snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
       snippet += 'if (typeof variables === \'function\') {\n';
       snippet += 'callback = variables;\n';
@@ -75,7 +86,7 @@ function generateFunctionSnippet (collectionItem, options) {
         snippet += options.ES6_enabled ? 'let ' : 'var ';
         snippet += `${varName} = variables.${varName} ? variables.${varName} : self.variables.${varName};\n`;
       });
-  
+
       // replaceVariable replaces all the postman variables and returns the resulting snippet
       snippet += replaceVariables(requestSnippet);
       snippet += '}';
@@ -93,14 +104,8 @@ function generateFunctionSnippet (collectionItem, options) {
  */
 async function itemHandler (collectionItem, options) {
   let snippet = '';
-  try {
-    snippet += `"${collectionItem.name}": \n`;
-    snippet += await generateFunctionSnippet(collectionItem, options);
-    snippet += ',\n';
-  }
-  catch (error) {
-    throw error;
-  }
+  snippet += await generateFunctionSnippet(collectionItem, options);
+  snippet += sdk.Collection.isCollection(collectionItem.__parent.__parent) ? ';\n\n' : ',\n';
   return snippet;
 }
 
@@ -112,11 +117,20 @@ async function itemHandler (collectionItem, options) {
  * @returns {string} - snippet for input ItemGroup
  */
 function itemGroupHandler (collectionItem, memberResults) {
-  let snippet = '';
+  let snippet = '',
+    collectionItemName = collectionItem.name.toUpperCase().split(' ').join('_');
+
   snippet += `/**\n${collectionItem.description}\n*/\n`;
-  snippet += `"${collectionItem.name}": {\n`;
-  snippet += memberResults.join('');
-  snippet += '},\n';
+  if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
+    snippet += `this.${collectionItemName} =  {\n`;
+    snippet += memberResults.join('');
+    snippet += '};\n\n';
+  }
+  else {
+    snippet += `"${collectionItemName}":  {\n`;
+    snippet += memberResults.join('');
+    snippet += '},\n';
+  }
   return snippet;
 }
 

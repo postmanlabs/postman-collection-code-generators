@@ -14,7 +14,9 @@ const processCollection = require('../../../lib/utils').processCollection,
  */
 async function generate (collection, options, callback) {
   var snippet = '',
+    collectionMember = collection.items.members,
     indent = options.indentType === 'Tab' ? '\t' : ' ';
+
   indent = indent.repeat(options.indentCount);
 
   if (options.ES6_enabled) {
@@ -24,6 +26,8 @@ async function generate (collection, options, callback) {
     snippet += 'var ';
   }
   snippet += 'request = require(\'request\');\n\n';
+
+  // initial config variable
   snippet += indent + 'const configVariables = {';
   if (options.variableList) {
     options.variableList.each((item) => {
@@ -31,19 +35,27 @@ async function generate (collection, options, callback) {
     });
   }
   snippet += indent + '};\n\n';
+
+  // class declaration
   snippet += 'function SDK(environment = {}) {\n\n';
   snippet += options.ES6_enabled ? 'const ' : 'var ';
   snippet += 'self = this;\n\n';
-  snippet += indent + 'this.requests = {\n';
-  try {
-    snippet += await processCollection(collection, options, itemHandler, itemGroupHandler);
-  }
-  catch (err) {
-    return callback(err, null);
-  }
-  snippet += indent + `}.${collection.name};\n\n`;
+
+  // Performing first layer individually to avoid adding additional layer to result
+  await Promise.all(collectionMember.map(async (child) => {
+    return processCollection(child, options, itemHandler, itemGroupHandler)
+      .then((str) => {
+        snippet += str;
+      })
+      .catch((error) => {
+        callback(error, null);
+      });
+  }));
+
   snippet += indent + 'this.variables = this.setVariables(environment);\n\n';
   snippet += '}\n\n';
+
+  // set variable method
   snippet += '/**\n';
   snippet += 'Function to set environment variables. These variables will override the collection variables\n\n';
   snippet += '@param {Object} env Object containing env variables\n';
@@ -56,6 +68,7 @@ async function generate (collection, options, callback) {
   snippet += indent + 'this.variables = variables;\n';
   snippet += indent + 'return this.variables;\n';
   snippet += indent + '};\n\n';
+  // get variable method
   snippet += '/**\n';
   snippet += 'Method to retrieve current variable config\n\n';
   snippet += '@param {any} [var] - variable name to return \n';
