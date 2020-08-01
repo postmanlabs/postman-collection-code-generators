@@ -1,4 +1,3 @@
-// TODO add options and fetch options
 const processCollection = require('../../../lib/utils').processCollection,
   { sanitize, itemGroupHandler, itemHandler, getVariableFunctions, getClassDoc} = require('./util');
 
