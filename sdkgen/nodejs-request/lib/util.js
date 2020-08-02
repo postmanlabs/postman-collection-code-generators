@@ -1,4 +1,5 @@
 const { convert } = require('postman-code-generators'),
+  beautify = require('js-beautify'),
   sdk = require('postman-collection');
 
 /**
@@ -194,11 +195,22 @@ function getClassDoc (collection, variables) {
   return snippet;
 }
 
+/**
+ * Returns beautified js SDK snippet
+ *
+ * @param {string} snippet - SDK snippet
+ * @param {number} indentSize - size of indentation (space)
+ */
+function format(snippet, indentSize) {
+  return beautify(snippet, { indent_size: indentSize, space_in_empty_paren: true });
+}
+
 module.exports = {
   sanitize,
   generateFunctionSnippet,
   itemHandler,
   itemGroupHandler,
   getVariableFunctions,
-  getClassDoc
+  getClassDoc,
+  format
 };
