@@ -144,7 +144,7 @@ function getVariableFunctions () {
   // set variable method
   setVariable += '/**\n';
   setVariable += 'Function to set variables for entire SDK. ';
-  setVariable += 'Thse variables will override existing/default values.\n\n';
+  setVariable += 'These variables will override existing/default values.\n\n';
   setVariable += '@param {Object} Object containing env variables\n';
   setVariable += '*/\n';
   setVariable += 'SDK.prototype.setVariables = function (vars) {\n';
