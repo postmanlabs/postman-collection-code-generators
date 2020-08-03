@@ -11,14 +11,14 @@ const args = process.argv,
     BOILERPLATE = path.resolve(__dirname, '../npm/boilerplate'),
     SDKGEN_FOLDER = path.resolve(__dirname, '../sdkgen') + '/';
 
-codegens = getSubfolders(SDKGEN_FOLDER);
+sdkgens = getSubfolders(SDKGEN_FOLDER);
 
 if (!args[2]) {
-    console.log(chalk.red('Please provide a name for the codegen.'));
+    console.log(chalk.red('Please provide a name for the sdkgen.'));
     return;
 }
 
-if (codegens.includes(args[2])) {
+if (sdkgens.includes(args[2])) {
     console.log(chalk.red('SDKGEN with same name already exists. ' +
         'Please follow the naming convention(language-library(variant)) and choose a unique name.\n'));
     return;
