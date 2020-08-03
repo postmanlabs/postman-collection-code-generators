@@ -39,7 +39,7 @@ async function generate (collection, options, callback) {
   snippet += getClassDoc(collection, options.variableList);
 
   // class declaration
-  snippet += 'function SDK(config) {\n\n';
+  snippet += 'function SDK(config = {}) {\n\n';
   snippet += options.ES6_enabled ? 'const ' : 'var ';
   snippet += 'self = this;\n\n';
   // Performing first layer individually to avoid adding additional layer to result
