@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "node npm/test.js",
+    "test-unit": "node npm/test-unit.js",
+    "test-lint": "node npm/test-lint.js",
     "boilerplate": "node npm/boilerplate.js"
   },
   "repository": {
@@ -21,5 +23,26 @@
   "bugs": {
     "url": "https://github.com/umeshp7/postman-collection-code-generators/issues"
   },
-  "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme"
+  "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme",
+  "dependencies": {
+    "async": "^3.2.0",
+    "node-fetch": "^2.6.0",
+    "postman-code-generators": "git+https://github.com/someshkoli/postman-code-generators.git#sdkGenerator",
+    "postman-collection": "^3.6.2",
+    "shelljs": "^0.8.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chalk": "^4.1.0",
+    "eslint": "^7.1.0",
+    "eslint-plugin-jsdoc": "^27.0.6",
+    "eslint-plugin-lodash": "^7.1.0",
+    "eslint-plugin-security": "^1.4.0",
+    "istanbul": "^0.4.5",
+    "lodash": "^4.17.15",
+    "mocha": "^7.2.0",
+    "nyc": "^15.1.0",
+    "pretty-ms": "^7.0.0",
+    "recursive-readdir": "^2.2.2"
+  }
 }
