@@ -5,6 +5,7 @@
   "main": "index.js",
   "license": "Apache-2.0",
   "dependencies": {
+    "js-beautify": "^1.11.0",
     "request": "^2.88.2"
   }
 }
