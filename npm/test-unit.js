@@ -22,6 +22,7 @@ module.exports = function (exit) {
 
   test('-d', COV_REPORT_PATH) && rm('-rf', COV_REPORT_PATH);
   mkdir('-p', COV_REPORT_PATH);
+  mkdir('-p', COV_REPORT_PATH + '/processinfo');
 
   var Mocha = require('mocha'),
     nyc = new NYC({
