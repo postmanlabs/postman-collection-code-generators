@@ -84,7 +84,7 @@ function generateFunctionSnippet (collectionItem, options) {
       variableDeclarations.forEach((element) => {
         let varName = element.substring(2, element.length - 2);
         snippet += options.ES6_enabled ? 'let ' : 'var ';
-        snippet += `${varName} = variables.${varName} ? variables.${varName} : self.variables.${varName};\n`;
+        snippet += `${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
       });
 
       // replaceVariable replaces all the postman variables and returns the resulting snippet
