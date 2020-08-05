@@ -58,11 +58,13 @@ function generateFunctionSnippet (collectionItem, options) {
 
       // JSDocs declaration
       snippet += `/**\n${request.description}\n`;
-      snippet += '@param {object} variables - Variables used for this request\n';
-      variableDeclarations.forEach((element) => {
-        let varName = element.substring(2, element.length - 2);
-        snippet += `@param {String} variables.${varName}\n`;
-      });
+      if (variableDeclarations) {
+        snippet += '@param {object} variables - Variables used for this request\n';
+        variableDeclarations.forEach((element) => {
+          let varName = element.substring(2, element.length - 2);
+          snippet += `@param {String} variables.${varName}\n`;
+        });
+      }
       snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
       snippet += '*/\n';
 
@@ -82,11 +84,13 @@ function generateFunctionSnippet (collectionItem, options) {
       snippet += '}\n';
 
       // Request level variable declaration
-      variableDeclarations.forEach((element) => {
-        let varName = element.substring(2, element.length - 2);
-        snippet += options.ES6_enabled ? 'let ' : 'var ';
-        snippet += `${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
-      });
+      if (variableDeclarations) {
+        variableDeclarations.forEach((element) => {
+          let varName = element.substring(2, element.length - 2);
+          snippet += options.ES6_enabled ? 'let ' : 'var ';
+          snippet += `${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
+        });
+      }
 
       // replaceVariable replaces all the postman variables and returns the resulting snippet
       snippet += replaceVariables(requestSnippet);
