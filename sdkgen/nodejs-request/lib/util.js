@@ -70,7 +70,7 @@ function generateFunctionSnippet (collectionItem, options) {
 
       // class property name declaration
       if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
-        snippet += `this.${collectionItemName} = `;
+        snippet += `this["${collectionItemName}"] = `;
       }
       else {
         snippet += `"${collectionItemName}": `;
@@ -127,7 +127,7 @@ function itemGroupHandler (collectionItem, memberResults) {
 
   snippet += `/**\n${collectionItem.description}\n*/\n`;
   if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
-    snippet += `this.${collectionItemName} =  {\n`;
+    snippet += `this["${collectionItemName}"] =  {\n`;
     snippet += memberResults.join(',');
     snippet += '};\n\n';
   }
@@ -170,7 +170,6 @@ function getVariableFunctions () {
   getVariable += 'SDK.prototype.getVariables = function (variable) {\n';
   getVariable += 'return variable ? this.variables[variable] : this.variables;\n';
   getVariable += '};\n\n';
-  getVariable += 'module.exports = SDK;\n';
 
   return setVariable + getVariable;
 }

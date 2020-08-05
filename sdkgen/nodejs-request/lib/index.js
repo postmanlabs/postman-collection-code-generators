@@ -58,6 +58,9 @@ async function generate (collection, options, callback) {
   // get/set variable methods
   snippet += getVariableFunctions();
 
+  // exporting generated module
+  snippet += 'module.exports = SDK;\n';
+
   return callback(null, snippet);
 }
 
