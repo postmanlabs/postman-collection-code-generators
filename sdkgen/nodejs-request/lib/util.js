@@ -58,6 +58,7 @@ function generateFunctionSnippet (collectionItem, options) {
 
       // JSDocs declaration
       snippet += `/**\n${request.description}\n`;
+      snippet += '@param {object} variables - Variables used for this request\n';
       variableDeclarations.forEach((element) => {
         let varName = element.substring(2, element.length - 2);
         snippet += `@param {String} variables.${varName}\n`;
@@ -159,7 +160,7 @@ function getVariableFunctions () {
   // get variable method
   getVariable += '/**\n';
   getVariable += 'Method to retrieve current variable.\n\n';
-  getVariable += '@param {string} [var] - Variable name\n';
+  getVariable += '@param {string} [variable] - Variable name\n';
   getVariable += '@returns {Object} object containing variables\n';
   getVariable += '*/\n';
   getVariable += 'SDK.prototype.getVariables = function (variable) {\n';
