@@ -55,6 +55,7 @@ function generateFunctionSnippet (collectionItem, options) {
       }
 
       variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
+      variableDeclarations = new Set(variableDeclarations);
 
       // JSDocs declaration
       snippet += `/**\n${request.description ? request.description + '\n' : ''}`;
