@@ -1,0 +1,24 @@
+{
+	"id": "a338c919-4bfb-48e0-a23d-992cf0b04431",
+	"name": "sdkgen_test",
+	"values": [
+		{
+			"key": "url",
+			"value": "www.google.com",
+			"enabled": true
+		},
+		{
+			"key": "var1",
+			"value": "valenv1",
+			"enabled": true
+		},
+		{
+			"key": "var2",
+			"value": "valenv2",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2020-07-20T22:50:39.600Z",
+	"_postman_exported_using": "Postman/7.28.0"
+}
