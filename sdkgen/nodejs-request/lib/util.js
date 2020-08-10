@@ -141,13 +141,33 @@ function itemGroupHandler (collectionItem, memberResults) {
 }
 
 /**
- * [Description]
+ * Returns function snippet for getVariable method
+ *
+ * @returns {string} set variable method snippet
  */
 function getVariableFunctions () {
-  let getVariable = '',
-    setVariable = '';
+  let getVariable = '';
 
-  // set variable method
+  getVariable += '/**\n';
+  getVariable += 'Method to retrieve current variable.\n\n';
+  getVariable += '@param {string} [variable] - Variable name\n';
+  getVariable += '@returns {Object} object containing variables\n';
+  getVariable += '*/\n';
+  getVariable += 'SDK.prototype.getVariables = function (variable) {\n';
+  getVariable += 'return variable ? this.variables[variable] : this.variables;\n';
+  getVariable += '};\n\n';
+
+  return getVariable;
+}
+
+/**
+ * Returns function snippet for get variable method
+ *
+ * @returns {string} - set variable method snippet
+ */
+function setVariableFunction () {
+  let setVariable = '';
+
   setVariable += '/**\n';
   setVariable += 'Function to set variables for entire SDK. ';
   setVariable += 'These variables will override existing/default values.\n\n';
@@ -162,17 +182,7 @@ function getVariableFunctions () {
   setVariable += 'return this.variables;\n';
   setVariable += '};\n\n';
 
-  // get variable method
-  getVariable += '/**\n';
-  getVariable += 'Method to retrieve current variable.\n\n';
-  getVariable += '@param {string} [variable] - Variable name\n';
-  getVariable += '@returns {Object} object containing variables\n';
-  getVariable += '*/\n';
-  getVariable += 'SDK.prototype.getVariables = function (variable) {\n';
-  getVariable += 'return variable ? this.variables[variable] : this.variables;\n';
-  getVariable += '};\n\n';
-
-  return setVariable + getVariable;
+  return setVariable;
 }
 
 /**
@@ -205,5 +215,6 @@ module.exports = {
   itemHandler,
   itemGroupHandler,
   getVariableFunctions,
+  setVariableFunction,
   getClassDoc
 };
