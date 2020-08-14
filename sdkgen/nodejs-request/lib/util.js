@@ -54,8 +54,8 @@ function getAuthSnippet (item, requestSnippet) {
 
   if (requestSnippet.match(HAWK_AUTH_STRING)) {
     requestSnippet = requestSnippet.replace(HAWK_AUTH_STRING, `' + hawk.client.header(
-      '${sanitize(request.url)}',
-      '${sanitize(request.method)}',
+      '${request.url}',
+      '${request.method}',
       {
         credentials: {
           id: '${sanitize(config.authId)}',
