@@ -1,4 +1,5 @@
 const { convert } = require('postman-code-generators'),
+  getAuthConfig = require('../../../lib/auth/utils').getAuthOptions,
   sdk = require('postman-collection');
 
 /**
@@ -33,6 +34,49 @@ function replaceVariables (requestSnippet) {
 }
 
 /**
+ * Adds required auth generation snippets
+ *  - hawk
+ *
+ * @param {sdk.Item} item - Parent item of request
+ * @param {string} requestSnippet - Request snippet generate by postman-code-generators
+ * @returns {string} - request snippt with added auth generating snippet
+ */
+function getAuthSnippet (item, requestSnippet) {
+  let request = item.request,
+    config,
+    HAWK_AUTH_STRING = `_${item.id}_HAWK_${item.id}_`;
+
+  if (!request.auth && !item.getAuth()) {
+    return requestSnippet;
+  }
+
+  config = getAuthConfig(request.auth || item.getAuth());
+
+  if (requestSnippet.match(HAWK_AUTH_STRING)) {
+    requestSnippet = requestSnippet.replace(HAWK_AUTH_STRING, `' + hawk.client.header(
+      '${sanitize(request.url)}',
+      '${sanitize(request.method)}',
+      {
+        credentials: {
+          id: '${sanitize(config.authId)}',
+          key: '${sanitize(config.authKey)}',
+          algorithm: '${sanitize(config.algorithm)}',
+        },
+        ext: '${sanitize(config.extraData)}',
+        timestamp: '${sanitize(config.timestamp)}',
+        nonce: '${sanitize(config.nonce)}',
+        payload: '${request.body ? sanitize(request.body.toString()) : ''}',
+        app: '${sanitize(config.app)}',
+        dlg: '${sanitize(config.delegation)}'
+      }
+    ).header + '`);
+  }
+
+  return requestSnippet;
+}
+
+
+/**
  * Generates snippet for a function declaration
 
  * @param {sdk.Item} collectionItem - PostmanItem Instance
@@ -54,6 +98,10 @@ function generateFunctionSnippet (collectionItem, options) {
         return reject(error);
       }
 
+      // replace auth params with respective auth generating snippet
+      requestSnippet = getAuthSnippet(collectionItem, requestSnippet);
+
+      // extract varaibles used from snipept
       variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
       variableDeclarations = new Set(variableDeclarations);
 
@@ -209,6 +257,26 @@ function getClassDoc (collection, variables) {
   return snippet;
 }
 
+
+/**
+ * Returns snippet for library imports for generating sdk
+ *
+ * @param {sdk.Collection} collection - Postman collection instance
+ */
+function getRequireList (collection) {
+  let requireList = ['const request = require(\'request\');'];
+
+  collection.forEachItem((item) => {
+    if (item.request.auth ? (item.request.auth.type === 'hawk') : false) {
+      if (!requireList.includes('const hawk = require(\'hawk\');')) {
+        requireList.push('const hawk = require(\'hawk\');');
+      }
+    }
+  });
+
+  return requireList;
+}
+
 module.exports = {
   sanitize,
   generateFunctionSnippet,
@@ -216,5 +284,6 @@ module.exports = {
   itemGroupHandler,
   getVariableFunctions,
   setVariableFunction,
+  getRequireList,
   getClassDoc
 };

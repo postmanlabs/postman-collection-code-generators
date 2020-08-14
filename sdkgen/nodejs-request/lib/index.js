@@ -1,5 +1,5 @@
-const processCollection = require('../../../lib/utils').processCollection,
-  { sanitize, itemGroupHandler, itemHandler, getVariableFunctions, getClassDoc} = require('./util');
+const {processCollection, authorizeCollection} = require('../../../lib/utils'),
+  { sanitize, itemGroupHandler, itemHandler, getVariableFunctions, getClassDoc, getRequireList} = require('./util');
 
 /**
  * Generates sdk for nodejs-request
@@ -18,13 +18,11 @@ async function generate (collection, options, callback) {
 
   indent = indent.repeat(options.indentCount);
 
-  if (options.ES6_enabled) {
-    snippet += 'const ';
-  }
-  else {
-    snippet += 'var ';
-  }
-  snippet += 'request = require(\'request\');\n\n';
+  // passing each request in the collection through the authorizer method to add necessary header/query
+  authorizeCollection(collection);
+
+  // get require list based on library and auth used in collection
+  snippet += getRequireList(collection).join('\n') + '\n\n';
 
   // initial config variable
   snippet += indent + 'const configVariables = {\n';
