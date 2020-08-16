@@ -8,6 +8,25 @@ const processCollection = require('../../../lib/utils').processCollection,
     getClassDoc } = require('./util');
 
 /**
+ * Returns list of available options for nodejs-request sdkgen
+ *
+ * @returns {Array} Array of available options for nodejs-request sdkgen
+ */
+function getOptions () {
+  return [
+    {
+      name: 'Set response return method',
+      id: 'returnMethod',
+      availableOptions: ['Callback', 'Promise'],
+      type: 'String',
+      default: 'Callback',
+      required: false,
+      description: 'Set response return method got http response.'
+    }
+  ];
+}
+
+/**
  * Generates sdk for nodejs-request
 
  * @param {PostmanCollection} collection - Postman collection Instance
@@ -23,6 +42,13 @@ async function generate (collection, options, callback) {
     indent = options.indentType === 'Tab' ? '\t' : ' ';
 
   indent = indent.repeat(options.indentCount);
+
+  try {
+    sanitizeOptions(options, getOptions());
+  }
+  catch (err) {
+    return callback(err, null);
+  }
 
   if (options.ES6_enabled) {
     snippet += 'const ';
