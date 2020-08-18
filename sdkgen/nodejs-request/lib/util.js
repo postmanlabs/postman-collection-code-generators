@@ -39,12 +39,13 @@ function replaceVariables (requestSnippet) {
  *
  * @param {sdk.Item} item - Parent item of request
  * @param {string} requestSnippet - Request snippet generate by postman-code-generators
- * @returns {string} - request snippt with added auth generating snippet
+ * @returns {object} - {request snippet with replaced auth headers, auth declaration snippet}
  */
 function getAuthSnippet (item, requestSnippet) {
   let request = item.request,
     config,
-    HAWK_AUTH_STRING = `_${item.id}_HAWK_${item.id}_`;
+    authSnippet = '',
+    HAWK_AUTH_HEADER = `_${item.id}_HAWK_${item.id}_`;
 
   if (!request.auth && !item.getAuth()) {
     return requestSnippet;
@@ -52,8 +53,9 @@ function getAuthSnippet (item, requestSnippet) {
 
   config = getAuthConfig(request.auth || item.getAuth());
 
-  if (requestSnippet.match(HAWK_AUTH_STRING)) {
-    requestSnippet = requestSnippet.replace(HAWK_AUTH_STRING, `' + hawk.client.header(
+  if (requestSnippet.match(HAWK_AUTH_HEADER)) {
+    requestSnippet = requestSnippet.replace(HAWK_AUTH_HEADER, '\' + hawkAuth + \'');
+    authSnippet = `let hawkAuth = hawk.client.header(
       '${request.url}',
       '${request.method}',
       {
@@ -69,10 +71,10 @@ function getAuthSnippet (item, requestSnippet) {
         app: '${sanitize(config.app)}',
         dlg: '${sanitize(config.delegation)}'
       }
-    ).header + '`);
+    ).header;`;
   }
 
-  return requestSnippet;
+  return {requestSnippet, authSnippet};
 }
 
 
@@ -87,6 +89,7 @@ function generateFunctionSnippet (collectionItem, options) {
   return new Promise((resolve, reject) => {
     let snippet = '',
       variableDeclarations,
+      authSnippets,
       request = collectionItem.request,
       collectionItemName = collectionItem.name.split(' ').join('_');
 
@@ -98,8 +101,6 @@ function generateFunctionSnippet (collectionItem, options) {
         return reject(error);
       }
 
-      // replace auth params with respective auth generating snippet
-      requestSnippet = getAuthSnippet(collectionItem, requestSnippet);
 
       // extract varaibles used from snipept
       variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
@@ -140,6 +141,15 @@ function generateFunctionSnippet (collectionItem, options) {
           snippet += `${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
         });
       }
+
+      // get auth related snippets
+      authSnippets = getAuthSnippet(collectionItem, requestSnippet);
+
+      // add auth variables
+      snippet += replaceVariables(authSnippets.authSnippet);
+
+      // replace auth variables
+      requestSnippet = authSnippets.requestSnippet;
 
       // replaceVariable replaces all the postman variables and returns the resulting snippet
       snippet += replaceVariables(requestSnippet);
@@ -268,8 +278,8 @@ function getRequireList (collection) {
 
   collection.forEachItem((item) => {
     if (item.request.auth ? (item.request.auth.type === 'hawk') : false) {
-      if (!requireList.includes('const hawk = require(\'hawk\');')) {
-        requireList.push('const hawk = require(\'hawk\');');
+      if (!requireList.includes('const hawk = require(\'@hapi/hawk\');')) {
+        requireList.push('const hawk = require(\'@hapi/hawk\');');
       }
     }
   });
