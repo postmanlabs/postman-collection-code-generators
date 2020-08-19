@@ -30,7 +30,8 @@ async function generate (collection, options, callback) {
   else {
     snippet += 'var ';
   }
-  snippet += 'request = require(\'request\');\n\n';
+  snippet += 'request = require(\'request\');\n';
+  snippet += 'const _ = require(\'lodash\');\n\n';
 
   // initial config variable
   snippet += indent + 'const configVariables = {\n';
