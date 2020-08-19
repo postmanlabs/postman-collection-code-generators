@@ -44,7 +44,7 @@ function generateFunctionSnippet (collectionItem, options) {
     let snippet = '',
       variableDeclarations,
       request = collectionItem.request,
-      collectionItemName = collectionItem.name.toUpperCase().split(' ').join('_');
+      collectionItemName = collectionItem.name.join('_');
 
     convert('NodeJs', 'Request', request, {
       SDKGEN_enabled: true,
@@ -124,7 +124,7 @@ async function itemHandler (collectionItem, options) {
  */
 function itemGroupHandler (collectionItem, memberResults) {
   let snippet = '',
-    collectionItemName = collectionItem.name.toUpperCase().split(' ').join('_');
+    collectionItemName = collectionItem.name.join('_');
 
   snippet += `/**\n${collectionItem.description ? collectionItem.description + '\n' : ''}*/\n`;
   if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
