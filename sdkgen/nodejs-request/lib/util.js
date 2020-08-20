@@ -201,7 +201,7 @@ function getClassDoc (collection, variables) {
  * @param {string} snippet - SDK snippet
  * @param {number} indentSize - size of indentation (space)
  */
-function format(snippet, indentSize) {
+function format (snippet, indentSize) {
   return beautify(snippet, { indent_size: indentSize, space_in_empty_paren: true });
 }
 
