@@ -48,7 +48,7 @@ function getAuthSnippet (item, requestSnippet) {
     HAWK_AUTH_HEADER = `_${item.id}_HAWK_${item.id}_`;
 
   if (!request.auth && !item.getAuth()) {
-    return requestSnippet;
+    return {authSnippet, requestSnippet};
   }
 
   config = getAuthConfig(request.auth || item.getAuth());
@@ -71,10 +71,9 @@ function getAuthSnippet (item, requestSnippet) {
         app: '${sanitize(config.app)}',
         dlg: '${sanitize(config.delegation)}'
       }
-    ).header;`;
+    ).header;\n`;
   }
-
-  return {requestSnippet, authSnippet};
+  return {authSnippet, requestSnippet};
 }
 
 
@@ -289,6 +288,7 @@ function getRequireList (collection) {
 
 module.exports = {
   sanitize,
+  getAuthSnippet,
   generateFunctionSnippet,
   itemHandler,
   itemGroupHandler,
