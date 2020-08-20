@@ -11,7 +11,7 @@ describe('Tests for generated sdk', () => {
   it('request variables should contain || notation instead of ? : notation', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.include('var url = variables.url || self.variables.url || \'\'');
     });
@@ -20,7 +20,7 @@ describe('Tests for generated sdk', () => {
   it('should contain complete function doc declaration for param', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
       expect(snippet).to.include('@param {object} variables - Variables used for this request');
@@ -32,7 +32,7 @@ describe('Tests for generated sdk', () => {
   it('should have property name as ["property_name"]', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
       expect(snippet).to.include('this["POST_Raw_Text_Copy"]');
@@ -43,7 +43,7 @@ describe('Tests for generated sdk', () => {
   it('should not contain any undefined description', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
       expect(snippet).to.not.include('undefined');
@@ -53,7 +53,8 @@ describe('Tests for generated sdk', () => {
   it('should not contain duplicate variable declaration in request', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
+        // expect.fail(null, null, err);
       }
       let s = 'var url = variables.url || self.variables.url || \'\';';
       expect(snippet).to.be.a('string');
