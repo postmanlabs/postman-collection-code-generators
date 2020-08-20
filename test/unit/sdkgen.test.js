@@ -59,9 +59,8 @@ describe('Generate function', () => {
       variant: 'request',
       outputType: 'file',
       outputFilePath: '../'
-    }, (err, output) => {
-      expect(err).not.to.be.null;
-      expect(output).to.be.null;
+    }, (err) => {
+      expect.fail(null, null, err);
     });
   });
 
@@ -112,9 +111,8 @@ describe('Generate function', () => {
     sdkgen.generate('random letters', {
       language: 'Nodejs',
       variant: 'request'
-    }, (err, snippet) => {
-      expect(snippet).to.be.null;
-      expect(err);
+    }, (err) => {
+      expect.fail(null, null, err);
     });
   });
 });

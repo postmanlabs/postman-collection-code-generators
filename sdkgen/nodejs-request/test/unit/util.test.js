@@ -22,7 +22,7 @@ describe('Util methods tests:', () => {
       snippet = await utils.generateFunctionSnippet(COLLECTION_INSTANCE.items.members[2], {});
     }
     catch (err) {
-      expect.fail(null, null, err);
+      expect(err).to.be.null;
     }
     expect(snippet).to.be.a('string');
     expect(snippet).to.be.equals(outputs.GENERATE_FUNCTION_SNIPPEPT);
@@ -34,7 +34,7 @@ describe('Util methods tests:', () => {
       snippet = await utils.itemHandler(COLLECTION_INSTANCE.items.members[2], {});
     }
     catch (err) {
-      expect.fail(null, null, err);
+      expect(err).to.be.null;
     }
     expect(snippet).to.be.a('string');
     expect(snippet).to.be.equals(outputs.ITEM_HANDLER.COLLECTION_AS_PARENT);
@@ -46,7 +46,7 @@ describe('Util methods tests:', () => {
       snippet = await utils.itemHandler(COLLECTION_INSTANCE.items.members[0].items.members[0], {});
     }
     catch (err) {
-      expect.fail(null, null, err);
+      expect(err).to.be.null;
     }
     expect(snippet).to.be.a('string');
     expect(snippet).to.include(outputs.ITEM_HANDLER.ITEMGROUP_AS_PARENT);

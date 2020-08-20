@@ -1,9 +1,5 @@
 const expect = require('chai').expect,
   sdk = require('postman-collection'),
-  utils = require('../../lib/util'),
-  fixtures = {
-    utilMethodOutputs: require('../fixtures/utilMethodOutputs.json')
-  },
   collection = {
     SDKGEN: require('../../../../test/fixtures/SDKGEN.postman_collection.json')
   },
@@ -18,8 +14,7 @@ describe('Tests for generated sdk', () => {
   it('should generate sdk snippet', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
-        return;
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
     });
@@ -28,7 +23,7 @@ describe('Tests for generated sdk', () => {
   it('should include nodejs-request library import', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
       expect(snippet).to.include('var request = require(\'request\')');
@@ -41,7 +36,7 @@ describe('Tests for generated sdk', () => {
       variableList: new sdk.VariableList(null, variables.SDKGEN.values)
     }, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
       expect(snippet).to.include('\'url\': \'www.google.com\'');
@@ -53,7 +48,7 @@ describe('Tests for generated sdk', () => {
   it('should have default constructor for generated module', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
       expect(snippet).to.include('function SDK(config = {})');
@@ -63,8 +58,7 @@ describe('Tests for generated sdk', () => {
   it('should have get/set Variable methods', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
-        return;
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
       expect(snippet).to.include('SDK.prototype.setVariables = function (vars) {');
@@ -75,8 +69,7 @@ describe('Tests for generated sdk', () => {
   it('should set initial variables values', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
-        return;
+        expect(err).to.be.null;
       }
       expect(snippet).to.be.a('string');
       expect(snippet).to.include('this.variables = this.setVariables(config)')
@@ -86,7 +79,7 @@ describe('Tests for generated sdk', () => {
   it('should have self variable declaration', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.include('self = this');
     });
@@ -95,7 +88,7 @@ describe('Tests for generated sdk', () => {
   it('should have export module snipept', () => {
     generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
-        expect.fail(null, null, err);
+        expect(err).to.be.null;
       }
       expect(snippet).to.include('module.exports = SDK');
     });
