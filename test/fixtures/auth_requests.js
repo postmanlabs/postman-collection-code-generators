@@ -1,3 +1,6 @@
+const {
+  sortedLastIndex
+} = require('lodash');
 const sdk = require('postman-collection');
 
 /**
@@ -546,6 +549,130 @@ module.exports = {
           'type': 'any',
           'value': '',
           'key': 'username'
+        }]
+      }
+    })
+  },
+
+  // oauth 2.0
+  'OAUTH2': {
+    'TOKEN_HEADER_PREFIX': new sdk.Request({
+      'description': {
+        // eslint-disable-next-line max-len
+        'content': 'The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using "Query String \nParameters". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter "hand" has the value "wave".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested.',
+        'type': 'text/plain'
+      },
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'oauth2',
+        'oauth2': [{
+          'type': 'any',
+          'value': 'token',
+          'key': 'accessToken'
+        }, {
+          'type': 'any',
+          'value': 'header',
+          'key': 'addTokenTo'
+        }, {
+          'type': 'any',
+          'value': 'Bearer ',
+          'key': 'headerPrefix'
+        }]
+      }
+    }),
+    'TOKEN_URL_PREFIX': new sdk.Request({
+      'description': {
+        // eslint-disable-next-line max-len
+        'content': 'The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using "Query String \nParameters". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter "hand" has the value "wave".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested.',
+        'type': 'text/plain'
+      },
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'oauth2',
+        'oauth2': [{
+          'type': 'any',
+          'value': 'token',
+          'key': 'accessToken'
+        }, {
+          'type': 'any',
+          'value': 'queryParams',
+          'key': 'addTokenTo'
+        }, {
+          'type': 'any',
+          'value': 'Bearer ',
+          'key': 'headerPrefix'
+        }]
+      }
+    }),
+    'WITHOUT_TOKEN': new sdk.Request({
+      'description': {
+        // eslint-disable-next-line max-len
+        'content': 'The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using "Query String \nParameters". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter "hand" has the value "wave".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested.',
+        'type': 'text/plain'
+      },
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'oauth2',
+        'oauth2': [{
+          'type': 'any',
+          'value': '',
+          'key': 'accessToken'
+        }, {
+          'type': 'any',
+          'value': 'queryParams',
+          'key': 'addTokenTo'
+        }]
+      }
+    }),
+    'TOKEN_HEADER': new sdk.Request({
+      'description': {
+        // eslint-disable-next-line max-len
+        'content': 'The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using "Query String \nParameters". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter "hand" has the value "wave".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested.',
+        'type': 'text/plain'
+      },
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'oauth2',
+        'oauth2': [{
+          'type': 'any',
+          'value': 'token',
+          'key': 'accessToken'
+        }, {
+          'type': 'any',
+          'value': 'header',
+          'key': 'addTokenTo'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'headerPrefix'
         }]
       }
     })
