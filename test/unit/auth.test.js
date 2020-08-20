@@ -96,4 +96,37 @@ describe('Postman Request Authorization', function () {
       expect(request.getHeaders('Authorization').Authorization).to.be.equal('Basic Og==');
     });
   });
+
+  describe('OAuth 2.0 authorization', () => {
+    it('should add auth header when token and prefix are provided', function () {
+      var request = authRequests.OAUTH2.TOKEN_HEADER_PREFIX;
+      authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.be.equal('Bearer token');
+    });
+
+    it('should add auth query when token and prefix are provided', function () {
+      var request = authRequests.OAUTH2.TOKEN_URL_PREFIX;
+      authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.url.query.has('access_token')).to.be.true;
+      expect(request.url.query.get('access_token')).to.be.equals('token');
+    });
+
+    it('should not add authorizatio header if auth token is not provided', function () {
+      var request = authRequests.OAUTH2.WITHOUT_TOKEN;
+      authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.getHeaders('Authorization').Authorization).to.be.undefined;
+    });
+
+    it('should add auth header when token and prefix are provided', function () {
+      var request = authRequests.OAUTH2.TOKEN_HEADER;
+      authorize(request, request.auth);
+      expect(request).to.be.instanceOf(sdk.Request);
+      expect(request.headers.has('Authorization')).to.be.true;
+      expect(request.getHeaders('Authorization').Authorization).to.be.equal('token');
+    });
+  });
 });
