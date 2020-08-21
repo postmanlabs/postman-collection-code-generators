@@ -8,8 +8,8 @@ const expect = require('chai').expect,
 
 describe('Tests for generated sdk', () => {
 
-  it('request variables should contain || notation instead of ? : notation', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('request variables should contain || notation instead of ? : notation', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -17,8 +17,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should contain complete function doc declaration for param', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should contain complete function doc declaration for param', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -29,8 +29,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should have property name as ["property_name"]', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should have property name as ["property_name"]', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -40,8 +40,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should not contain any undefined description', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should not contain any undefined description', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -50,8 +50,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should not contain duplicate variable declaration in request', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should not contain duplicate variable declaration in request', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
         // expect.fail(null, null, err);
