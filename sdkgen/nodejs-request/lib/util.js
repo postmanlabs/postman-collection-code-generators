@@ -50,7 +50,7 @@ function generateFunctionSnippet (collectionItem, options) {
     let snippet = '',
       variableDeclarations,
       request = collectionItem.request,
-      variables = _.map(options.variableList.members, 'key'),
+      variables = options.variableList ? _.map(options.variableList.members, 'key') : [],
       collectionItemName = collectionItem.name.split(' ').join('_');
 
     convert('NodeJs', 'Request', request, {
