@@ -1,4 +1,4 @@
-const processCollection = require('../../../lib/utils').processCollection,
+const { processCollection, sanitizeOptions } = require('../../../lib/utils'),
   {
     sanitize,
     itemGroupHandler,
