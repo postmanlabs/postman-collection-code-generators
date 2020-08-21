@@ -9,7 +9,14 @@ const expect = require('chai').expect,
 describe('Tests for generated sdk', () => {
 
   it('request variables should contain || notation instead of ? : notation', async () => {
-    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+    await generate(COLLECTION_INSTANCE, {
+      variableList: new sdk.VariableList(null, [
+        {
+          key: 'url',
+          value: 'www.google.com'
+        }
+      ])
+    }, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -18,7 +25,14 @@ describe('Tests for generated sdk', () => {
   });
 
   it('should contain complete function doc declaration for param', async () => {
-    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+    await generate(COLLECTION_INSTANCE, {
+      variableList: new sdk.VariableList(null, [
+        {
+          key: 'url',
+          value: 'www.google.com'
+        }
+      ])
+    }, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }

@@ -101,6 +101,7 @@ function generateFunctionSnippet (collectionItem, options) {
           // declaring request level variables for only those which are provided by the user in options
           if (variables.includes(varName)) {
             snippet += options.ES6_enabled ? 'let ' : 'var ';
+            snippet += `${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
           }
         });
       }
