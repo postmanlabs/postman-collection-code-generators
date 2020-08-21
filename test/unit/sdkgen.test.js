@@ -7,8 +7,8 @@ const expect = require('chai').expect,
   };
 describe('Generate function', () => {
 
-  it('should generate sdk snippet without outputType option', () => {
-    sdkgen.generate({
+  it('should generate sdk snippet without outputType option', async () => {
+    await sdkgen.generate({
       type: 'json',
       source: collections.SDKGEN
     }, {
@@ -20,8 +20,8 @@ describe('Generate function', () => {
     });
   });
 
-  it('should generate sdk snippet with outputType as String', () => {
-    sdkgen.generate({
+  it('should generate sdk snippet with outputType as String', async () => {
+    await sdkgen.generate({
       type: 'json',
       source: collections.SDKGEN
     }, {
@@ -34,8 +34,8 @@ describe('Generate function', () => {
     });
   });
 
-  it('should generate sdk snippet with outputType as File', () => {
-    sdkgen.generate({
+  it('should generate sdk snippet with outputType as File', async () => {
+    await sdkgen.generate({
       type: 'json',
       source: collections.SDKGEN
     }, {
@@ -50,8 +50,8 @@ describe('Generate function', () => {
     });
   });
 
-  it('should throw an error if outputfilepath is invalid', () => {
-    sdkgen.generate({
+  it('should throw an error if outputfilepath is invalid', async () => {
+    await sdkgen.generate({
       type: 'json',
       source: collections.SDKGEN
     }, {
@@ -64,8 +64,8 @@ describe('Generate function', () => {
     });
   });
 
-  it('should generate sdk snippet with source as collection json', () => {
-    sdkgen.generate({
+  it('should generate sdk snippet with source as collection json', async () => {
+    await sdkgen.generate({
       type: 'json',
       source: collections.SDKGEN
     }, {
@@ -77,9 +77,9 @@ describe('Generate function', () => {
     });
   });
 
-  it('should generate sdk snippet with source as PostmanCollection instance', () => {
+  it('should generate sdk snippet with source as PostmanCollection instance', async () => {
     let collection = new sdk.Collection(collections.SDKGEN);
-    sdkgen.generate({
+    await sdkgen.generate({
       type: 'json',
       source: collection
     }, {
@@ -92,11 +92,11 @@ describe('Generate function', () => {
   });
 
   // TODO fix issue with response resolution
-  it('should generate sdk snippet with source as url', () => {
-    sdkgen.generate(
+  it('should generate sdk snippet with source as url', async () => {
+    await sdkgen.generate(
       {
         type: 'string',
-        source: 'https://www.getpostman.com/collections/4a7c7e33aa5dc9dd11b1'
+        source: 'https://www.getpostman.com/collections/c8aa0d9bd381c73c5ac3'
       }, {
         language: 'Nodejs',
         variant: 'request'
@@ -107,12 +107,12 @@ describe('Generate function', () => {
   });
 
 
-  it('should throw an error if invalid colleciton source is provided', () => {
-    sdkgen.generate('random letters', {
+  it('should throw an error if invalid colleciton source is provided', async () => {
+    await sdkgen.generate('random letters', {
       language: 'Nodejs',
       variant: 'request'
     }, (err) => {
-      expect.fail(null, null, err);
+      expect(err);
     });
   });
 });

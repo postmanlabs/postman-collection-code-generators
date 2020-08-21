@@ -11,8 +11,8 @@ const expect = require('chai').expect,
 
 describe('Tests for generated sdk', () => {
 
-  it('should generate sdk snippet', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should generate sdk snippet', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -20,8 +20,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should include nodejs-request library import', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should include nodejs-request library import', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -31,8 +31,8 @@ describe('Tests for generated sdk', () => {
   });
 
 
-  it('should add variable if provided', () => {
-    generate(COLLECTION_INSTANCE, {
+  it('should add variable if provided', async () => {
+    await generate(COLLECTION_INSTANCE, {
       variableList: new sdk.VariableList(null, variables.SDKGEN.values)
     }, (err, snippet) => {
       if (err) {
@@ -45,8 +45,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should have default constructor for generated module', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should have default constructor for generated module', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -55,8 +55,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should have get/set Variable methods', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should have get/set Variable methods', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -66,8 +66,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should set initial variables values', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should set initial variables values', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -76,8 +76,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should have self variable declaration', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should have self variable declaration', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
@@ -85,8 +85,8 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should have export module snipept', () => {
-    generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
+  it('should have export module snipept', async () => {
+    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
         expect(err).to.be.null;
       }
