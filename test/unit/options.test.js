@@ -3,8 +3,6 @@ const expect = require('chai').expect,
   assert = require('chai').assert,
   sdkGenerator = require('../../'),
   utils = require('../../lib/utils'),
-  sdk = require('postman-collection'),
-  sdkgens = require('../../lib/assets/sdkgens'),
   sdkOptions = require('../../lib/assets/sdkOptions');
 
 describe('List Available SDK', () => {
@@ -41,6 +39,16 @@ describe('SDK Generator options', () => {
     let options = sdkGenerator.getSDKOptions('Nodejs', 'Request');
     assert(options.length >= sdkOptions.length);
   });
+
+  it('should have same type for default and option type', () => {
+    let options = sdkGenerator.getSDKOptions();
+    options.forEach((option) => {
+      expect(typeof option.default).to.equals(option.type.toLowerCase());
+    });
+  });
+});
+
+describe('Sanitize option method: ', () => {
 
   it('should add default options to option array if not provided', () => {
     expect(true);
