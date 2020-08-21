@@ -46,14 +46,7 @@ module.exports = {
         }]
       }
     }),
-<<<<<<< HEAD
-<<<<<<< HEAD
     // if only api key is given with input type as header
-=======
->>>>>>> 3edcc7e... Completes API key authorizer
-=======
-    // if only api key is given with input type as header
->>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'KEY_HEADER': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -86,14 +79,7 @@ module.exports = {
         }]
       }
     }),
-<<<<<<< HEAD
-<<<<<<< HEAD
     // if api key is not given and input type is header
-=======
->>>>>>> 3edcc7e... Completes API key authorizer
-=======
-    // if api key is not given and input type is header
->>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'HEADER': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -126,14 +112,7 @@ module.exports = {
         }]
       }
     }),
-<<<<<<< HEAD
-<<<<<<< HEAD
     // if api key and value are given with in type as query params
-=======
->>>>>>> 3edcc7e... Completes API key authorizer
-=======
-    // if api key and value are given with in type as query params
->>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'KEY_VAL_QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -166,14 +145,7 @@ module.exports = {
         }]
       }
     }),
-<<<<<<< HEAD
-<<<<<<< HEAD
     // if only api key is given with input type as query param
-=======
->>>>>>> 3edcc7e... Completes API key authorizer
-=======
-    // if only api key is given with input type as query param
->>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'KEY_QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -206,14 +178,7 @@ module.exports = {
         }]
       }
     }),
-<<<<<<< HEAD
-<<<<<<< HEAD
     // if neither api key or value is given with in type as query param
-=======
->>>>>>> 3edcc7e... Completes API key authorizer
-=======
-    // if neither api key or value is given with in type as query param
->>>>>>> 883f0d9... Adds necessary comments to auth_requests
     'QUERY': new sdk.Request({
       'url': {
         'protocol': 'https',
@@ -245,159 +210,6 @@ module.exports = {
           'key': 'value'
         }]
       }
-<<<<<<< HEAD
-    })
-  },
-
-  // bearer token authorization
-  'BEARER_TOKEN': {
-    // when bearer token is given
-    'TOKEN': new sdk.Request({
-      'url': {
-        'protocol': 'https',
-        'path': ['get'],
-        'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
-        'variable': []
-      },
-      'method': 'GET',
-      'auth': {
-        'type': 'bearer',
-        'bearer': [{
-          'type': 'any',
-          'value': 'testbearertoken',
-          'key': 'token'
-        }]
-      }
-    })
-  },
-
-  // basic authorization
-  'BASIC': {
-    // if username password are given
-    'USERNAME_PASSWORD': new sdk.Request({
-      'url': {
-        'protocol': 'https',
-        'path': ['get'],
-        'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
-        'variable': []
-      },
-      'method': 'GET',
-      'auth': {
-        'type': 'basic',
-        'basic': [{
-          'type': 'any',
-          'value': 'test',
-          'key': 'password'
-        }, {
-          'type': 'any',
-          'value': 'test',
-          'key': 'username'
-        }]
-      }
-    }),
-    // if only username is given
-    'USERNAME': new sdk.Request({
-      'url': {
-        'protocol': 'https',
-        'path': ['get'],
-        'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
-        'variable': []
-      },
-      'method': 'GET',
-      'auth': {
-        'type': 'basic',
-        'basic': [{
-          'type': 'any',
-          'value': '',
-          'key': 'password'
-        }, {
-          'type': 'any',
-          'value': 'test',
-          'key': 'username'
-        }]
-      }
-    }),
-    // if only password is given
-    'PASSWORD': new sdk.Request({
-      'url': {
-        'protocol': 'https',
-        'path': ['get'],
-        'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
-        'variable': []
-      },
-      'method': 'GET',
-      'auth': {
-        'type': 'basic',
-        'basic': [{
-          'type': 'any',
-          'value': 'test',
-          'key': 'password'
-        }, {
-          'type': 'any',
-          'value': '',
-          'key': 'username'
-        }]
-      }
-    }),
-
-    // if neither username nor password is given
-    'NO_USERNAME_NO_PASS': new sdk.Request({
-      'url': {
-        'protocol': 'https',
-        'path': ['get'],
-        'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
-        'variable': []
-      },
-      'method': 'GET',
-      'auth': {
-        'type': 'basic',
-        'basic': [{
-          'type': 'any',
-          'value': '',
-          'key': 'password'
-        }, {
-          'type': 'any',
-          'value': '',
-          'key': 'username'
-        }]
-      }
-=======
->>>>>>> 3edcc7e... Completes API key authorizer
     })
   },
 
