@@ -98,5 +98,6 @@ async function generate (collection, options, callback) {
 }
 
 module.exports = {
-  generate
+  generate,
+  getOptions
 };
