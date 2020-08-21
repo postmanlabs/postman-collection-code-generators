@@ -33,6 +33,26 @@ function replaceVariables (requestSnippet) {
 }
 
 /**
+ * [Description]
+ *
+ * @param returnType - Type of return for function (callback/Promise)
+ * @returns {Array} - array of snippets for return method
+ */
+function getReturnMethodSnippets (returnType) {
+  let snippets = [];
+  if (returnType === 'Promise') {
+    snippets.push('if (error) {');
+    snippets.push('return reject(error);');
+    snippets.push('}');
+    snippets.push('return resolve(response);');
+  }
+  if (returnType === 'Callback') {
+    snippets.push('return callback(error, response);');
+  }
+  return snippets;
+}
+
+/**
  * Generates snippet for a function declaration
 
  * @param {sdk.Item} collectionItem - PostmanItem Instance
@@ -66,7 +86,10 @@ function generateFunctionSnippet (collectionItem, options) {
           snippet += `@param {String} variables.${varName}\n`;
         });
       }
-      snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
+      snippet += options.returnMethod === 'Callback' ?
+        '@param {Function} callback - Callback function to return response (err, res)\n' :
+        '';
+
       snippet += '*/\n';
 
       // class property name declaration
@@ -77,12 +100,19 @@ function generateFunctionSnippet (collectionItem, options) {
         snippet += `"${collectionItemName}": `;
       }
 
-      // function signature declaration
-      snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
-      snippet += 'if (typeof variables === \'function\') {\n';
-      snippet += 'callback = variables;\n';
-      snippet += 'variables = {};\n';
-      snippet += '}\n';
+      if (options.returnMethod === 'Callback') {
+        // function signature declaration
+        snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
+        snippet += 'if (typeof variables === \'function\') {\n';
+        snippet += 'callback = variables;\n';
+        snippet += 'variables = {};\n';
+        snippet += '}\n';
+      }
+
+      if (options.returnMethod === 'Promise') {
+        snippet += options.ES6_enabled ? '(variables) => {\n' : 'function(variables){\n';
+        snippet += 'return new Promise((resolve, reject) => {\n';
+      }
 
       // Request level variable declaration
       if (variableDeclarations) {
@@ -93,8 +123,20 @@ function generateFunctionSnippet (collectionItem, options) {
         });
       }
 
+      // replacing return method
+
+      requestSnippet = requestSnippet.replace(
+        'callback(error, response);\n',
+        getReturnMethodSnippets(options.returnMethod).join('\n')
+      );
+
       // replaceVariable replaces all the postman variables and returns the resulting snippet
       snippet += replaceVariables(requestSnippet);
+
+      if (options.returnMethod === 'Promise') {
+        snippet += '});';
+      }
+
       snippet += '}';
       return resolve(snippet);
     });
