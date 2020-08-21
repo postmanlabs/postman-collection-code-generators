@@ -1,6 +1,3 @@
-const {
-  sortedLastIndex
-} = require('lodash');
 const sdk = require('postman-collection');
 
 /**
