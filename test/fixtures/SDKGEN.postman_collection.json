@@ -1,0 +1,536 @@
+{
+	"info": {
+		"_postman_id": "381431ac-0f2c-4e29-a81c-8b347eb1d38d",
+		"name": "SDKGEN",
+		"description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Request Methods",
+			"item": [
+				{
+					"name": "Utilities / Date and Time",
+					"item": [
+						{
+							"name": "Between timestamps",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"response is ok\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"response json should say timestamp is not between start and end\", function () {",
+											"    pm.response.to.have.jsonBody('between', false);",
+											"});"
+										],
+										"id": "090482b5-ad5b-4c5f-8b83-eb7499ad582a"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/time/between?timestamp=2016-10-10&start=2017-10-10&end=2019-10-10",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"time",
+										"between"
+									],
+									"query": [
+										{
+											"key": "timestamp",
+											"value": "2016-10-10"
+										},
+										{
+											"key": "start",
+											"value": "2017-10-10"
+										},
+										{
+											"key": "end",
+											"value": "2019-10-10"
+										}
+									]
+								},
+								"description": "A simple `GET` request to `/time/between` to check if the provided timestamp is between a range specified by the `start` and `end` query parameters. A resolution limit can also be specified by the `unit` query parameter.\n\nFor instance, for a resolution `unit` of `month`,\n`2016-10-05` does lie between `2016-11-02` and `2016-09-01`.\n\nThis endpoint also accepts `timestamp`, `locale`, `format`, `strict`, and `target` query parameters to construct the date time instance to check against.\n\nResponses are provided in JSON format, with a `between` key to indicate the result. The response code is `200` for valid query parameters, and `400` otherwise.\n\n```\n{\n  between: true/false\n}\n```"
+							},
+							"response": []
+						},
+						{
+							"name": "Leap year check",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											"pm.test(\"response is ok\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"response json should say timestamp is within leap year\", function () {",
+											"    pm.response.to.have.jsonBody('leap', true);",
+											"});"
+										],
+										"id": "a7ea5269-60c9-450d-8ddf-ab310197d711"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/time/leap?timestamp=2016-10-10",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"time",
+										"leap"
+									],
+									"query": [
+										{
+											"key": "timestamp",
+											"value": "2016-10-10"
+										}
+									]
+								},
+								"description": "A simple `GET` request to `/time/leap` to check if the provided/current timestamp belongs to a leap year.\n\nThis endpoint also accepts `timestamp`, `locale`, `format`, `strict`, and `target` query parameters to construct the date time instance to check against.\n\nResponses are provided in JSON format, with a `leap` key to indicate the result. The response code is `200` for valid query parameters, and `400` otherwise.\n\n```\n{\n  leap: true/false\n}\n```"
+							},
+							"response": []
+						}
+					],
+					"description": "A set of `/time/*` mounted requests to perform date-time manipulations, among other operations.\n",
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "POST Form Data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response body has json with form data\", function () {",
+									"    pm.response.to.have.jsonBody('form.foo1', 'bar1')",
+									"        .and.have.jsonBody('form.foo2', 'bar2');",
+									"});"
+								],
+								"id": "8ad73d95-dfa2-48b1-b149-2b903c66acbc"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "foo1",
+									"value": "{{var4}}",
+									"type": "text"
+								},
+								{
+									"key": "foo2",
+									"value": "{{var5}}",
+									"type": "text"
+								}
+							],
+							"options": {
+								"urlencoded": {}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/post",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"post"
+							]
+						},
+						"description": "The HTTP `POST` request method is meant to transfer data to a server \n(and elicit a response). What data is returned depends on the implementation\nof the server.\n\nA `POST` request can pass parameters to the server using \"Query String \nParameters\", as well as the Request Body. For example, in the following request,\n\n> POST /hi/there?hand=wave\n>\n> <request-body>\n\nThe parameter \"hand\" has the value \"wave\". The request body can be in multiple\nformats. These formats are defined by the MIME type of the request. The MIME \nType can be set using the ``Content-Type`` HTTP header. The most commonly used \nMIME types are:\n\n* `multipart/form-data`\n* `application/x-www-form-urlencoded`\n* `application/json`\n\nThis endpoint echoes the HTTP headers, request parameters, the contents of\nthe request body and the complete URI requested when data is sent as a form parameter."
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response body has json with form data\", function () {",
+									"    pm.response.to.have.jsonBody('data', ",
+									"        'This is expected to be sent back as part of response body.');",
+									"});"
+								],
+								"id": "452548b6-8f0f-4d9e-bfa7-241dde95594a"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "This is expected to be sent back as part of response body.{{var1}}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/delete",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"delete"
+							]
+						},
+						"description": "The HTTP `DELETE` method is used to delete resources on a server. The exact\nuse of `DELETE` requests depends on the server implementation. In general, \n`DELETE` requests support both, Query String parameters as well as a Request \nBody.\n\nThis endpoint accepts an HTTP `DELETE` request and provides debug information\nsuch as the HTTP headers, Query String arguments, and the Request Body."
+					},
+					"response": []
+				}
+			],
+			"description": "HTTP has multiple request \"verbs\", such as `GET`, `PUT`, `POST`, `DELETE`,\n`PATCH`, `HEAD`, etc. \n\nAn HTTP Method (verb) defines how a request should be interpreted by a server. \nThe endpoints in this section demonstrate various HTTP Verbs. Postman supports \nall the HTTP Verbs, including some rarely used ones, such as `PROPFIND`, `UNLINK`, \netc.\n\nFor details about HTTP Verbs, refer to [RFC 2616](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html#sec9)\n",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "POST Raw Text",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response body has json with request body\", function () {",
+							"    pm.response.to.have.jsonBody('data', ",
+							"        'This is expected to be sent back as part of response body.');",
+							"});"
+						],
+						"id": "903a7253-f69d-46c8-b7f3-a2e2a3f70a97"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "This is expected to be sent back as part of response body {{var3}} {{var2}}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/post",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"post"
+					]
+				},
+				"description": "The HTTP `POST` request method is meant to transfer data to a server \n(and elicit a response). What data is returned depends on the implementation\nof the server.\n\nA `POST` request can pass parameters to the server using \"Query String \nParameters\", as well as the Request Body. For example, in the following request,\n\n> POST /hi/there?hand=wave\n>\n> <request-body>\n\nThe parameter \"hand\" has the value \"wave\". The request body can be in multiple\nformats. These formats are defined by the MIME type of the request. The MIME \nType can be set using the ``Content-Type`` HTTP header. The most commonly used \nMIME types are:\n\n* `multipart/form-data`\n* `application/x-www-form-urlencoded`\n* `application/json`\n\nThis endpoint echoes the HTTP headers, request parameters, the contents of\nthe request body and the complete URI requested."
+			},
+			"response": []
+		},
+		{
+			"name": "POST Raw Text Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response body has json with request body\", function () {",
+							"    pm.response.to.have.jsonBody('data', ",
+							"        'This is expected to be sent back as part of response body.');",
+							"});"
+						],
+						"id": "239bbe6f-4dbd-41e2-a46d-79b4085a60fb"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "{\n    body {\n        graphql {\n            \n        }\n    }\n}",
+						"variables": "{\n    \"aa\": {{var1}}\n}"
+					},
+					"options": {
+						"formdata": {}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/post",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"post"
+					]
+				},
+				"description": "The HTTP `POST` request method is meant to transfer data to a server \n(and elicit a response). What data is returned depends on the implementation\nof the server.\n\nA `POST` request can pass parameters to the server using \"Query String \nParameters\", as well as the Request Body. For example, in the following request,\n\n> POST /hi/there?hand=wave\n>\n> <request-body>\n\nThe parameter \"hand\" has the value \"wave\". The request body can be in multiple\nformats. These formats are defined by the MIME type of the request. The MIME \nType can be set using the ``Content-Type`` HTTP header. The most commonly used \nMIME types are:\n\n* `multipart/form-data`\n* `application/x-www-form-urlencoded`\n* `application/json`\n\nThis endpoint echoes the HTTP headers, request parameters, the contents of\nthe request body and the complete URI requested."
+			},
+			"response": []
+		},
+		{
+			"name": "GET Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "10e09028-8435-451c-8868-25656858387e",
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response body has json with request queries\", function () {",
+							"    pm.response.to.have.jsonBody('args.foo1', 'bar1')",
+							"        .and.have.jsonBody('args.foo2', 'bar2');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "hawk",
+					"hawk": [
+						{
+							"key": "authKey",
+							"value": "testkeyssss",
+							"type": "string"
+						},
+						{
+							"key": "timestamp",
+							"value": "",
+							"type": "string"
+						},
+						{
+							"key": "delegation",
+							"value": "dlgggg",
+							"type": "string"
+						},
+						{
+							"key": "app",
+							"value": "apppp",
+							"type": "string"
+						},
+						{
+							"key": "extraData",
+							"value": "aaaaa",
+							"type": "string"
+						},
+						{
+							"key": "user",
+							"value": "somesh",
+							"type": "string"
+						},
+						{
+							"key": "authId",
+							"value": "testid",
+							"type": "string"
+						},
+						{
+							"key": "algorithm",
+							"value": "sha256",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/get?foo1={{var1}}{{var4}}&foo2={{var2}}{{var5}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "foo1",
+							"value": "{{var1}}{{var4}}"
+						},
+						{
+							"key": "foo2",
+							"value": "{{var2}}{{var5}}"
+						}
+					]
+				},
+				"description": "The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using \"Query String \nParameters\". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter \"hand\" has the value \"wave\".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested."
+			},
+			"response": [
+				{
+					"name": "GET Request Woops",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://postman-echo.com/get?foo1=bar1&foo2=bar2",
+							"protocol": "https",
+							"host": [
+								"postman-echo",
+								"com"
+							],
+							"path": [
+								"get"
+							],
+							"query": [
+								{
+									"key": "foo1",
+									"value": "bar1"
+								},
+								{
+									"key": "foo2",
+									"value": "bar2"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 11 Jun 2019 10:43:13 GMT"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"161-aLhNcsGArlgLSKbxPqfBW3viHPI\""
+						},
+						{
+							"key": "Server",
+							"value": "nginx"
+						},
+						{
+							"key": "set-cookie",
+							"value": "sails.sid=s%3AGz-wblZgXE8FCDq7aJpx_tUgZUcG3Nsw.LdNEN8L0C7nGWkvGLwvdw6R2s6Syjr%2FzkvyevA8qR0c; Path=/; HttpOnly"
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Length",
+							"value": "249"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"args\": {\n        \"foo1\": \"bar1\",\n        \"foo2\": \"bar2\"\n    },\n    \"headers\": {\n        \"x-forwarded-proto\": \"https\",\n        \"host\": \"postman-echo.com\",\n        \"accept\": \"*/*\",\n        \"accept-encoding\": \"gzip, deflate\",\n        \"cache-control\": \"no-cache\",\n        \"postman-token\": \"5c27cd7d-6b16-4e5a-a0ef-191c9a3a275f\",\n        \"user-agent\": \"PostmanRuntime/7.6.1\",\n        \"x-forwarded-port\": \"443\"\n    },\n    \"url\": \"https://postman-echo.com/get?foo1=bar1&foo2=bar2\"\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "843b2fd8-201f-464e-a99c-686d948a2c39",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "9007dedd-b19b-4e6d-9826-cdae67bfe60f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "bae145e8-4a35-47d2-be61-950843709813",
+			"key": "var1",
+			"value": "valur",
+			"type": "string"
+		},
+		{
+			"id": "73cd6546-27f6-47b8-9d0c-4c07e0a96bd3",
+			"key": "var2",
+			"value": "value2",
+			"type": "string"
+		},
+		{
+			"id": "de553503-77f5-4d7b-a8ad-e85ca58b4948",
+			"key": "var3",
+			"value": "value3",
+			"type": "string"
+		},
+		{
+			"id": "d2d49d57-8581-48d3-bef6-7542788d28c1",
+			"key": "var4",
+			"value": "value4",
+			"type": "string"
+		},
+		{
+			"id": "e93f3eac-db9e-4c72-99af-81328217a2d1",
+			"key": "var5",
+			"value": "value5",
+			"type": "string"
+		},
+		{
+			"id": "820ef9e1-10ef-4b99-8af6-f7e063e65de1",
+			"key": "url",
+			"value": "https://postman-echo.com",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}
