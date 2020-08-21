@@ -1,5 +1,11 @@
 const processCollection = require('../../../lib/utils').processCollection,
-  { sanitize, itemGroupHandler, itemHandler, getVariableFunctions, getClassDoc} = require('./util');
+  {
+    sanitize,
+    itemGroupHandler,
+    itemHandler,
+    getVariableFunction,
+    setVariableFunction,
+    getClassDoc } = require('./util');
 
 /**
  * Generates sdk for nodejs-request
@@ -56,7 +62,8 @@ async function generate (collection, options, callback) {
   snippet += '}\n\n';
 
   // get/set variable methods
-  snippet += getVariableFunctions();
+  snippet += getVariableFunction();
+  snippet += setVariableFunction();
 
   // exporting generated module
   snippet += 'module.exports = SDK;\n';
