@@ -110,7 +110,7 @@ function generateFunctionSnippet (collectionItem, options) {
       }
 
       if (options.returnMethod === 'Promise') {
-        snippet += options.ES6_enabled ? '(variables) => {\n' : 'function(variables){\n';
+        snippet += options.ES6_enabled ? '(variables = {}) => {\n' : 'function(variables = {}){\n';
         snippet += 'return new Promise((resolve, reject) => {\n';
       }
 
