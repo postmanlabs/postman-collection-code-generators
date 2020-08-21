@@ -7,7 +7,6 @@
     "test": "node npm/test.js",
     "test-unit": "node npm/test-unit.js",
     "test-lint": "node npm/test-lint.js",
-    "boilerplate": "node npm/boilerplate.js"
   },
   "repository": {
     "type": "git",
