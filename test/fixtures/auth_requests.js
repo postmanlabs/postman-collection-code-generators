@@ -362,248 +362,125 @@ module.exports = {
       }
     })
   },
-  'HAWK': {
-    'ID_KEY': new sdk.Request({
+  // oauth 2.0
+  'OAUTH2': {
+    'TOKEN_HEADER_PREFIX': new sdk.Request({
+      'description': {
+        // eslint-disable-next-line max-len
+        'content': 'The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using "Query String \nParameters". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter "hand" has the value "wave".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested.',
+        'type': 'text/plain'
+      },
       'url': {
         'protocol': 'https',
         'path': ['get'],
         'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
+        'query': [],
         'variable': []
       },
       'method': 'GET',
       'auth': {
-        'type': 'hawk',
-        'hawk': [{
+        'type': 'oauth2',
+        'oauth2': [{
           'type': 'any',
-          'value': 'sha256',
-          'key': 'algorithm'
+          'value': 'token',
+          'key': 'accessToken'
         }, {
           'type': 'any',
-          'value': '',
-          'key': 'app'
+          'value': 'header',
+          'key': 'addTokenTo'
         }, {
           'type': 'any',
-          'value': 'id',
-          'key': 'authId'
-        }, {
-          'type': 'any',
-          'value': 'key',
-          'key': 'authKey'
-        }, {
-          'type': 'any',
-          'value': '',
-          'key': 'delegation'
-        }, {
-          'type': 'any',
-          'value': '',
-          'key': 'extraData'
-        }, {
-          'type': 'any',
-          'value': false,
-          'key': 'includePayloadHash'
-        }, {
-          'type': 'any',
-          'value': 'fixednonce',
-          'key': 'nonce'
-        }, {
-          'type': 'any',
-          'value': '1234',
-          'key': 'timestamp'
-        }, {
-          'type': 'any',
-          'value': '',
-          'key': 'user'
+          'value': 'Bearer ',
+          'key': 'headerPrefix'
         }]
       }
     }),
-    'ID_KEY_EXT': new sdk.Request({
+    'TOKEN_URL_PREFIX': new sdk.Request({
+      'description': {
+        // eslint-disable-next-line max-len
+        'content': 'The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using "Query String \nParameters". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter "hand" has the value "wave".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested.',
+        'type': 'text/plain'
+      },
       'url': {
         'protocol': 'https',
         'path': ['get'],
         'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
+        'query': [],
         'variable': []
       },
       'method': 'GET',
       'auth': {
-        'type': 'hawk',
-        'hawk': [{
+        'type': 'oauth2',
+        'oauth2': [{
           'type': 'any',
-          'value': 'sha256',
-          'key': 'algorithm'
+          'value': 'token',
+          'key': 'accessToken'
         }, {
           'type': 'any',
-          'value': '',
-          'key': 'app'
+          'value': 'queryParams',
+          'key': 'addTokenTo'
         }, {
           'type': 'any',
-          'value': 'id',
-          'key': 'authId'
-        }, {
-          'type': 'any',
-          'value': 'key',
-          'key': 'authKey'
-        }, {
-          'type': 'any',
-          'value': '',
-          'key': 'delegation'
-        }, {
-          'type': 'any',
-          'value': 'ext',
-          'key': 'extraData'
-        }, {
-          'type': 'any',
-          'value': false,
-          'key': 'includePayloadHash'
-        }, {
-          'type': 'any',
-          'value': 'fixednonce',
-          'key': 'nonce'
-        }, {
-          'type': 'any',
-          'value': '1234',
-          'key': 'timestamp'
-        }, {
-          'type': 'any',
-          'value': '',
-          'key': 'user'
+          'value': 'Bearer ',
+          'key': 'headerPrefix'
         }]
       }
     }),
-    'ALL_PARAM_SET': new sdk.Request({
+    'WITHOUT_TOKEN': new sdk.Request({
+      'description': {
+        // eslint-disable-next-line max-len
+        'content': 'The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using "Query String \nParameters". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter "hand" has the value "wave".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested.',
+        'type': 'text/plain'
+      },
       'url': {
         'protocol': 'https',
         'path': ['get'],
         'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
+        'query': [],
         'variable': []
       },
       'method': 'GET',
       'auth': {
-        'type': 'hawk',
-        'hawk': [{
-          'type': 'any',
-          'value': 'sha256',
-          'key': 'algorithm'
-        }, {
-          'type': 'any',
-          'value': 'app',
-          'key': 'app'
-        }, {
-          'type': 'any',
-          'value': 'id',
-          'key': 'authId'
-        }, {
-          'type': 'any',
-          'value': 'key',
-          'key': 'authKey'
-        }, {
-          'type': 'any',
-          'value': 'dlg',
-          'key': 'delegation'
-        }, {
-          'type': 'any',
-          'value': 'ext',
-          'key': 'extraData'
-        }, {
-          'type': 'any',
-          'value': false,
-          'key': 'includePayloadHash'
-        }, {
-          'type': 'any',
-          'value': 'fixednonce',
-          'key': 'nonce'
-        }, {
-          'type': 'any',
-          'value': '1234',
-          'key': 'timestamp'
-        }, {
+        'type': 'oauth2',
+        'oauth2': [{
           'type': 'any',
           'value': '',
-          'key': 'user'
+          'key': 'accessToken'
+        }, {
+          'type': 'any',
+          'value': 'queryParams',
+          'key': 'addTokenTo'
         }]
       }
     }),
-    'ALL_PARAM_EXISTING_HEADER': new sdk.Request({
+    'TOKEN_HEADER': new sdk.Request({
+      'description': {
+        // eslint-disable-next-line max-len
+        'content': 'The HTTP `GET` request method is meant to retrieve data from a server. The data\nis identified by a unique URI (Uniform Resource Identifier). \n\nA `GET` request can pass parameters to the server using "Query String \nParameters". For example, in the following request,\n\n> http://example.com/hi/there?hand=wave\n\nThe parameter "hand" has the value "wave".\n\nThis endpoint echoes the HTTP headers, request parameters and the complete\nURI requested.',
+        'type': 'text/plain'
+      },
       'url': {
         'protocol': 'https',
         'path': ['get'],
         'host': ['postman-echo', 'com'],
-        'query': [{
-          'key': 'foo1',
-          'value': 'bar1'
-        }, {
-          'key': 'foo2',
-          'value': 'aa'
-        }],
+        'query': [],
         'variable': []
       },
       'method': 'GET',
-      'header': [{
-        'key': 'authorization',
-        'value': 'testHawkHeader'
-      }],
       'auth': {
-        'type': 'hawk',
-        'hawk': [{
+        'type': 'oauth2',
+        'oauth2': [{
           'type': 'any',
-          'value': 'sha256',
-          'key': 'algorithm'
+          'value': 'token',
+          'key': 'accessToken'
         }, {
           'type': 'any',
-          'value': 'app',
-          'key': 'app'
-        }, {
-          'type': 'any',
-          'value': 'id',
-          'key': 'authId'
-        }, {
-          'type': 'any',
-          'value': 'key',
-          'key': 'authKey'
-        }, {
-          'type': 'any',
-          'value': 'dlg',
-          'key': 'delegation'
-        }, {
-          'type': 'any',
-          'value': 'ext',
-          'key': 'extraData'
-        }, {
-          'type': 'any',
-          'value': false,
-          'key': 'includePayloadHash'
-        }, {
-          'type': 'any',
-          'value': 'fixednonce',
-          'key': 'nonce'
-        }, {
-          'type': 'any',
-          'value': '1234',
-          'key': 'timestamp'
+          'value': 'header',
+          'key': 'addTokenTo'
         }, {
           'type': 'any',
           'value': '',
-          'key': 'user'
+          'key': 'headerPrefix'
         }]
       }
     })
