@@ -45,7 +45,7 @@ function generateFunctionSnippet (collectionItem, options) {
     let snippet = '',
       variableDeclarations,
       request = collectionItem.request,
-      collectionItemName = collectionItem.name.toUpperCase().split(' ').join('_');
+      collectionItemName = collectionItem.name.split(' ').join('_');
 
     convert('NodeJs', 'Request', request, {
       SDKGEN_enabled: true,
@@ -56,19 +56,23 @@ function generateFunctionSnippet (collectionItem, options) {
       }
 
       variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
+      variableDeclarations = new Set(variableDeclarations);
 
       // JSDocs declaration
-      snippet += `/**\n${request.description}\n`;
-      variableDeclarations.forEach((element) => {
-        let varName = element.substring(2, element.length - 2);
-        snippet += `@param {String} variables.${varName}\n`;
-      });
+      snippet += `/**\n${request.description ? request.description + '\n' : ''}`;
+      if (variableDeclarations) {
+        snippet += '@param {object} variables - Variables used for this request\n';
+        variableDeclarations.forEach((element) => {
+          let varName = element.substring(2, element.length - 2);
+          snippet += `@param {String} variables.${varName}\n`;
+        });
+      }
       snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
       snippet += '*/\n';
 
       // class property name declaration
       if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
-        snippet += `this.${collectionItemName} = `;
+        snippet += `this["${collectionItemName}"] = `;
       }
       else {
         snippet += `"${collectionItemName}": `;
@@ -82,11 +86,13 @@ function generateFunctionSnippet (collectionItem, options) {
       snippet += '}\n';
 
       // Request level variable declaration
-      variableDeclarations.forEach((element) => {
-        let varName = element.substring(2, element.length - 2);
-        snippet += options.ES6_enabled ? 'let ' : 'var ';
-        snippet += `${varName} = variables.${varName} ? variables.${varName} : self.variables.${varName};\n`;
-      });
+      if (variableDeclarations) {
+        variableDeclarations.forEach((element) => {
+          let varName = element.substring(2, element.length - 2);
+          snippet += options.ES6_enabled ? 'let ' : 'var ';
+          snippet += `${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
+        });
+      }
 
       // replaceVariable replaces all the postman variables and returns the resulting snippet
       snippet += replaceVariables(requestSnippet);
@@ -119,11 +125,11 @@ async function itemHandler (collectionItem, options) {
  */
 function itemGroupHandler (collectionItem, memberResults) {
   let snippet = '',
-    collectionItemName = collectionItem.name.toUpperCase().split(' ').join('_');
+    collectionItemName = collectionItem.name.split(' ').join('_');
 
-  snippet += `/**\n${collectionItem.description}\n*/\n`;
+  snippet += `/**\n${collectionItem.description ? collectionItem.description + '\n' : ''}*/\n`;
   if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
-    snippet += `this.${collectionItemName} =  {\n`;
+    snippet += `this["${collectionItemName}"] =  {\n`;
     snippet += memberResults.join(',');
     snippet += '};\n\n';
   }
@@ -136,13 +142,33 @@ function itemGroupHandler (collectionItem, memberResults) {
 }
 
 /**
- * [Description]
+ * Returns function snippet for getVariable method
+ *
+ * @returns {string} set variable method snippet
  */
-function getVariableFunctions () {
-  let getVariable = '',
-    setVariable = '';
+function getVariableFunction () {
+  let getVariable = '';
 
-  // set variable method
+  getVariable += '/**\n';
+  getVariable += 'Method to retrieve current variable.\n\n';
+  getVariable += '@param {string} [variable] - Variable name\n';
+  getVariable += '@returns {Object} object containing variables\n';
+  getVariable += '*/\n';
+  getVariable += 'SDK.prototype.getVariables = function (variable) {\n';
+  getVariable += 'return variable ? this.variables[variable] : this.variables;\n';
+  getVariable += '};\n\n';
+
+  return getVariable;
+}
+
+/**
+ * Returns function snippet for get variable method
+ *
+ * @returns {string} - set variable method snippet
+ */
+function setVariableFunction () {
+  let setVariable = '';
+
   setVariable += '/**\n';
   setVariable += 'Function to set variables for entire SDK. ';
   setVariable += 'These variables will override existing/default values.\n\n';
@@ -157,18 +183,7 @@ function getVariableFunctions () {
   setVariable += 'return this.variables;\n';
   setVariable += '};\n\n';
 
-  // get variable method
-  getVariable += '/**\n';
-  getVariable += 'Method to retrieve current variable.\n\n';
-  getVariable += '@param {string} [var] - Variable name\n';
-  getVariable += '@returns {Object} object containing variables\n';
-  getVariable += '*/\n';
-  getVariable += 'SDK.prototype.getVariables = function (variable) {\n';
-  getVariable += 'return variable ? this.variables[variable] : this.variables;\n';
-  getVariable += '};\n\n';
-  getVariable += 'module.exports = SDK;\n';
-
-  return setVariable + getVariable;
+  return setVariable;
 }
 
 /**
@@ -181,7 +196,7 @@ function getClassDoc (collection, variables) {
   let snippet = '';
 
   snippet += '/**\n';
-  snippet += collection.description + '\n';
+  snippet += collection.description ? collection.description + '\n' : '';
   snippet += '@param {object} config - Variables to used in SDK. \n';
 
   if (variables) {
@@ -210,7 +225,8 @@ module.exports = {
   generateFunctionSnippet,
   itemHandler,
   itemGroupHandler,
-  getVariableFunctions,
+  getVariableFunction,
+  setVariableFunction,
   getClassDoc,
   format
 };

@@ -1,8 +1,10 @@
 const processCollection = require('../../../lib/utils').processCollection,
-  { sanitize,
+  {
+    sanitize,
     itemGroupHandler,
     itemHandler,
-    getVariableFunctions,
+    getVariableFunction,
+    setVariableFunction,
     getClassDoc,
     format } = require('./util');
 
@@ -44,7 +46,7 @@ async function generate (collection, options, callback) {
   snippet += getClassDoc(collection, options.variableList);
 
   // class declaration
-  snippet += 'function SDK(config) {\n\n';
+  snippet += 'function SDK(config = {}) {\n\n';
   snippet += options.ES6_enabled ? 'const ' : 'var ';
   snippet += 'self = this;\n\n';
   // Performing first layer individually to avoid adding additional layer to result
@@ -61,7 +63,11 @@ async function generate (collection, options, callback) {
   snippet += '}\n\n';
 
   // get/set variable methods
-  snippet += getVariableFunctions();
+  snippet += getVariableFunction();
+  snippet += setVariableFunction();
+
+  // exporting generated module
+  snippet += 'module.exports = SDK;\n';
 
   try {
     snippet = format(snippet, 2);
