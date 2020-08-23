@@ -202,7 +202,7 @@ function itemGroupHandler (collectionItem, memberResults) {
  *
  * @returns {string} set variable method snippet
  */
-function getVariableFunctions () {
+function getVariableFunction () {
   let getVariable = '';
 
   getVariable += '/**\n';
@@ -292,7 +292,7 @@ module.exports = {
   generateFunctionSnippet,
   itemHandler,
   itemGroupHandler,
-  getVariableFunctions,
+  getVariableFunction,
   setVariableFunction,
   getRequireList,
   getClassDoc
