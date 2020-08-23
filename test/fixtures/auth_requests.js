@@ -362,7 +362,6 @@ module.exports = {
       }
     })
   },
-
   // oauth 2.0
   'OAUTH2': {
     'TOKEN_HEADER_PREFIX': new sdk.Request({
