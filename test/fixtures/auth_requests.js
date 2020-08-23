@@ -361,5 +361,251 @@ module.exports = {
         }]
       }
     })
+  },
+  'HAWK': {
+    'ID_KEY': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'hawk',
+        'hawk': [{
+          'type': 'any',
+          'value': 'sha256',
+          'key': 'algorithm'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'app'
+        }, {
+          'type': 'any',
+          'value': 'id',
+          'key': 'authId'
+        }, {
+          'type': 'any',
+          'value': 'key',
+          'key': 'authKey'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'delegation'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'extraData'
+        }, {
+          'type': 'any',
+          'value': false,
+          'key': 'includePayloadHash'
+        }, {
+          'type': 'any',
+          'value': 'fixednonce',
+          'key': 'nonce'
+        }, {
+          'type': 'any',
+          'value': '1234',
+          'key': 'timestamp'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'user'
+        }]
+      }
+    }),
+    'ID_KEY_EXT': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'hawk',
+        'hawk': [{
+          'type': 'any',
+          'value': 'sha256',
+          'key': 'algorithm'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'app'
+        }, {
+          'type': 'any',
+          'value': 'id',
+          'key': 'authId'
+        }, {
+          'type': 'any',
+          'value': 'key',
+          'key': 'authKey'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'delegation'
+        }, {
+          'type': 'any',
+          'value': 'ext',
+          'key': 'extraData'
+        }, {
+          'type': 'any',
+          'value': false,
+          'key': 'includePayloadHash'
+        }, {
+          'type': 'any',
+          'value': 'fixednonce',
+          'key': 'nonce'
+        }, {
+          'type': 'any',
+          'value': '1234',
+          'key': 'timestamp'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'user'
+        }]
+      }
+    }),
+    'ALL_PARAM_SET': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'auth': {
+        'type': 'hawk',
+        'hawk': [{
+          'type': 'any',
+          'value': 'sha256',
+          'key': 'algorithm'
+        }, {
+          'type': 'any',
+          'value': 'app',
+          'key': 'app'
+        }, {
+          'type': 'any',
+          'value': 'id',
+          'key': 'authId'
+        }, {
+          'type': 'any',
+          'value': 'key',
+          'key': 'authKey'
+        }, {
+          'type': 'any',
+          'value': 'dlg',
+          'key': 'delegation'
+        }, {
+          'type': 'any',
+          'value': 'ext',
+          'key': 'extraData'
+        }, {
+          'type': 'any',
+          'value': false,
+          'key': 'includePayloadHash'
+        }, {
+          'type': 'any',
+          'value': 'fixednonce',
+          'key': 'nonce'
+        }, {
+          'type': 'any',
+          'value': '1234',
+          'key': 'timestamp'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'user'
+        }]
+      }
+    }),
+    'ALL_PARAM_EXISTING_HEADER': new sdk.Request({
+      'url': {
+        'protocol': 'https',
+        'path': ['get'],
+        'host': ['postman-echo', 'com'],
+        'query': [{
+          'key': 'foo1',
+          'value': 'bar1'
+        }, {
+          'key': 'foo2',
+          'value': 'aa'
+        }],
+        'variable': []
+      },
+      'method': 'GET',
+      'header': [{
+        'key': 'authorization',
+        'value': 'testHawkHeader'
+      }],
+      'auth': {
+        'type': 'hawk',
+        'hawk': [{
+          'type': 'any',
+          'value': 'sha256',
+          'key': 'algorithm'
+        }, {
+          'type': 'any',
+          'value': 'app',
+          'key': 'app'
+        }, {
+          'type': 'any',
+          'value': 'id',
+          'key': 'authId'
+        }, {
+          'type': 'any',
+          'value': 'key',
+          'key': 'authKey'
+        }, {
+          'type': 'any',
+          'value': 'dlg',
+          'key': 'delegation'
+        }, {
+          'type': 'any',
+          'value': 'ext',
+          'key': 'extraData'
+        }, {
+          'type': 'any',
+          'value': false,
+          'key': 'includePayloadHash'
+        }, {
+          'type': 'any',
+          'value': 'fixednonce',
+          'key': 'nonce'
+        }, {
+          'type': 'any',
+          'value': '1234',
+          'key': 'timestamp'
+        }, {
+          'type': 'any',
+          'value': '',
+          'key': 'user'
+        }]
+      }
+    })
   }
 };
