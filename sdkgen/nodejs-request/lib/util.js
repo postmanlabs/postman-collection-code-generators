@@ -1,5 +1,6 @@
 const { convert } = require('postman-code-generators'),
   beautify = require('js-beautify'),
+  getAuthConfig = require('../../../lib/auth/utils').getAuthOptions,
   sdk = require('postman-collection');
 
 /**
@@ -34,6 +35,50 @@ function replaceVariables (requestSnippet) {
 }
 
 /**
+ * Adds required auth generation snippets
+ *  - hawk
+ *
+ * @param {sdk.Item} item - Parent item of request
+ * @param {string} requestSnippet - Request snippet generate by postman-code-generators
+ * @returns {object} - {request snippet with replaced auth headers, auth declaration snippet}
+ */
+function getAuthSnippet (item, requestSnippet) {
+  let request = item.request,
+    config,
+    authSnippet = '',
+    HAWK_AUTH_HEADER = `_${item.id}_HAWK_${item.id}_`;
+
+  if (!request.auth && !item.getAuth()) {
+    return {authSnippet, requestSnippet};
+  }
+
+  config = getAuthConfig(request.auth || item.getAuth());
+
+  if (requestSnippet.match(HAWK_AUTH_HEADER)) {
+    requestSnippet = requestSnippet.replace(HAWK_AUTH_HEADER, '\' + hawkAuth + \'');
+    authSnippet = `let hawkAuth = hawk.client.header(
+      '${request.url}',
+      '${request.method}',
+      {
+        credentials: {
+          id: '${sanitize(config.authId)}',
+          key: '${sanitize(config.authKey)}',
+          algorithm: '${sanitize(config.algorithm)}',
+        },
+        ext: '${sanitize(config.extraData)}',
+        timestamp: '${sanitize(config.timestamp)}',
+        nonce: '${sanitize(config.nonce)}',
+        payload: '${request.body ? sanitize(request.body.toString()) : ''}',
+        app: '${sanitize(config.app)}',
+        dlg: '${sanitize(config.delegation)}'
+      }
+    ).header;\n`;
+  }
+  return {authSnippet, requestSnippet};
+}
+
+
+/**
  * Generates snippet for a function declaration
 
  * @param {sdk.Item} collectionItem - PostmanItem Instance
@@ -44,6 +89,7 @@ function generateFunctionSnippet (collectionItem, options) {
   return new Promise((resolve, reject) => {
     let snippet = '',
       variableDeclarations,
+      authSnippets,
       request = collectionItem.request,
       collectionItemName = collectionItem.name.split(' ').join('_');
 
@@ -55,6 +101,8 @@ function generateFunctionSnippet (collectionItem, options) {
         return reject(error);
       }
 
+
+      // extract varaibles used from snipept
       variableDeclarations = requestSnippet.match(/{{[^{\s\n}]*}}/g);
       variableDeclarations = new Set(variableDeclarations);
 
@@ -93,6 +141,15 @@ function generateFunctionSnippet (collectionItem, options) {
           snippet += `${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
         });
       }
+
+      // get auth related snippets
+      authSnippets = getAuthSnippet(collectionItem, requestSnippet);
+
+      // add auth variables
+      snippet += replaceVariables(authSnippets.authSnippet);
+
+      // replace auth variables
+      requestSnippet = authSnippets.requestSnippet;
 
       // replaceVariable replaces all the postman variables and returns the resulting snippet
       snippet += replaceVariables(requestSnippet);
@@ -210,6 +267,7 @@ function getClassDoc (collection, variables) {
   return snippet;
 }
 
+
 /**
  * Returns beautified js SDK snippet
  *
@@ -218,15 +276,36 @@ function getClassDoc (collection, variables) {
  */
 function format (snippet, indentSize) {
   return beautify(snippet, { indent_size: indentSize, space_in_empty_paren: true });
+
+
+/**
+ * Returns snippet for library imports for generating sdk
+ *
+ * @param {sdk.Collection} collection - Postman collection instance
+ */
+function getRequireList (collection) {
+  let requireList = ['const request = require(\'request\');'];
+
+  collection.forEachItem((item) => {
+    if (item.request.auth ? (item.request.auth.type === 'hawk') : false) {
+      if (!requireList.includes('const hawk = require(\'@hapi/hawk\');')) {
+        requireList.push('const hawk = require(\'@hapi/hawk\');');
+      }
+    }
+  });
+
+  return requireList;
 }
 
 module.exports = {
   sanitize,
+  getAuthSnippet,
   generateFunctionSnippet,
   itemHandler,
   itemGroupHandler,
   getVariableFunction,
   setVariableFunction,
   getClassDoc,
+  getRequireList,
   format
 };
