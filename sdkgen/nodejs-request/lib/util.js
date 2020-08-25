@@ -1,4 +1,5 @@
 const { convert } = require('postman-code-generators'),
+  beautify = require('js-beautify'),
   getAuthConfig = require('../../../lib/auth/utils').getAuthOptions,
   sdk = require('postman-collection');
 
@@ -268,6 +269,16 @@ function getClassDoc (collection, variables) {
 
 
 /**
+ * Returns beautified js SDK snippet
+ *
+ * @param {string} snippet - SDK snippet
+ * @param {number} indentSize - size of indentation (space)
+ */
+function format (snippet, indentSize) {
+  return beautify(snippet, { indent_size: indentSize, space_in_empty_paren: true });
+
+
+/**
  * Returns snippet for library imports for generating sdk
  *
  * @param {sdk.Collection} collection - Postman collection instance
@@ -294,6 +305,7 @@ module.exports = {
   itemGroupHandler,
   getVariableFunction,
   setVariableFunction,
+  getClassDoc,
   getRequireList,
-  getClassDoc
+  format
 };

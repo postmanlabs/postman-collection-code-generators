@@ -6,7 +6,8 @@ const {processCollection, authorizeCollection} = require('../../../lib/utils'),
     getVariableFunction,
     setVariableFunction,
     getClassDoc,
-    getRequireList} = require('./util');
+    getRequireList,
+    format } = require('./util');
 
 /**
  * Generates sdk for nodejs-request
@@ -67,8 +68,12 @@ async function generate (collection, options, callback) {
   // exporting generated module
   snippet += 'module.exports = SDK;\n';
 
-  // exporting generated module
-  snippet += 'module.exports = SDK;\n';
+  try {
+    snippet = format(snippet, 2);
+  }
+  catch (error) {
+    return callback(error, null);
+  }
 
   return callback(null, snippet);
 }
