@@ -30,9 +30,9 @@ try {
     .replace(/"<<</, '')
     .replace(/>>>"/, '')
     .replace(/"/g, '\'')
-  };\nmodule.exports = sdkgens;\n`;
+  };\nmodule.exports = sdkgens;`;
   formatedString = format(sdkgenListSnippet, { indent_size: 2, space_in_empty_paren: true });
-  fs.writeFileSync(path.join(PATH_TO_ASSETS, 'sdkgens.js'), formatedString);
+  fs.writeFileSync(path.join(PATH_TO_ASSETS, 'sdkgens.js'), formatedString + '\n');
 }
 catch (error) {
   console.log(error);
