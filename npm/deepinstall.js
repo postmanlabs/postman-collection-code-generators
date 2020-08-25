@@ -1,7 +1,8 @@
+const chalk = require('chalk');
+
 var shell = require('shelljs'),
   path = require('path'),
   async = require('async'),
-  pwd = shell.pwd(),
   PATH_TO_ASSETS = path.resolve(path.join(__dirname, '../lib/assets')),
   PATH_TO_PACKAGE_SCRIPT = path.join(__dirname, 'package.js');
 
@@ -23,12 +24,11 @@ async.series([
     sdkgens.forEach((sdkgen) => {
       let PATH_TO_SDKGEN = path.join(PATH_TO_ASSETS, sdkgen.path),
         output;
-      shell.cd(PATH_TO_SDKGEN);
 
       console.log(`${sdkgen.name}: npm install`);
-      output = shell.exec('npm install');
-
-      shell.cd(pwd);
+      output = shell.exec('npm install', {
+        cwd: PATH_TO_SDKGEN
+      });
 
       if (output.code !== 0) {
         console.error('Filed to run npm install for sdkgen: ' + sdkgen.name);
@@ -43,5 +43,5 @@ async.series([
   if (err) {
     console.log(err);
   }
-  shell.cd(pwd);
+  console.log(chalk.green('SDK generators installed successfully'));
 });
