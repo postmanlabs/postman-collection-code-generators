@@ -276,7 +276,7 @@ function getClassDoc (collection, variables) {
  */
 function format (snippet, indentSize) {
   return beautify(snippet, { indent_size: indentSize, space_in_empty_paren: true });
-
+}
 
 /**
  * Returns snippet for library imports for generating sdk
@@ -309,3 +309,4 @@ module.exports = {
   getRequireList,
   format
 };
+
