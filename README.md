@@ -5,11 +5,11 @@ _Manage all of your organization's APIs in Postman, with the industry's most com
 *Modern software is built on APIs. Postman helps you develop APIs faster.*
 
 # postman-collection-code-generators
-This library converts Postman Collection into client SDK of chosen language.
+This library converts Postman Collection into client SDK of the chosen language.
 
-Every code generator has two identifiers: `language` and `variant`.
-* `language` of a sdk generator is the language in which client SDK is generated.
-* `variant` of a sdk generator is the main library name which is used in the generated SDK.
+Every sdk generator has two identifiers: `language` and `variant`.
+* `language` of sdk generator is the language in which client SDK is generated.
+* `variant` of sdk generator is the main library name which is used in the generated SDK.
 
 | Language | Variant |
 | -------- | ------- |
@@ -22,7 +22,7 @@ Every code generator has two identifiers: `language` and `variant`.
   - [Getting Started](#getting-started)
   - [Prerequisite](#prerequisite)
   - [Usage](#usage)
-    - [Using postman-code-generators as a Library](#using-postman-code-generators-as-a-library)
+    - [Using postman-collection-code-generators as a Library](#using-postman-collection-code-generators-as-a-library)
       - [getLanguageList](#getlanguagelist)
       - [getSDKOptions](#getsdkoptions)
       - [generate](#generate)
@@ -32,17 +32,17 @@ Every code generator has two identifiers: `language` and `variant`.
   - [License](#license)
 
 ## Getting Started
-To get started on you local machine.
+To get started on your local machine.
 ```bash
 $ git clone https://github.com/postmanlabs/postman-code-generators.git
 ```
 
 ## Prerequisite
-To run any of the postman-code-generators, ensure that you have NodeJS >= v12. A copy of the NodeJS installable can be downloaded from https://nodejs.org/en/download/package-manager.
-
+To run any of the postman-collection-code-generators, ensure that you have NodeJS >= v12. A copy of the NodeJS installable can be downloaded [here] (https://nodejs.org/en/download/package-manager.
+)
 ## Usage
-### Using postman-code-generators as a Library 
-There are three functions that are exposed in postman-code-generators: getLanguageList, getSDKOptions & generate.
+### Using postman-collection-code-generators as a Library 
+There are three functions that are exposed in postman-collection-code-generators: getLanguageList, getSDKOptions & generate.
 
 #### getLanguageList
 
@@ -73,10 +73,10 @@ A typical option has the following properties:
 * `name` - Display name
 * `id` - unique ID of the option
 * `type` - Data type of the option. (Allowed data types: `boolean`, `string`)
-* `default` - Default value. The value that is used if this option is not specified while creating code snippet
+* `default` - Default value. The value that is used if this option is not specified while creating SDK snippet.
 * `availableOptions` - List of available options.
 * `required` - Boolean to denote if its a required option
-* `description` - User friendly description.
+* `description` - User-friendly description.
 
 ```js
 let sdkgen = require('pathToSdkgen');
@@ -167,7 +167,7 @@ This command will install all the dependencies in production mode.
 ```bash
 $ npm install
 ```
-To install dev dependencies also for all codegens run: 
+To install dev dependencies also for all sdkgen run: 
 ```bash
 $ npm run deepinstall
 ```
@@ -176,10 +176,10 @@ To run common repo test as well as tests for all sdkgens
 ```bash
 $ npm test
 ```
-To run structure and individual tests on a single codegen
+To run structure and individual tests on a single sdkgen
 ```bash
 $ npm test <sdken-name>;
-# Here "codege-name" is the folder name of the codegen inside codegens folder
+# Here "sdkgen-name" is the folder name of the sdkgen inside sdkgen folder
 ```
 
 
