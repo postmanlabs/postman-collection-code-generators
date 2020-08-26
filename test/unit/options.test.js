@@ -18,34 +18,67 @@ describe('List Available SDK', () => {
 
 describe('SDK Generator options', () => {
   it('options should contain all required properties', () => {
-    let options = sdkGenerator.getSDKOptions();
-    options.forEach((option) => {
-      expect(option).to.have.haveOwnProperty('name');
-      expect(option).to.have.haveOwnProperty('id');
-      expect(option).to.have.haveOwnProperty('default');
-      expect(option).to.have.haveOwnProperty('availableOptions');
-      expect(option).to.have.haveOwnProperty('type');
-      expect(option).to.have.haveOwnProperty('required');
-      expect(option).to.have.haveOwnProperty('description');
+    sdkGenerator.getSDKOptions((err, options) => {
+      if (err) {
+        expect(err).to.be.null;
+      }
+      options.forEach((option) => {
+        expect(option).to.have.haveOwnProperty('name');
+        expect(option).to.have.haveOwnProperty('id');
+        expect(option).to.have.haveOwnProperty('default');
+        expect(option).to.have.haveOwnProperty('availableOptions');
+        expect(option).to.have.haveOwnProperty('type');
+        expect(option).to.have.haveOwnProperty('required');
+        expect(option).to.have.haveOwnProperty('description');
+      });
     });
   });
 
   it('should return global sdk options if language and variants are not provided', () => {
-    let options = sdkGenerator.getSDKOptions();
-    expect(options.length).to.equals(sdkOptions.length);
+    sdkGenerator.getSDKOptions((err, options) => {
+      if (err) {
+        expect(err).to.be.null;
+      }
+      expect(options.length).to.equals(sdkOptions.length);
+    });
   });
 
   it('should return options for given language with global options', () => {
-    let options = sdkGenerator.getSDKOptions('Nodejs', 'Request');
-    assert(options.length >= sdkOptions.length);
+    sdkGenerator.getSDKOptions('Nodejs', 'Request', (err, options) => {
+      if (err) {
+        expect(err).to.be.null;
+      }
+      options.forEach((option) => {
+        expect(option).to.have.haveOwnProperty('name');
+        expect(option).to.have.haveOwnProperty('id');
+        expect(option).to.have.haveOwnProperty('default');
+        expect(option).to.have.haveOwnProperty('availableOptions');
+        expect(option).to.have.haveOwnProperty('type');
+        expect(option).to.have.haveOwnProperty('required');
+        expect(option).to.have.haveOwnProperty('description');
+      });
+    });
   });
 
   it('should have same type for default and option type', () => {
-    let options = sdkGenerator.getSDKOptions();
-    options.forEach((option) => {
-      expect(typeof option.default).to.equals(option.type.toLowerCase());
+    sdkGenerator.getSDKOptions((err, options) => {
+      if (err) {
+        expect(err).to.be.null;
+      }
+      options.forEach((option) => {
+        expect(typeof option.default).to.equals(option.type.toLowerCase());
+      });
     });
   });
+
+  it('should throw an error if invalid language and variant are provided', () => {
+    sdkGenerator.getSDKOptions('wronglang', 'wrongvariant', (err) => {
+      if (err) {
+        expect(err);
+      }
+    });
+  });
+
 });
 
 describe('Sanitize option method: ', () => {
