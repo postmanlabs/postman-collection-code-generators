@@ -4,10 +4,10 @@
   "description": "Repository for generating code from Postman Collection.",
   "main": "index.js",
   "scripts": {
-    "deepinstall": "node npm/deepinstall.js",
     "test": "npm/test.sh",
     "test-unit": "node npm/test-unit.js",
-    "test-lint": "node npm/test-lint.js"
+    "test-lint": "node npm/test-lint.js",
+    "deepinstall": "node npm/deepinstall.js"
   },
   "repository": {
     "type": "git",
