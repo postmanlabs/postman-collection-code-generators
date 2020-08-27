@@ -9,6 +9,9 @@
     "test-lint": "node npm/test-lint.js",
     "boilerplate": "node npm/boilerplate.js"
   },
+  "bin": {
+    "sdkgen": "./bin/sdkgen.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/umeshp7/postman-collection-code-generators.git"
@@ -26,6 +29,9 @@
   "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme",
   "dependencies": {
     "async": "^3.2.0",
+    "chalk": "^4.1.0",
+    "cli-table3": "^0.6.0",
+    "commander": "^6.0.0",
     "node-fetch": "^2.6.0",
     "postman-code-generators": "git+https://github.com/someshkoli/postman-code-generators.git#sdkGenerator",
     "postman-collection": "^3.6.2",
@@ -33,7 +39,6 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "chalk": "^4.1.0",
     "eslint": "^7.1.0",
     "eslint-plugin-jsdoc": "^27.0.6",
     "eslint-plugin-lodash": "^7.1.0",
