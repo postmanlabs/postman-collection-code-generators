@@ -94,7 +94,6 @@ describe('Sanitize option method: ', () => {
     expect(options.variant).to.equals('Request');
     expect(options.outputType).to.equals('String');
     expect(options.outputFilePath).to.equals(require.main.path);
-    expect(options.includeReadme).to.equals(false);
     expect(options.variables).to.deep.equals({});
   });
 
