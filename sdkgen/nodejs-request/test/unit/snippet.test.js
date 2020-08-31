@@ -1,7 +1,7 @@
 const expect = require('chai').expect,
   sdk = require('postman-collection'),
   collection = {
-    SDKGEN: require('../../../../test/fixtures/SDKGEN.postman_collection.json'),
+    SDKGEN: require('../../../../test/fixtures/SDKGEN.postman_collection.json')
   },
   generate = require('../../index').generate,
   COLLECTION_INSTANCE = new sdk.Collection(collection.SDKGEN);

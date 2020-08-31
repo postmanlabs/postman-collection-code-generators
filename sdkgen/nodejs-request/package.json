@@ -1,5 +1,8 @@
 {
   "name": "nodejs-request",
+  "language": "nodejs",
+  "variant": "request",
+  "extension": "js",
   "version": "0.0.1",
   "description": "Converts Postman Collection to nodejs-request client SDK",
   "main": "index.js",
@@ -8,6 +11,7 @@
     "test": "node npm/test.js"
   },
   "dependencies": {
+    "js-beautify": "^1.13.0",
     "request": "^2.88.2"
   }
 }
