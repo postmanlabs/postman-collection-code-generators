@@ -115,8 +115,9 @@ function generateFunctionSnippet (collectionItem, options) {
 
       // JSDocs declaration
       snippet += `/**\n${request.description ? request.description + '\n' : ''}`;
+
       if (variableDeclarations) {
-        snippet += '@param {object} variables - Variables used for this request\n';
+        snippet += variables.length ? '@param {object} variables - Variables used for this request\n' : '';
         variableDeclarations.forEach((element) => {
           let varName = element.substring(2, element.length - 2);
           // checking if variable name is provided as variable in options
@@ -137,11 +138,13 @@ function generateFunctionSnippet (collectionItem, options) {
       }
 
       // function signature declaration
-      snippet += options.ES6_enabled ? '(variables, callback) => {\n' : 'function(variables, callback){\n';
-      snippet += 'if (typeof variables === \'function\') {\n';
-      snippet += 'callback = variables;\n';
-      snippet += 'variables = {};\n';
-      snippet += '}\n';
+      snippet += variables.length ? '(variables, callback) => {\n' : '(callback) => {\n';
+      if (variables.length) {
+        snippet += 'if (typeof variables === \'function\') {\n';
+        snippet += 'callback = variables;\n';
+        snippet += 'variables = {};\n';
+        snippet += '}\n';
+      }
 
       // Request level variable declaration
       if (variableDeclarations) {
@@ -149,8 +152,7 @@ function generateFunctionSnippet (collectionItem, options) {
           let varName = element.substring(2, element.length - 2);
           // declaring request level variables for only those which are provided by the user in options
           if (variables.includes(varName)) {
-            snippet += options.ES6_enabled ? 'let ' : 'var ';
-            snippet += `${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
+            snippet += `let ${varName} = variables.${varName} || self.variables.${varName} || '';\n`;
           }
         });
       }
@@ -303,7 +305,10 @@ function format (snippet, indentSize) {
  * @param {sdk.Collection} collection - Postman collection instance
  */
 function getRequireList (collection) {
-  let requireList = ['const request = require(\'request\');'];
+  let requireList = [
+    'const request = require(\'request\');',
+    'const _ = require(\'lodash\');'
+  ];
 
   collection.forEachItem((item) => {
     if (item.request.auth ? (item.request.auth.type === 'hawk') : false) {

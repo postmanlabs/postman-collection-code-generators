@@ -20,7 +20,7 @@ describe('Tests for generated sdk', () => {
       if (err) {
         expect(err).to.be.null;
       }
-      expect(snippet).to.include('var url = variables.url || self.variables.url || \'\'');
+      expect(snippet).to.include('let url = variables.url || self.variables.url || \'\'');
     });
   });
 

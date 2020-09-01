@@ -48,7 +48,7 @@ describe('Tests for Variable Declaration sdk', () => {
         console.log(err);
         expect(err).to.be.null;
       }
-      expect(snippet).to.include('var var1 = variables.var1 || self.variables.var1 || \'\';');
+      expect(snippet).to.include('let var1 = variables.var1 || self.variables.var1 || \'\';');
     });
   });
 
