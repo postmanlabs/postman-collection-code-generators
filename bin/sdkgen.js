@@ -81,9 +81,10 @@ function runGenerate (collection, command) {
           data.globalVariables,
           data.collectionVariables,
           data.environmentVariables,
-          (command.variable ? argsToVariableList(command.variables) : [])
+          (command.variables ? argsToVariableList(command.variables) : [])
         ),
         additionalOptions = additionalOptionToJson(command.additional || []);
+
       if (command.verbose) { console.log(chalk.green.bold('Generating SDK...')); }
       generator.generate({
         type: 'json',

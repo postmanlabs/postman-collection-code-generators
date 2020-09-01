@@ -10,7 +10,6 @@ const fs = require('fs'),
  * @param {string} location - path to be resolved
  */
 module.exports.resolvePath = (location) => {
-  console.log(pwd);
   return path.isAbsolute(location) ? location : path.resolve(path.join(pwd, location));
 };
 
