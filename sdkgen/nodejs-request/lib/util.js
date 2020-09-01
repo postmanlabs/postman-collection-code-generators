@@ -162,12 +162,13 @@ function generateFunctionSnippet (collectionItem, options) {
 
       if (options.returnMethod === 'Callback') {
       // function signature declaration
-      snippet += variables.length ? '(variables, callback) => {\n' : '(callback) => {\n';
-      if (variables.length) {
-        snippet += 'if (typeof variables === \'function\') {\n';
-        snippet += 'callback = variables;\n';
-        snippet += 'variables = {};\n';
-        snippet += '}\n';
+        snippet += variables.length ? '(variables, callback) => {\n' : '(callback) => {\n';
+        if (variables.length) {
+          snippet += 'if (typeof variables === \'function\') {\n';
+          snippet += 'callback = variables;\n';
+          snippet += 'variables = {};\n';
+          snippet += '}\n';
+        }
       }
 
       if (options.returnMethod === 'Promise') {
@@ -200,9 +201,6 @@ function generateFunctionSnippet (collectionItem, options) {
 
       // replace auth variables
       requestSnippet = authSnippets.requestSnippet;
-
-      // replaceVariable replaces all the postman variables and returns the resulting snippet
-      snippet += replaceVariables(requestSnippet);
 
       if (options.returnMethod === 'Promise') {
         snippet += '});';
