@@ -41,6 +41,26 @@ function replaceVariables (requestSnippet, variableList) {
 }
 
 /**
+ * [Description]
+ *
+ * @param returnType - Type of return for function (callback/Promise)
+ * @returns {Array} - array of snippets for return method
+ */
+function getReturnMethodSnippets (returnType) {
+  let snippets = [];
+  if (returnType === 'Promise') {
+    snippets.push('if (error) {');
+    snippets.push('return reject(error);');
+    snippets.push('}');
+    snippets.push('return resolve(response);');
+  }
+  if (returnType === 'Callback') {
+    snippets.push('return callback(error, response);');
+  }
+  return snippets;
+}
+
+/**
  * Adds required auth generation snippets
  *  - hawk
  *
@@ -126,7 +146,10 @@ function generateFunctionSnippet (collectionItem, options) {
           }
         });
       }
-      snippet += '@param {Function} callback - Callback function to return response (err, res)\n';
+      snippet += options.returnMethod === 'Callback' ?
+        '@param {Function} callback - Callback function to return response (err, res)\n' :
+        '';
+
       snippet += '*/\n';
 
       // class property name declaration
@@ -137,13 +160,20 @@ function generateFunctionSnippet (collectionItem, options) {
         snippet += `"${collectionItemName}": `;
       }
 
+      if (options.returnMethod === 'Callback') {
       // function signature declaration
-      snippet += variables.length ? '(variables, callback) => {\n' : '(callback) => {\n';
-      if (variables.length) {
-        snippet += 'if (typeof variables === \'function\') {\n';
-        snippet += 'callback = variables;\n';
-        snippet += 'variables = {};\n';
-        snippet += '}\n';
+        snippet += variables.length ? '(variables, callback) => {\n' : '(callback) => {\n';
+        if (variables.length) {
+          snippet += 'if (typeof variables === \'function\') {\n';
+          snippet += 'callback = variables;\n';
+          snippet += 'variables = {};\n';
+          snippet += '}\n';
+        }
+      }
+
+      if (options.returnMethod === 'Promise') {
+        snippet += options.ES6_enabled ? '(variables = {}) => {\n' : 'function(variables = {}){\n';
+        snippet += 'return new Promise((resolve, reject) => {\n';
       }
 
       // Request level variable declaration
@@ -157,6 +187,12 @@ function generateFunctionSnippet (collectionItem, options) {
         });
       }
 
+      // replacing return method
+      requestSnippet = requestSnippet.replace(
+        'callback(error, response);\n',
+        getReturnMethodSnippets(options.returnMethod).join('\n')
+      );
+
       // get auth related snippets
       authSnippets = getAuthSnippet(collectionItem, requestSnippet);
 
@@ -166,7 +202,10 @@ function generateFunctionSnippet (collectionItem, options) {
       // replace auth variables
       requestSnippet = authSnippets.requestSnippet;
 
-      // replaceVariable replaces all the postman variables and returns the resulting snippet
+      if (options.returnMethod === 'Promise') {
+        snippet += '});';
+      }
+
       snippet += replaceVariables(requestSnippet, variables);
       snippet += '}';
       return resolve(snippet);

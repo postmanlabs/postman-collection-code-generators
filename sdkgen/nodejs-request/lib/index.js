@@ -1,4 +1,4 @@
-const {processCollection, authorizeCollection} = require('../../../lib/utils'),
+const { processCollection, sanitizeOptions, authorizeCollection } = require('../../../lib/utils'),
   {
     sanitize,
     itemGroupHandler,
@@ -8,6 +8,25 @@ const {processCollection, authorizeCollection} = require('../../../lib/utils'),
     getClassDoc,
     getRequireList,
     format } = require('./util');
+
+/**
+ * Returns list of available options for nodejs-request sdkgen
+ *
+ * @returns {Array} Array of available options for nodejs-request sdkgen
+ */
+function getOptions () {
+  return [
+    {
+      name: 'Set response return method',
+      id: 'returnMethod',
+      availableOptions: ['Callback', 'Promise'],
+      type: 'String',
+      default: 'Callback',
+      required: false,
+      description: 'Set response return method got http response.'
+    }
+  ];
+}
 
 /**
  * Generates sdk for nodejs-request
@@ -25,6 +44,13 @@ async function generate (collection, options, callback) {
     indent = options.indentType === 'Tab' ? '\t' : ' ';
 
   indent = indent.repeat(options.indentCount);
+
+  try {
+    sanitizeOptions(options, getOptions());
+  }
+  catch (err) {
+    return callback(err, null);
+  }
 
   // passing each request in the collection through the authorizer method to add necessary header/query
   authorizeCollection(collection);
@@ -80,5 +106,6 @@ async function generate (collection, options, callback) {
 }
 
 module.exports = {
-  generate
+  generate,
+  getOptions
 };
