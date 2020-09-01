@@ -92,7 +92,7 @@ function runGenerate (collection, command) {
         language: command.language,
         variant: command.library || command.language,
         outputType: (command.output ? 'File' : 'String'),
-        outputFilePath: (resolvePath(command.output) || undefined),
+        outputFilePath: (command.output ? resolvePath(command.output) : undefined),
         variables: variables,
         ...additionalOptions
       }, (err, result) => {

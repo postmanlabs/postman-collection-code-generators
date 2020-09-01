@@ -10,6 +10,7 @@ const fs = require('fs'),
  * @param {string} location - path to be resolved
  */
 module.exports.resolvePath = (location) => {
+  console.log(pwd);
   return path.isAbsolute(location) ? location : path.resolve(path.join(pwd, location));
 };
 
@@ -40,6 +41,7 @@ module.exports.fetchJSON = (location, callback) => {
   }
   else {
     fs.readFile(location, (err, data) => {
+      console.log(location);
       location = module.exports.resolvePath(location);
       if (err) {
         console.log(err);
