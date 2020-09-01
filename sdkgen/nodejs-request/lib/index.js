@@ -1,11 +1,13 @@
-const { processCollection, sanitizeOptions } = require('../../../lib/utils'),
+const { processCollection, sanitizeOptions, authorizeCollection } = require('../../../lib/utils'),
   {
     sanitize,
     itemGroupHandler,
     itemHandler,
     getVariableFunction,
     setVariableFunction,
-    getClassDoc } = require('./util');
+    getClassDoc,
+    getRequireList,
+    format } = require('./util');
 
 /**
  * Returns list of available options for nodejs-request sdkgen
@@ -50,30 +52,27 @@ async function generate (collection, options, callback) {
     return callback(err, null);
   }
 
-  if (options.ES6_enabled) {
-    snippet += 'const ';
-  }
-  else {
-    snippet += 'var ';
-  }
-  snippet += 'request = require(\'request\');\n\n';
+  // passing each request in the collection through the authorizer method to add necessary header/query
+  authorizeCollection(collection);
+
+  // get require list based on library and auth used in collection
+  snippet += getRequireList(collection).join('\n') + '\n\n';
 
   // initial config variable
-  snippet += indent + 'const configVariables = {\n';
   if (options.variableList) {
+    snippet += indent + 'const configVariables = {\n';
     options.variableList.each((item) => {
       snippet += indent.repeat(2) + `'${sanitize(item.key)}': '${sanitize(item.value)}',\n`;
     });
+    snippet += indent + '};\n\n';
   }
-  snippet += indent + '};\n\n';
 
   // class doc
   snippet += getClassDoc(collection, options.variableList);
 
   // class declaration
   snippet += 'function SDK(config = {}) {\n\n';
-  snippet += options.ES6_enabled ? 'const ' : 'var ';
-  snippet += 'self = this;\n\n';
+  snippet += options.variableList ? 'const self = this;\n\n' : '';
   // Performing first layer individually to avoid adding additional layer to result
   await Promise.all(collectionMember.map((child) => {
     return processCollection(child, options, itemHandler, itemGroupHandler)
@@ -84,15 +83,24 @@ async function generate (collection, options, callback) {
         callback(error, null);
       });
   }));
-  snippet += indent + 'this.variables = this.setVariables(config);\n\n';
+  snippet += options.variableList ? 'this.variables = this.setVariables(config);\n\n' : '';
   snippet += '}\n\n';
 
   // get/set variable methods
-  snippet += getVariableFunction();
-  snippet += setVariableFunction();
+  if (options.variableList) {
+    snippet += getVariableFunction();
+    snippet += setVariableFunction();
+  }
 
   // exporting generated module
   snippet += 'module.exports = SDK;\n';
+
+  try {
+    snippet = format(snippet, 2);
+  }
+  catch (error) {
+    return callback(error, null);
+  }
 
   return callback(null, snippet);
 }

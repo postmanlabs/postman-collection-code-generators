@@ -69,7 +69,7 @@ describe('Response Return Method:', () => {
       if (err) {
         expect(err).to.be.null;
       }
-      expect(snippet).to.include('(variables, callback)');
+      expect(snippet).to.include('(callback)');
       expect(snippet).to.include('return callback(error, response);');
     });
   });
