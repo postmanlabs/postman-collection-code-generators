@@ -4,10 +4,10 @@
   "description": "Repository for generating code from Postman Collection.",
   "main": "index.js",
   "scripts": {
-    "test": "node npm/test.js",
+    "test": "npm/test.sh",
     "test-unit": "node npm/test-unit.js",
     "test-lint": "node npm/test-lint.js",
-    "boilerplate": "node npm/boilerplate.js"
+    "deepinstall": "node npm/deepinstall.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   "homepage": "https://github.com/umeshp7/postman-collection-code-generators#readme",
   "dependencies": {
     "async": "^3.2.0",
+    "js-beautify": "^1.13.0",
     "node-fetch": "^2.6.0",
     "postman-code-generators": "git+https://github.com/someshkoli/postman-code-generators.git#sdkGenerator",
     "postman-collection": "^3.6.2",

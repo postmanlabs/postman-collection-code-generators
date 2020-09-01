@@ -15,7 +15,30 @@ describe('Hawk snippet test:', () => {
   it('should replace hawk header with hawkAuth variable', async () => {
     let snippet;
     try {
-      snippet = await utils.generateFunctionSnippet(HAWK_ITEM, {});
+      snippet = await utils.generateFunctionSnippet(HAWK_ITEM, {
+        variableList: new sdk.VariableList(null, [
+          {
+            key: 'url',
+            value: 'www.google.com'
+          },
+          {
+            key: 'var1',
+            value: 'value1'
+          },
+          {
+            key: 'var2',
+            value: 'value2'
+          },
+          {
+            key: 'var4',
+            value: 'value4'
+          },
+          {
+            key: 'var5',
+            value: 'value5'
+          }
+        ])
+      });
     }
     catch (err) {
       expect(err).to.be.null;
@@ -26,7 +49,30 @@ describe('Hawk snippet test:', () => {
   it('should replace hawk header with hawkAuth variable', async () => {
     let snippet;
     try {
-      snippet = await utils.generateFunctionSnippet(HAWK_ITEM, {});
+      snippet = await utils.generateFunctionSnippet(HAWK_ITEM, {
+        variableList: new sdk.VariableList(null, [
+          {
+            key: 'url',
+            value: 'www.google.com'
+          },
+          {
+            key: 'var1',
+            value: 'value1'
+          },
+          {
+            key: 'var2',
+            value: 'value2'
+          },
+          {
+            key: 'var4',
+            value: 'value4'
+          },
+          {
+            key: 'var5',
+            value: 'value5'
+          }
+        ])
+      });
     }
     catch (err) {
       expect(err).to.be.null;
