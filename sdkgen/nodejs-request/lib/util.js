@@ -17,6 +17,13 @@ function sanitize (inputString) {
   return inputString.replace(/\\/g, '\\\\').replace(/'/g, '\\\'').replace(/\n/g, '\\n');
 }
 
+function getCamelCaseName (input) {
+  var result = input.split(' ').join('-').toLowerCase();
+  result = result.replace(/-([a-z])/g, (g) => { return g[1].toUpperCase(); });
+
+  return result;
+}
+
 /**
  * Replaces postman variables( {{variable}} ) in the generated snippet as
  * `' + variable_name + '`
@@ -118,7 +125,7 @@ function generateFunctionSnippet (collectionItem, options) {
       authSnippets,
       request = collectionItem.request,
       variables = options.variableList ? _.map(options.variableList.members, 'key') : [],
-      collectionItemName = collectionItem.name.split(' ').join('_');
+      collectionItemName = getCamelCaseName(collectionItem.name);
 
     convert('NodeJs', 'Request', request, {
       SDKGEN_enabled: true,
@@ -236,11 +243,11 @@ async function itemHandler (collectionItem, options) {
  */
 function itemGroupHandler (collectionItem, memberResults) {
   let snippet = '',
-    collectionItemName = collectionItem.name.split(' ').join('_');
+    collectionItemName = getCamelCaseName(collectionItem.name);
 
   snippet += `/**\n${collectionItem.description ? collectionItem.description + '\n' : ''}*/\n`;
   if (sdk.Collection.isCollection(collectionItem.__parent.__parent)) {
-    snippet += `this["${collectionItemName}"] =  {\n`;
+    snippet += `this.${collectionItemName} =  {\n`;
     snippet += memberResults.join(',');
     snippet += '};\n\n';
   }
