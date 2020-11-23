@@ -7,6 +7,7 @@
     "test": "npm/test.sh",
     "test-unit": "node npm/test-unit.js",
     "test-lint": "node npm/test-lint.js",
+    "postinstall": "node npm/deepinstall.js",
     "deepinstall": "node npm/deepinstall.js"
   },
   "bin": {

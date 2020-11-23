@@ -1,0 +1,1530 @@
+{
+	"info": {
+		"_postman_id": "62d7cf37-7b36-45ca-9da9-3e65903cda18",
+		"name": "TravefyAPIPublic",
+		"description": "![Travefy Developer API Documentation](https://s3.amazonaws.com/travefy-storage/content/Travefy-API-Banner.jpg)\n\nWelcome to Travefy's API.  Here are some pre-made requests for you to explore the API using [Postman](https://getpostman.com).\n\n# API Keys\n\nYou'll need your API keys, so contact [apisupport@travefy.com](mailto:apisupport@travefy.com) if you don't have them.\n\nThere is a public key and a private key for your platform. \n\nThink of your private key like a password:\n- Store it securely\n- Don't share it with anyone outside of your organization\n- Don't put it in any code on your website or in a Url that someone could find\n\n`Users` you've created on the platform also have a `PublicKey` and private `AccessToken`. This `AccessToken` is specific to your platform and acts as a password for the `User`, so do not share this access token. It may be revoked by the `User` at any time.\n\nDifferent calls in the API require different keys. For example, creating and managing `Users` requires your platform's secret key. Creating `Trips` on behalf of a `User` requires your platform's public key and the `AaccessToken` for the `User`. Check each call for the requirements.\n\n# Setup\n\nNOTE: You'll need to [create an environment in Postman](https://www.getpostman.com/docs/environments), select that environment, and enter your platform's api keys in the `0 - Setup/Environment Setup` pre-request script ([documentation on pre-request scripts](http://www.getpostman.com/docs/pre_request_scripts)) to set the environment variables.  Also, the calls have dependencies.  A `Trip` must be created before a `TripDay`, a `TripDay` must be created before a `TripEvent`, and `GET`/`UPDATE`/`DELETE` calls will only work after an item is created with a `POST`.\n\nNOTE: The [Create Full Trip](#10087261-a1b2-a05d-966d-bcf4609fc649) request is the only request that allows child entities (days, events, and ideas) to be passed in with the parent entity.  All other calls will only affect the primary entity.\n\n# Making Your First Call\n\nMaking your first call\nTest that you have the headers setup by making a `GET` request to `/api/v1/echo` with the `X-API-PUBLIC-KEY` header set to your platform's public key.  [Here's the Postman test for that](#ae3d-d794-c1e9-ba9f-25414ce121bb). You should get a `HTTP 200 OK` response if your keys are correct.\n\nNext, make a `GET` request to /api/v1/secureEcho with the `X-API-PUBLIC-KEY` and `X-API-PRIVATE-KEY` headers set to your platform's public and private keys. [Here's the Postman test for that](#bc0d6a-f565-164d-0699-baae5899a97e).  You should get a `HTTP 200 OK` response if your keys are correct.\n\n# Environments\n\nEnvironment | API Base Url | Web App Url\n----------- | ------- | -----------\nSandbox | https://api.travefy.com:81/ | https://sandbox.travefy.com:81/\nProduction | https://api.travefy.com/ | https://sandbox.travefy.com/\n\nNotes:\n- Your platform will have separate API keys for each environment.\n- Data created or modified in each environment will not affect the other.\n- Data cannot be transfered from one environment to the other.\n\n\n# Single Sign-On (SSO)\n\nFor platforms that have it enabled, `Users` can be authenticated into your platform the Travefy environment from your site.  To use this, `POST` a `form` to `https://{{your-travefy-platform-url}}/auth/tokenBasedLogin`.  The `User` will then be authenticated and redirected to their account page.\n\nHere's a working example of SSO working within our Sandbox environment:\nhttps://jsfiddle.net/6a100dyj/\n\nYou'll need to do a few changes from this example:\n1. Change the base url from `travelco-sandbox.travefy.com` to your travefy platform url and remove port 81.\n2. Add your platform's public key.  _NOTE: DO NOT add your Private Key to any public or user-accessible page_.\n3. Add the user's access token.  _NOTE: This is a secure token and should be on a page that only authorized users can access._\n4. Style the button.\n\n# API Pricing\nClick [here](https://intercom.help/travefy/api-and-developer-tools/api-pricing) for information on our API pricing.\n\n# Questions/Comments/Suggestions\n\nIf you have any questions or comments, please let us know at [apisupport@travefy.com](mailto:apisupport@travefy.com).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Setup",
+			"item": [
+				{
+					"name": "Secure Echo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "65105d37-5e44-4ed1-a6a8-d0e5535ee030",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-API-PRIVATE-KEY",
+								"value": "{{platformPrivateKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/secureEcho",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"secureEcho"
+							]
+						},
+						"description": "Test that calls with your platform's _private_ API key succeed."
+					},
+					"response": []
+				},
+				{
+					"name": "Echo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2595a96f-e56b-4917-a6af-d72a67eb8861",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/echo",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"echo"
+							]
+						},
+						"description": "Test that calls with your platform's _public_ API key succeed."
+					},
+					"response": []
+				}
+			],
+			"description": "Note: You need to run this before _any_ other request if you are using Postman.  If you're using another client, feel free to skip this.\n--------------------\n\nAdd your API keys to the Pre-request Script and execute the `Environment Setup` request to setup the environment.\n\n```\n//set your platform api keys here\npostman.setEnvironmentVariable(\"platformPrivateKey\", \"<YOUR-PLATFORM-PRIVATE-API-KEY>\");\npostman.setEnvironmentVariable(\"platformPublicKey\", \"<YOUR-PLATFORM-PUBLIC-API-KEY>\");\n```",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"tests[\"Status code name has string\"] = responseCode.name.has(\"Created\");",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Full name has string'] = data.User.FullName.has(\"Agent\");",
+									"tests['Username has string'] = data.User.Username.has(\"agent\");",
+									"tests['Response has Title'] = data.User.Title;",
+									"tests['Response has Phone'] = data.User.Phone;",
+									"tests['Response has Url'] = data.User.Url;",
+									"tests['Response has ImageUrl'] = data.User.ImageUrl;",
+									"tests['Response has CompanyLogoUrl'] = data.User.CompanyLogoUrl;",
+									"tests[\"Has usbscription period end\"] = data.User.SubscriptionPeriodEnd;",
+									"tests[\"Is Subscription Level 1\"] = data.AgentSubscriptionLevel === 1;",
+									"",
+									"",
+									"postman.setEnvironmentVariable(\"user-private-key\", data.AccessToken);",
+									"postman.setEnvironmentVariable(\"user-access-token\", data.AccessToken);",
+									"postman.setEnvironmentVariable(\"userId\", data.User.Id);",
+									""
+								],
+								"id": "f16d9683-cefa-4f29-8779-39f36ac9dcb6"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-PRIVATE-KEY",
+								"value": "{{platformPrivateKey}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n    \"User\":{  \r\n        \"Username\": \"agent1.{{$timestamp}}@example.com\",\r\n        \"FullName\": \"Agent Level 1 User\",\r\n        \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-4.gif\",\r\n        \"Title\": \"Travel Expert\",\r\n        \"Phone\": \"555-555-1234\",\r\n        \"Url\": \"https://travefy.com/\",\r\n        \"CompanyLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\r\n    },\r\n    \"AgentSubscriptionLevel\": 1\r\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/users/",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						},
+						"description": "Create a `User` on the Travefy platform.\n\nThe response of this request give you a chance to store the `AccessToken` and `PublicKey` for the `User`.  Those keys are also available on the `User` GET and GET by `Id` requests.  These are automatically stored in the Postman environment for testing.\n\nNote: if the `User` already has an account on Travefy, they'll need to authorize your Platform on their account.  Send them to https://{{your-travefy-platform-url}}/account/authorize and they can approve access.  You can then retrieve their tokens via the Get Users call. \n\n<!--\n### Sample Response\n```\n{\n  \"User\": {\n    \"Id\": 1234,\n    \"FullName\": \"Agent Level 1 User\",\n    \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-4.gif\",\n    \"Username\": \"agent1.1491421454@example.com\",\n    \"IsAgent\": true,\n    \"SubscriptionPeriodEnd\": \"2019-10-10T00:00:00\",\n    \"AgentSubscriptionIsActive\": true,\n    \"Title\": \"Travel Expert\",\n    \"Phone\": \"555-555-1234\",\n    \"Url\": \"https://travefy.com/\",\n    \"CompanyLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n  },\n  \"AccessToken\": \"xxxxxxxxxxxx\",\n  \"PublicKey\": \"xxxxxxxxxxxx\",\n  \"AgentSubscriptionLevel\": 1,\n  \"IsActive\": true,\n  \"CreatedOn\": \"2017-04-05T19:44:13.4028771Z\"\n}\n```\n-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a98f4d78-c8dc-4833-9c68-4ed1a0536005",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests[\"Has created on\"] = data.CreatedOn;",
+									"tests[\"Is Active\"] = data.IsActive;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-PRIVATE-KEY",
+								"value": "{{platformPrivateKey}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/users/{{userId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						},
+						"description": "Get a `User` from the Travefy platform by their `Id`.\r\n\r\n<!--\r\n### Sample Response\r\n```\r\n{\r\n    \"User\": {\r\n        \"Id\": 1234,\r\n        \"FullName\": \"Agent Level 1 User\",\r\n        \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-4.gif\",\r\n        \"Username\": \"agent1.1491422490@example.com\",\r\n        \"IsAgent\": true,\r\n        \"SubscriptionPeriodEnd\": \"2019-10-10T00:00:00\",\r\n        \"AgentSubscriptionIsActive\": true,\r\n        \"Title\": \"Travel Expert\",\r\n        \"Phone\": \"555-555-1234\",\r\n        \"Url\": \"https://travefy.com/\",\r\n        \"CompanyLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\r\n    },\r\n    \"AccessToken\": \"xxxxxxxxxxxx\",\r\n    \"PublicKey\": \"xxxxxxxxxxxx\",\r\n    \"AgentSubscriptionLevel\": 1,\r\n    \"IsActive\": true,\r\n    \"CreatedOn\": \"2017-04-05T20:01:27.25\"\r\n}```\r\n-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "82cacf22-9b9e-4ec4-9d94-6ab39eed8d0c",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Full name has string'] = data.User.FullName.endsWith(\"agent2\");",
+									"tests['Username has string'] = data.User.Username.endsWith(\"-updated@example.com\");",
+									"tests[\"Has created on\"] = data.CreatedOn;",
+									"tests[\"Is Active\"] = data.IsActive;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-API-PRIVATE-KEY",
+								"value": "{{platformPrivateKey}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\" : {\r\n        \"username\" : \"nate+agent1-{{$timestamp}}-updated@example.com\",\r\n        \"fullName\" : \"nate test agent2\"\r\n    }\r\n}\r\n\r\n",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/users/{{userId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						},
+						"description": "Update a User.  Currently, this will update Username (email), FullName, and ImageUrl.\n\n<!--\n### Sample Response\n```\n{\n    \"User\": {\n        \"Id\": 1234,\n        \"FullName\": \"nate test agent2\",\n        \"ImageUrl\": null,\n        \"Username\": \"nate+agent1-1491422734-updated@example.com\",\n        \"IsAgent\": true,\n        \"SubscriptionPeriodEnd\": \"2019-10-10T00:00:00\",\n        \"AgentSubscriptionIsActive\": true,\n        \"Title\": \"Travel Expert\",\n        \"Phone\": \"555-555-1234\",\n        \"Url\": \"https://travefy.com/\",\n        \"CompanyLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n    },\n    \"AccessToken\": \"xxxxxxxxxxxx\",\n    \"PublicKey\": \"xxxxxxxxxxxx\",\n    \"AgentSubscriptionLevel\": 1,\n    \"IsActive\": true,\n    \"CreatedOn\": \"2017-04-05T20:01:27.25\"\n}```\n-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "8b6e93dc-aa15-4a28-9a4b-e8edfe716bf0",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests[\"at least one user was returned\"] = data.length;",
+									"",
+									"var firstUser = data[0];",
+									"tests[\"Has created on\"] = firstUser.CreatedOn;",
+									"tests[\"Is Active\"] = firstUser.IsActive;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-API-PRIVATE-KEY",
+								"value": "{{platformPrivateKey}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/users",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						},
+						"description": "Get all Users that your platform has access to.\n\n<!--\n### Sample Response\n```[\n  {\n    \"User\": {\n      \"Id\": 1234,\n      \"FullName\": \"nate not agent from api!\",\n      \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-pro.png\",\n      \"Username\": \"nate+notagentfromapi1455044172@example.com\",\n      \"IsAgent\": false,\n      \"SubscriptionPeriodEnd\": null,\n      \"AgentSubscriptionIsActive\": false,\n      \"Title\": null,\n      \"Phone\": null,\n      \"Url\": null,\n      \"CompanyLogoUrl\": null\n    },\n    \"AccessToken\": \"xxxxxxxxxxxx\",\n    \"PublicKey\": \"xxxxxxxxxxxx\",\n    \"AgentSubscriptionLevel\": null,\n    \"IsActive\": true,\n    \"CreatedOn\": \"0001-01-01T00:00:00\"\n  },\n  {\n    \"User\": {\n      \"Id\": 1235,\n      \"FullName\": \"nate agent from api!\",\n      \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-pro.png\",\n      \"Username\": \"nate+notagentfromapi1455045001@example.com\",\n      \"IsAgent\": true,\n      \"SubscriptionPeriodEnd\": 2019-10-10T00:00:00,\n      \"AgentSubscriptionIsActive\": true,\n      \"Title\": Travel Expert,\n      \"Phone\": 555-555-1234,\n      \"Url\": \"https://travefy.com\",\n      \"CompanyLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n    },\n    \"AccessToken\": \"xxxxxxxxxxxx\",\n    \"PublicKey\": \"xxxxxxxxxxxx\",\n    \"AgentSubscriptionLevel\": 1,\n    \"IsActive\": true,\n    \"CreatedOn\": \"0001-01-01T00:00:00\"\n  },...```\n  -->"
+					},
+					"response": []
+				}
+			],
+			"description": "Notes\n------------\nIn production, your platform may be charged for any created users.  Sandbox users are free to create.\n\nRequest\n-------------\n\n`AgentSubscriptionLevel` values:\n\n- 0 = Starter\n- 1 = Plus\n- 2 = Premium\n\nResponse Items\n-------------\nAfter successfully creating the `User`, `POST` method returns an object with the following properties:\n- `User` - The `User` that was created.\n- `AccessToke` - Your platform's `AccessToken` for this `User`, keep this securely stored like a password.\n- `PublicKey` - The `PublicKey` for this `User`, this is a unique, non-secure identifier and should be stored.\n- `AgentSubscriptionLevel` - The level of their Travefy Pro subscription.",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Trips",
+			"item": [
+				{
+					"name": "Create Trip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0802b8b7-0a17-4d9f-aeb5-90faab1c79e7",
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"tests[\"Status code name has string\"] = responseCode.name.has(\"Created\");",
+									"    ",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Body contains Trip'] = data.Id;",
+									"tests['Body contains CreatedOn'] = data.CreatedOn;",
+									"tests['Body contains TripCoverPhotoUrl'] = data.TripCoverPhotoUrl;",
+									"tests['Return invite message'] = data.InviteMessage; ",
+									"tests['Return estimated cost'] = data.EstimatedCost; ",
+									"tests['Return isCostPerPerson'] = data.IsCostPerPerson; ",
+									"tests['Trip has no days'] = !data.TripDays || data.TripDays.length === 0;",
+									"tests['Trip has PartnerIdentifier'] = data.PartnerIdentifier.startsWith('trip-');",
+									"tests['Return VerificationKey'] = data.VerificationKey; ",
+									"tests['Return Status'] = data.Status === \"Quote\"; ",
+									"",
+									"postman.setEnvironmentVariable(\"tripId\", data.Id);",
+									"postman.setEnvironmentVariable(\"trip-key\", data.VerificationKey);",
+									"postman.setEnvironmentVariable(\"tripPartnerId\", data.PartnerIdentifier);",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n    \"Name\": \"Trip {{$timestamp}}\",\r\n    \"InviteMessage\": \"Welcome to the trip!\",\r\n    \"TripCoverPhotoUrl\": \"http://lorempixel.com/640/480/city\",\r\n    \"EstimatedCost\": \"$1,234\",\r\n    \"IsCostPerPerson\": true,\r\n    \"PartnerIdentifier\": \"trip-{{$timestamp}}\",\r\n\t\"Status\": \"Quote\",\r\n\t\"IsChatDisabled\": false\r\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips"
+							]
+						},
+						"description": "Create an empty `Trip` on the Travefy platform.\n\n<!--### Sample Response\n```{\n  \"Id\": 1234,\n  \"VerificationKey\": xxxxxxxxxxxx,\n  \"Name\": \"Trip 1491423330\",\n  \"Active\": true,\n  \"CreatedOn\": \"2017-04-05T20:15:26.5392324Z\",\n  \"InviteMessage\": \"Welcome to the trip!\",\n  \"TripCoverPhotoUrl\": \"http://lorempixel.com/640/480/city\",\n  \"EstimatedCost\": \"$1,234\",\n  \"IsCostPerPerson\": true,\n  \"TripDays\": null,\n  \"SecondaryLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Full Trip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "96612357-e476-43c1-9da3-00bc1ca8f074",
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;",
+									"tests[\"Status code name has string\"] = responseCode.name.has(\"Created\");",
+									" ",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Body contains Trip'] = data.Id;",
+									"tests['Return invite message'] = data.InviteMessage; ",
+									"tests['Return TripCoverPhotoUrl'] = data.TripCoverPhotoUrl.startsWith(\"http://lorempixel\");",
+									"tests['Return VerificationKey'] = data.VerificationKey; ",
+									"tests['Return Status'] = data.Status === \"Quote\"; ",
+									"",
+									"tests['Body contains TripDay'] = data.TripDays.length > 0;",
+									"tests['Trip has 1 TripDay'] = data.TripDays.length === 1;",
+									"tests['Trip has PartnerIdentifier'] = data.PartnerIdentifier.startsWith('trip-');",
+									"",
+									"var firstDay = data.TripDays[0];",
+									"",
+									"tests['Body contains TripEvent'] = firstDay.TripEvents.length > 0;",
+									"",
+									"var firstEvent = firstDay.TripEvents[0];",
+									"",
+									"tests['Segment Provider Name'] = firstEvent.SegmentProviderName;",
+									"tests['Segment Provider Phone'] = firstEvent.SegmentProviderPhone;",
+									"tests['Segment Provider Url'] = firstEvent.SegmentProviderUrl;",
+									"tests['Segment Identifier'] = firstEvent.SegmentIdentifier;",
+									"tests['Currency code is USD'] = firstEvent.CurrencyCode === 'USD';",
+									"tests['PriceInCents is 12345'] = firstEvent.PriceInCents === 12345;",
+									"tests['IsEndingEvent'] = firstEvent.IsEndingEvent;",
+									"",
+									"tests['TripIdea was created'] = firstEvent.TripIdeas.length > 0;",
+									"",
+									"var firstTripIdea = firstEvent.TripIdeas[0];",
+									"tests['TripIdea has name'] = firstTripIdea.Name;",
+									"tests['TripIdea has description'] = firstTripIdea.Description;",
+									"tests['TripIdea has url'] = firstTripIdea.Url;",
+									"tests['TripIdea has adorable picture :)'] = firstTripIdea.ImageUrl.endsWith('cats');",
+									"tests['TripIdea has address'] = firstTripIdea.Address;",
+									"tests['TripIdea has latitude'] = firstTripIdea.Latitude;",
+									"tests['TripIdea has longitude'] = firstTripIdea.Longitude;",
+									"",
+									"postman.setEnvironmentVariable(\"tripId\", data.Id);",
+									"postman.setEnvironmentVariable(\"tripPartnerId\", data.PartnerIdentifier);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n    \"Name\": \"Trip {{$timestamp}}\",\r\n    \"InviteMessage\": \"Welcome to your trip!\",\r\n    \"TripCoverPhotoUrl\": \"http://lorempixel.com/400/200/cats/\",\r\n    \"Status\": \"Quote\",\r\n    \"PartnerIdentifier\": \"trip-{{$timestamp}}\",\r\n    \"IsChatDisabled\": true,\r\n    \"TripDays\": [  \r\n        {  \r\n            \"Title\": \"Trip Day {{$timestamp}}\",\r\n            \"Date\": \"1\\/27\\/2017\",\r\n            \"TripEvents\": [  \r\n                {  \r\n                    \"Name\": \"Trip Event {{$timestamp}}\",\r\n                    \"SegmentProviderName\": \"Lincoln Grand Hotel\",\r\n                    \"SegmentProviderPhone\": \"555-867-5309\",\r\n                    \"SegmentProviderUrl\": \"https://lincolngrandhotel.com\",\r\n                    \"SegmentIdentifier\": \"YP02XVDB\",\r\n                    \"CurrencyCode\": \"USD\",\r\n                    \"PriceInCents\": 12345,\r\n                    \"EventType\": 1,\r\n                    \"IsEndingEvent\": true,\r\n                    \"TripIdeas\": [  \r\n                        {  \r\n                            \"Name\": \"My Place\",\r\n                            \"ImageUrl\": \"http://lorempixel.com\\/400\\/200\\/cats\",\r\n                            \"Url\": \"https://example.com\",\r\n                            \"Description\": \"A great place to visit!\",\r\n                            \"Latitude\": 34.0784796,\r\n                            \"Longitude\": -107.6184694,\r\n                            \"Address\": \"123 W Main St\",\r\n                            \"City\": \"Citytown\",\r\n                            \"State\": \"NM\",\r\n                            \"ZipCode\": 87825,\r\n                            \"Country\": \"US\"\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips"
+							]
+						},
+						"description": "Create a `Trip` on the Travefy platform with a full itinerary (`TripDays` and `TripEvents`).\n\n<!--### Sample Response\n```\n{\n    \"Id\": 1234,\n    \"VerificationKey\": xxxxxxxxxxxx,\n    \"Name\": \"Trip 1491423686\",\n    \"Active\": true,\n    \"CreatedOn\": \"2017-04-05T20:21:22.4826361Z\",\n    \"InviteMessage\": \"Welcome to your trip!\",\n    \"TripCoverPhotoUrl\": \"http://lorempixel.com/400/200/cats/\",\n    \"EstimatedCost\": $1,234,\n    \"IsCostPerPerson\": true,\n    \"TripDays\": [\n        {\n            \"Id\": 12345,\n            \"TripId\": 1234,\n            \"Title\": \"Trip Day 1491423686\",\n            \"Date\": \"2017-01-27T00:00:00\",\n            \"Ordinal\": 0.5,\n            \"IsActive\": true,\n            \"CreatedOn\": \"2017-04-05T20:21:22.5138857Z\",\n            \"TripEvents\": [\n                {\n                    \"Id\": 123456,\n                    \"TripDayId\": 12345,\n                    \"IsActive\": true,\n                    \"SegmentProviderName\": \"Lincoln Grand Hotel\",\n                    \"SegmentProviderPhone\": \"555-867-5309\",\n                    \"SegmentProviderUrl\": \"https://lincolngrandhotel.com\",\n                    \"SegmentIdentifier\": \"YP02XVDB\",\n                    \"Ordinal\": 0.5,\n                    \"Name\": \"Trip Event 1491423686\",\n                    \"Description\": \"Former hotel in Lincoln Nebraska\",\n                    \"StartTimeZoneId\": null,\n                    \"StartTimeInMinutes\": null,\n                    \"DurationInMinutes\": null,\n                    \"StartTerminal\": null,\n                    \"StartGate\": null,\n                    \"EndTerminal\": null,\n                    \"EndGate\": null,\n                    \"PriceInCents\": 12345,\n                    \"CurrencyCode\": \"USD\",\n                    \"TransportationIdentifier\": null,\n                    \"EventType\": 1,\n                    \"IsEndingEvent\": true,\n                    \"IsArrival\": false,\n                    \"TripIdeas\": [\n                        {\n                            \"Id\": 654,\n                            \"TripEventId\": 123456,\n                            \"Name\": \"My Place\",\n                            \"ImageUrl\": \"http://lorempixel.com/400/200/cats\",\n                            \"Url\": \"https://example.com\",\n                            \"Description\": \"A great place to visit!\",\n                            \"Latitude\": 34.0784796,\n                            \"Longitude\": -107.6184694,\n                            \"Address\": \"123 W Main St\",\n                            \"City\": \"Citytown\",\n                            \"State\": \"NM\",\n                            \"ZipCode\": \"54321\",\n                            \"Phone\": 555-555-1234,\n                            \"Country\": \"US\",\n                            \"IsActive\": true\n                        }\n                    ],\n                }\n            ],\n        }\n    ],\n    \"SecondaryLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Return trip'] = data.Id; ",
+									"tests['Return trip day'] = data.TripDays;",
+									""
+								],
+								"id": "121a0191-65b4-41e2-bfbd-fadcb87dbfac"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}"
+							]
+						},
+						"description": "Get a `Trip` from the Travefy platform.\n\n<!--### Sample Response\n```\n{\n    \"Id\": 1234,\n    \"VerificationKey\": xxxxxxxxxxxx,\n    \"Name\": \"Trip 1491423686\",\n    \"Active\": true,\n    \"CreatedOn\": \"2017-04-05T20:21:22.4826361Z\",\n    \"InviteMessage\": \"Welcome to your trip!\",\n    \"TripCoverPhotoUrl\": \"http://lorempixel.com/400/200/cats/\",\n    \"EstimatedCost\": $1,234,\n    \"IsCostPerPerson\": true,\n    \"TripDays\": [\n        {\n            \"Id\": 12345,\n            \"TripId\": 1234,\n            \"Title\": \"Trip Day 1491423686\",\n            \"Date\": \"2017-01-27T00:00:00\",\n            \"Ordinal\": 0.5,\n            \"IsActive\": true,\n            \"CreatedOn\": \"2017-04-05T20:21:22.5138857Z\",\n            \"TripEvents\": [\n                {\n                    \"Id\": 123456,\n                    \"TripDayId\": 12345,\n                    \"IsActive\": true,\n                    \"SegmentProviderName\": \"Lincoln Grand Hotel\",\n                    \"SegmentProviderPhone\": \"555-867-5309\",\n                    \"SegmentProviderUrl\": \"https://lincolngrandhotel.com\",\n                    \"SegmentIdentifier\": \"YP02XVDB\",\n                    \"Ordinal\": 0.5,\n                    \"Name\": \"Trip Event 1491423686\",\n                    \"Description\": \"Former hotel in Lincoln Nebraska\",\n                    \"StartTimeZoneId\": null,\n                    \"StartTimeInMinutes\": null,\n                    \"DurationInMinutes\": null,\n                    \"StartTerminal\": null,\n                    \"StartGate\": null,\n                    \"EndTerminal\": null,\n                    \"EndGate\": null,\n                    \"PriceInCents\": 12345,\n                    \"CurrencyCode\": \"USD\",\n                    \"TransportationIdentifier\": null,\n                    \"EventType\": 1,\n                    \"IsEndingEvent\": true,\n                    \"IsArrival\": false,\n                    \"TripIdeas\": [\n                        {\n                            \"Id\": 654,\n                            \"TripEventId\": 123456,\n                            \"Name\": \"My Place\",\n                            \"ImageUrl\": \"http://lorempixel.com/400/200/cats\",\n                            \"Url\": \"https://example.com\",\n                            \"Description\": \"A great place to visit!\",\n                            \"Latitude\": 34.0784796,\n                            \"Longitude\": -107.6184694,\n                            \"Address\": \"123 W Main St\",\n                            \"City\": \"Citytown\",\n                            \"State\": \"NM\",\n                            \"ZipCode\": \"54321\",\n                            \"Phone\": 555-555-1234,\n                            \"Country\": \"US\",\n                            \"IsActive\": true\n                        }\n                    ],\n                }\n            ],\n        }\n    ],\n    \"SecondaryLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trip by Partner Identifier",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Return trip'] = data.Id; ",
+									"tests['Return trip day'] = data.TripDays;",
+									"",
+									"tests['Trip Id matches'] = data.Id == postman.getEnvironmentVariable(\"tripId\");",
+									""
+								],
+								"id": "1080f906-f4c5-4253-8d20-5f11607df089"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/?partnerIdentifier={{tripPartnerId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								""
+							],
+							"query": [
+								{
+									"key": "partnerIdentifier",
+									"value": "{{tripPartnerId}}"
+								}
+							]
+						},
+						"description": "Get a `Trip` from the Travefy platform by `PartnerIdentifier`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trips",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Return some trips'] = data.length > 0; ",
+									""
+								],
+								"id": "7aba1534-68e3-4dc9-9111-15430342db84"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips"
+							]
+						},
+						"description": "Get every `Trip` created by your platform for the given `User`.\n\n<!--### Sample Response\n\n```\n[\n  {\n    \"Id\": 10002,\n    \"VerificationKey\": xxxxxxxxxxxx,\n    \"Name\": \"Trip 1491423686\",\n    \"Active\": true,\n    \"CreatedOn\": \"2017-04-05T20:21:22.4826361Z\",\n    \"InviteMessage\": \"Welcome to your trip!\",\n    \"TripCoverPhotoUrl\": \"http://lorempixel.com/400/200/cats/\",\n    \"EstimatedCost\": null,\n    \"IsCostPerPerson\": null,\n    \"TripDays\": null,\n    \"SecondaryLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n  },\n  {\n    \"Id\": 10001,\n    \"VerificationKey\": xxxxxxxxxxxx,\n    \"Name\": \"Trip 1491423330\",\n    \"Active\": true,\n    \"CreatedOn\": \"2017-04-05T20:15:26.54\",\n    \"InviteMessage\": \"Welcome to the trip!\",\n    \"TripCoverPhotoUrl\": \"http://lorempixel.com/640/480/city\",\n    \"EstimatedCost\": \"$1,234\",\n    \"IsCostPerPerson\": true,\n    \"TripDays\": null,\n    \"SecondaryLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n  }\n]```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Trip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 200;\r",
+									"tests[\"Status code name has string\"] = responseCode.name.has(\"OK\");\r",
+									"\r",
+									"var data = JSON.parse(responseBody);\r",
+									"\r",
+									"tests['Body contains Trip'] = data.Id;\r",
+									"tests['Return invite message'] = data.InviteMessage; \r",
+									"\r",
+									"tests['Body contains TripDay'] = data.TripDays.length > 0;\r",
+									"tests['Trip has 1 TripDay'] = data.TripDays.length === 1;\r",
+									"\r",
+									"tests['Trip name was updated'] = data.Name.has('Updated');\r",
+									"\r",
+									"var firstDay = data.TripDays[0];\r",
+									"\r",
+									"tests['Body contains TripEvent'] = firstDay.TripEvents.length > 0;\r",
+									"tests['First day name was updated'] = firstDay.Title.has('Updated');\r",
+									"tests['First day date was updated'] = firstDay.Date === '2016-03-21T00:00:00';\r",
+									"\r",
+									"var firstEvent = firstDay.TripEvents[0];\r",
+									"\r",
+									"tests['Event name was updated'] = firstEvent.Name.has('Updated');\r",
+									"tests['Segment Provider Name'] = firstEvent.SegmentProviderName;\r",
+									"tests['Segment Provider Phone'] = firstEvent.SegmentProviderPhone;\r",
+									"tests['Segment Provider Url'] = firstEvent.SegmentProviderUrl;\r",
+									"tests['Segment Identifier'] = firstEvent.SegmentIdentifier;\r",
+									"tests['IsEndingEvent'] = firstEvent.IsEndingEvent;\r",
+									"tests['Currency code is USD'] = firstEvent.CurrencyCode === 'USD';\r",
+									"tests['PriceInCents is 12345'] = firstEvent.PriceInCents === 13579;\r",
+									"\r",
+									"tests['TripIdea was created'] = firstEvent.TripIdeas.length > 0;\r",
+									"\r",
+									"var firstTripIdea = firstEvent.TripIdeas[0];\r",
+									"tests['TripIdea name was updated'] = firstTripIdea.Name.has('New');\r",
+									"tests['TripIdea has description'] = firstTripIdea.Description;\r",
+									"tests['TripIdea has url'] = firstTripIdea.Url;\r",
+									"tests['TripIdea has adorable picture :)'] = firstTripIdea.ImageUrl.endsWith('cats');\r",
+									"tests['TripIdea has address'] = firstTripIdea.Address;\r",
+									"tests['TripIdea has latitude'] = firstTripIdea.Latitude;\r",
+									"tests['TripIdea has longitude'] = firstTripIdea.Longitude;\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"tripId\", data.Id);\r",
+									""
+								],
+								"id": "c3b29cae-bcd0-438a-a231-d50301ab73e9"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n    \"Name\": \"Updated {{$timestamp}}\",\r\n    \"InviteMessage\": \"Welcome to your trip!\",\r\n    \"TripDays\": [  \r\n        {  \r\n            \"Title\": \"Updated {{$timestamp}}\",\r\n            \"Date\": \"3\\/21\\/2016\",\r\n            \"TripEvents\": [  \r\n                {  \r\n                    \"Name\": \"Updated {{$timestamp}}\",\r\n                    \"SegmentProviderName\": \"Lincoln Grand Hotel\",\r\n                    \"SegmentProviderPhone\": \"555-867-5309\",\r\n                    \"SegmentProviderUrl\": \"https:\\/\\/lincolngrandhotel.com\",\r\n                    \"SegmentIdentifier\": \"YP02XVDB\",\r\n                    \"CurrencyCode\": \"USD\",\r\n                    \"PriceInCents\": 13579,\r\n                    \"EventType\": 1,\r\n                    \"IsEndingEvent\": true,\r\n                    \"TripIdeas\": [  \r\n                        {  \r\n                            \"Name\": \"My New Place\",\r\n                            \"ImageUrl\": \"http:\\/\\/lorempixel.com\\/400\\/200\\/cats\",\r\n                            \"Url\": \"https:\\/\\/example.com\",\r\n                            \"Description\": \"A great place to visit!\",\r\n                            \"Latitude\": 34.0784796,\r\n                            \"Longitude\": -107.6184694,\r\n                            \"Address\": \"123 W Main St\",\r\n                            \"City\": \"Citytown\",\r\n                            \"State\": \"NM\",\r\n                            \"ZipCode\": 87825,\r\n                            \"Country\": \"US\"\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}"
+							]
+						},
+						"description": "Update the `Trip` itinerary information AND metadata (`Name`, `TripCoverPhotoUrl`, etc.).  Note: do not pass up _any_ `TripDays` if you only want to update the metadata.\n\nIf you pass up _any_ `TripDays`, the entire trip itinerary information will be replaced.  Chat messages and saved `TripIdeas` will be maintained, but all `TripDays`, `TripEvents`, and `TripIdeas` on `TripEvents` will be replaced.\n\n<!--### Sample Response\n```\n{\n    \"Id\": 1234,\n    \"VerificationKey\": xxxxxxxxxxxx,\n    \"Name\": \"Updated 1491423686\",\n    \"Active\": true,\n    \"CreatedOn\": \"2017-04-05T20:21:22.4826361Z\",\n    \"InviteMessage\": \"Welcome to your trip!\",\n    \"TripCoverPhotoUrl\": \"http://lorempixel.com/400/200/cats/\",\n    \"EstimatedCost\": $1,234,\n    \"IsCostPerPerson\": true,\n    \"TripDays\": [\n        {\n            \"Id\": 12345,\n            \"TripId\": 1234,\n            \"Title\": \"Updated 1491423686\",\n            \"Date\": \"2017-03-21T00:00:00\",\n            \"Ordinal\": 0.5,\n            \"IsActive\": true,\n            \"CreatedOn\": \"2017-04-05T20:21:22.5138857Z\",\n            \"TripEvents\": [\n                {\n                    \"Id\": 123456,\n                    \"TripDayId\": 12345,\n                    \"IsActive\": true,\n                    \"SegmentProviderName\": \"Lincoln Grand Hotel\",\n                    \"SegmentProviderPhone\": \"555-867-5309\",\n                    \"SegmentProviderUrl\": \"https://lincolngrandhotel.com\",\n                    \"SegmentIdentifier\": \"YP02XVDB\",\n                    \"Ordinal\": 0.5,\n                    \"Name\": \"Updated 1491423686\",\n                    \"Description\": \"Former hotel in Lincoln Nebraska\",\n                    \"StartTimeZoneId\": null,\n                    \"StartTimeInMinutes\": null,\n                    \"DurationInMinutes\": null,\n                    \"StartTerminal\": null,\n                    \"StartGate\": null,\n                    \"EndTerminal\": null,\n                    \"EndGate\": null,\n                    \"PriceInCents\": 13579,\n                    \"CurrencyCode\": \"USD\",\n                    \"TransportationIdentifier\": null,\n                    \"EventType\": 1,\n                    \"IsEndingEvent\": true,\n                    \"IsArrival\": false,\n                    \"TripIdeas\": [\n                        {\n                            \"Id\": 654,\n                            \"TripEventId\": 123456,\n                            \"Name\": \"My New Place\",\n                            \"ImageUrl\": \"http://lorempixel.com/400/200/cats\",\n                            \"Url\": \"https://example.com\",\n                            \"Description\": \"A great place to visit!\",\n                            \"Latitude\": 34.0784796,\n                            \"Longitude\": -107.6184694,\n                            \"Address\": \"123 W Main St\",\n                            \"City\": \"Citytown\",\n                            \"State\": \"NM\",\n                            \"ZipCode\": \"54321\",\n                            \"Phone\": 555-555-1234,\n                            \"Country\": \"US\",\n                            \"IsActive\": true\n                        }\n                    ],\n                }\n            ],\n        }\n    ],\n    \"SecondaryLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Archive Trip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+									"tests[\"Status code name has string\"] = responseCode.name.has(\"OK\");\r",
+									"\r",
+									"var data = JSON.parse(responseBody);\r",
+									"\r",
+									"tests['Body contains Trip'] = data.Id;\r",
+									"tests['Trip is archived'] = data.IsArchived;\r",
+									""
+								],
+								"id": "6ee00932-486a-41a5-aa46-631df1eff6cf"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}"
+							]
+						},
+						"description": "Archives the `Trip`.\n\n<!--### Sample Response\n```\n{\n    \"Id\": 1234,\n    \"VerificationKey\": xxxxxxxxxxxx,\n    \"Name\": \"Updated 1491423686\",\n    \"Active\": true,\n    \"CreatedOn\": \"2017-04-05T20:21:22.4826361Z\",\n    \"InviteMessage\": \"Welcome to your trip!\",\n    \"TripCoverPhotoUrl\": \"http://lorempixel.com/400/200/cats/\",\n    \"EstimatedCost\": $1,234,\n    \"IsCostPerPerson\": true,\n    \"SecondaryLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\",\n    \"IsArchived\": true\n}```-->"
+					},
+					"response": []
+				}
+			],
+			"description": "# Notes\n\nStatus can be set from one of the statuses the User has created in the web interface and is matched by the string provided.  The match is *not* case-sensitive.  If no matching Status is found, it is not set (\"No Status\" in the UI).  `Quote`, `Confirmed`, and `Paid` are default statuses for all agents currently, but this is subject to change.\n\n`TripIdeas` are a collection on a `TripEvent` and are often establishments or other info that is associated with the `TripEvent`.  For example, the event may be \"Beachside Dinner\" with a time and reservation info and the idea may be \"Shorebird Resturant\" with the location, hours, etc.  Currently these are completely stand-alone and will not connect with any existing items from the Travefy database or an agent's Content Library.  See the Create Full Trip request for an example usage.\n\nThe `PartnerIdentifier` field on a `Trip` can be used to store _your_ identifier on the `Trip`.  For example, if you have a different identifier for the `Trip` in _your_ database, you can store that here.  You can then query the `Trip` by that identifier to get the Travefy `Id` for the `Trip`.  Note: This field must be unique across your platform.",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Trip Days",
+			"item": [
+				{
+					"name": "Create Trip Day",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 201\"] = responseCode.code === 201;\r",
+									"tests[\"Status code name has string\"] = responseCode.name.has(\"Created\");\r",
+									"\r",
+									"var data = JSON.parse(responseBody);\r",
+									"\r",
+									"tests['Body contains Trip'] = data.Id;\r",
+									"postman.setEnvironmentVariable(\"tripDayId\", data.Id);\r",
+									""
+								],
+								"id": "77444898-83c5-4d4b-a6c2-d0991bdc3859"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n    \"Title\": \"Trip Day {{$timestamp}}\",\r\n    \"TripId\": \"{{tripId}}\",\r\n    \"Date\": \"2017/01/15\"\r\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/tripDays/",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tripDays",
+								""
+							]
+						},
+						"description": "Create a `TripDay` on a given `Trip`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.\n\n<!--### Sample Response\n\n```\n{\n  \"Id\": 654321,\n  \"TripId\": 10002,\n  \"Title\": \"Trip Day 1491424870\",\n  \"Date\": \"2017-01-15T00:00:00\",\n  \"Ordinal\": 0.75,\n  \"IsActive\": true,\n  \"CreatedOn\": \"2017-04-05T20:41:07.0284278Z\",\n  \"TripEvents\": null\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trip Days",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"tests['Return some trip days'] = data.length > 0; ",
+									""
+								],
+								"id": "c324a2b9-b0d7-4ae5-a821-1dd1daffbfe6"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/tripDays/",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tripDays",
+								""
+							]
+						},
+						"description": "Get all the `TripDay`s for this `Trip`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.\n\n<!--### Sample Response\n\n```\n[\n  {\n    \"Id\": 654321,\n    \"TripId\": 10002,\n    \"Title\": \"Updated 1491424553\",\n    \"Date\": \"2016-03-21T00:00:00\",\n    \"Ordinal\": 0.5,\n    \"IsActive\": true,\n    \"CreatedOn\": \"2017-04-05T20:21:22.513\",\n    \"TripEvents\": null\n  },\n  {\n    \"Id\": 543210,\n    \"TripId\": 10002,\n    \"Title\": \"Trip Day 1491424870\",\n    \"Date\": \"2017-01-15T00:00:00\",\n    \"Ordinal\": 0.75,\n    \"IsActive\": true,\n    \"CreatedOn\": \"2017-04-05T20:41:07.0284278Z\",\n    \"TripEvents\": null\n  }\n]```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trip Day",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"tests['Return trip'] = data.Id; ",
+									""
+								],
+								"id": "0ec4c553-33e0-4eb1-8344-655f37cf5ecc"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/tripDays/{{tripDayId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tripDays",
+								"{{tripDayId}}"
+							]
+						},
+						"description": "Get the specified `TripDay`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.\n\n<!--### Sample Response\n\n```\n{\n  \"Id\": 654321,\n  \"TripId\": 10002,\n  \"Title\": \"Trip Day 1491424870\",\n  \"Date\": \"2017-01-15T00:00:00\",\n  \"Ordinal\": 0.75,\n  \"IsActive\": true,\n  \"CreatedOn\": \"2017-04-05T20:41:07.0284278Z\",\n  \"TripEvents\": null\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Trip Day ",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+									"\r",
+									"var data = JSON.parse(responseBody);\r",
+									"\r",
+									"tests['Body contains Trip'] = data.Id;\r",
+									"postman.setEnvironmentVariable(\"tripDayId\", data.Id);\r",
+									"\r",
+									"tests['Title is updated'] = data.Title.has(\"Updated\");\r",
+									"\r",
+									"tests['isActive is true'] = data.IsActive === true;\r",
+									""
+								],
+								"id": "be4e64c5-a510-4190-94fa-e0d910f19710"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n    \"Title\": \"Updated Trip Day {{$timestamp}}\",\r\n    \"TripId\": \"{{tripId}}\",\r\n    \"Date\": \"2016/02/15\",\r\n    \"IsActive\": true\r\n}",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/tripDays/{{tripDayId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tripDays",
+								"{{tripDayId}}"
+							]
+						},
+						"description": "Update the specified `TripDay`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.\n\n<!--### Sample Response\n\n```\n{\n  \"Id\": 654321,\n  \"TripId\": 10002,\n  \"Title\": \"Updated Trip Day 1491425270\",\n  \"Date\": \"2016-02-15T00:00:00\",\n  \"Ordinal\": 0.25,\n  \"IsActive\": true,\n  \"CreatedOn\": \"2017-04-05T20:41:07.027\",\n  \"TripEvents\": null\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Trip Day",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"tests['IsActive is false'] = !data.IsActive;",
+									""
+								],
+								"id": "f6b695a6-5a32-4088-92d0-083809013716"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/tripDays/{{tripDayId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tripDays",
+								"{{tripDayId}}"
+							]
+						},
+						"description": "Delete the specified `TripDay`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.\n\n<!--### Sample Response\n\n```\n{\n  \"Id\": 654321,\n  \"TripId\": 10002,\n  \"Title\": \"Updated Trip Day 1491425270\",\n  \"Date\": \"2016-02-15T00:00:00\",\n  \"Ordinal\": 0.25,\n  \"IsActive\": false,\n  \"CreatedOn\": \"2017-04-05T20:41:07.027\",\n  \"TripEvents\": null\n}```-->"
+					},
+					"response": []
+				}
+			],
+			"description": "A `TripDay` represents a day on the itinerary.  It may have a date (e.g. 2017/01/24) or may not (e.g. Day 2).\n\nNOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip` for all of these calls.",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Trip Users",
+			"item": [
+				{
+					"name": "Create TripUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+									"\r",
+									"var data = JSON.parse(responseBody);\r",
+									"\r",
+									"tests['Body contains TripUsers'] = data;\r",
+									"tests['Body contains 3 TripUsers'] = data.length === 3;\r",
+									"var firstTripUser = data[0];\r",
+									"\r",
+									"tests['TripUser 1 has Id'] = firstTripUser.Id;\r",
+									"tests['TripUser 1 has TripId'] = firstTripUser.TripId;\r",
+									"tests['TripUser 1 has UserId'] = firstTripUser.UserId;\r",
+									"tests['TripUser 1 has User'] = firstTripUser.User;\r",
+									"tests['TripUser 1 Role is 4'] = firstTripUser.Role === 4;\r",
+									"tests['TripUser 1 Name starts with readonly '] = firstTripUser.User.FullName.startsWith('readonly ');\r",
+									"tests['TripUser 1 Email starts with readonly+'] = firstTripUser.User.Username.startsWith('readonly+');\r",
+									"\r",
+									"var secondTripUser = data[1];\r",
+									"\r",
+									"tests['TripUser 2 has Id'] = secondTripUser.Id;\r",
+									"tests['TripUser 2 has TripId'] = secondTripUser.TripId;\r",
+									"tests['TripUser 2 has UserId'] = secondTripUser.UserId;\r",
+									"tests['TripUser 2 has User'] = secondTripUser.User;\r",
+									"tests['TripUser 2 Role is 4'] = secondTripUser.Role === 4;\r",
+									"tests['TripUser 2 Name starts with default '] = secondTripUser.User.FullName.startsWith('default ');\r",
+									"tests['TripUser 2 Email starts with default+'] = secondTripUser.User.Username.startsWith('default+');\r",
+									"\r",
+									"var thirdTripUser = data[2];\r",
+									"\r",
+									"tests['TripUser 3 has Id'] = thirdTripUser.Id;\r",
+									"tests['TripUser 3 has TripId'] = thirdTripUser.TripId;\r",
+									"tests['TripUser 3 has UserId'] = thirdTripUser.UserId;\r",
+									"tests['TripUser 3 has User'] = thirdTripUser.User;\r",
+									"tests['TripUser 3 Role is 3'] = thirdTripUser.Role === 3;\r",
+									"tests['TripUser 3 Name starts with collaborator '] = thirdTripUser.User.FullName.startsWith('collaborator ');\r",
+									"tests['TripUser 3 Email starts with collaborator+'] = thirdTripUser.User.Username.startsWith('collaborator+');\r",
+									"\r",
+									"postman.setEnvironmentVariable(\"trip-userId\", firstTripUser.Id);\r",
+									"postman.setEnvironmentVariable(\"trip-user-id2\", secondTripUser.Id);\r",
+									"postman.setEnvironmentVariable(\"trip-user-id3\", thirdTripUser.Id);\r",
+									""
+								],
+								"id": "1bdf3679-6c52-4a2c-9955-07504b97059b"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tripUsers\":[\n      {  \n        \"email\": \"readonly+{{$timestamp}}@example.com\",\n        \"fullName\": \"readonly {{$timestamp}}\",\n        \"role\": \"4\"\n      },\n      {  \n        \"email\": \"collaborator+{{$timestamp}}@example.com\",\n        \"fullName\": \"collaborator {{$timestamp}}\",\n        \"role\": \"3\"\n      },\n      {  \n        \"email\": \"default+{{$timestamp}}@example.com\",\n        \"fullName\": \"default {{$timestamp}}\",\n        \"role\": \"0\"\n      }\n    ]\n}\n",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}/tripUsers/invite",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}",
+								"tripUsers",
+								"invite"
+							]
+						},
+						"description": "Create (invite) 1 or more `TripUsers` to a `Trip`.  `FullName` and `UserName` (email) are required.\n\nCurrently, this will not send an invite email to them, so you will need to notify them to check their trips list if needed.\n\nNOTE: You cannot invite anyone in the `Organizer` Role.\n\nNOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.\n\n<!--### SAMPLE RESPONSE\n\n```[\n    {\n        \"Id\": 123,\n        \"TripId\": 12345,\n        \"UserId\": 67890,\n        \"Role\": 4,\n        \"User\": {\n            \"Id\": 67890,\n            \"FullName\": \"readonly 1500310460\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n            \"Username\": \"readonly+1500310460@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    },\n    {\n        \"Id\": 124,\n        \"TripId\": 12345,\n        \"UserId\": 67891,\n        \"Role\": 4,\n        \"User\": {\n            \"Id\": 67891,\n            \"FullName\": \"default 1500310460\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n            \"Username\": \"default+1500310460@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    },\n    {\n        \"Id\": 125,\n        \"TripId\": 12345,\n        \"UserId\": 67892,\n        \"Role\": 3,\n        \"User\": {\n            \"Id\": 67892,\n            \"FullName\": \"collaborator 1500310460\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-6.gif\",\n            \"Username\": \"collaborator+1500310460@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    }\n]```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Get TripUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Return TripUser'] = data.Id;",
+									"tests['TripUser Id matches'] = data.Id === parseInt(postman.getEnvironmentVariable(\"trip-userId\"));",
+									"tests['Return Role'] = data.Role;",
+									"tests['Return UserId'] = data.UserId;",
+									"tests['Return User'] = data.User;",
+									"tests['Return TripId'] = data.TripId === parseInt(postman.getEnvironmentVariable(\"tripId\"));",
+									""
+								],
+								"id": "2dda5d1a-af7f-41a1-92be-63a329e20ca4"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}/tripUsers/{{trip-userId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}",
+								"tripUsers",
+								"{{trip-userId}}"
+							]
+						},
+						"description": "Retreive a given `TripUser`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.\n\n<!--### SAMPLE RESPONSE\n\n```{\n    \"Id\": 123,\n    \"TripId\": 12345,\n    \"UserId\": 67890,\n    \"Role\": 4,\n    \"User\": {\n        \"Id\": 112233,\n        \"FullName\": \"readonly 1500310460\",\n        \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n        \"Username\": \"readonly+1500310460@example.com\",\n        \"IsAgent\": false,\n        \"SubscriptionPeriodEnd\": null,\n        \"AgentSubscriptionIsActive\": false,\n        \"Title\": null,\n        \"Phone\": null,\n        \"Url\": null,\n        \"CompanyLogoUrl\": null\n    }\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Get TripUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Return some TripUsers'] = data.length > 0; ",
+									"",
+									"var firstTripUser = data[0];",
+									"",
+									"tests['Return TripUser'] = firstTripUser.Id; ",
+									"tests['Return Role'] = firstTripUser.Role;",
+									"tests['Return UserId'] = firstTripUser.UserId;",
+									"tests['Return User'] = firstTripUser.User;",
+									"tests['Return TripId'] = firstTripUser.TripId === parseInt(postman.getEnvironmentVariable(\"tripId\"));",
+									"",
+									"postman.setEnvironmentVariable(\"organizer-trip-userId\", firstTripUser.Id);",
+									""
+								],
+								"id": "d48e27bc-a33d-4e59-8acb-77edbad81de1"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}/tripUsers",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}",
+								"tripUsers"
+							]
+						},
+						"description": "Retreive all `TripUsers` on a `Trip`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.\n\n<!--### SAMPLE RESPONSE\n\n```[\n    {\n        \"Id\": 123,\n        \"TripId\": 12345,\n        \"UserId\": 67890,\n        \"Role\": 1,\n        \"User\": {\n            \"Id\": 67890,\n            \"FullName\": \"Agent Level 1 User\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-4.gif\",\n            \"Username\": \"agent1.1500310214@example.com\",\n            \"IsAgent\": true,\n            \"SubscriptionPeriodEnd\": \"2019-10-10T00:00:00\",\n            \"AgentSubscriptionIsActive\": true,\n            \"Title\": \"Travel Expert\",\n            \"Phone\": \"555-555-1234\",\n            \"Url\": \"https://travefy.com/\",\n            \"CompanyLogoUrl\": \"https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg\"\n        }\n    },\n    {\n        \"Id\": 12346,\n        \"TripId\": 12345,\n        \"UserId\": 67891,\n        \"Role\": 4,\n        \"User\": {\n            \"Id\": 67891,\n            \"FullName\": \"Cameron Example\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-5.gif\",\n            \"Username\": \"cameron@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    },\n    {\n        \"Id\": 125,\n        \"TripId\": 12345,\n        \"UserId\": 67892,\n        \"Role\": 4,\n        \"User\": {\n            \"Id\": 67892,\n            \"FullName\": \"Default Example\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-5.gif\",\n            \"Username\": \"default@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    },\n    {\n        \"Id\": 126,\n        \"TripId\": 12345,\n        \"UserId\": 67893,\n        \"Role\": 3,\n        \"User\": {\n            \"Id\": 67893,\n            \"FullName\": \"Collaborator Example\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-9.gif\",\n            \"Username\": \"collaborator@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    },\n    {\n        \"Id\": 127,\n        \"TripId\": 12345,\n        \"UserId\": 67894,\n        \"Role\": 4,\n        \"User\": {\n            \"Id\": 67894,\n            \"FullName\": \"readonly 1500310460\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n            \"Username\": \"readonly+1500310460@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    },\n    {\n        \"Id\": 128,\n        \"TripId\": 12345,\n        \"UserId\": 67895,\n        \"Role\": 4,\n        \"User\": {\n            \"Id\": 67895,\n            \"FullName\": \"default 1500310460\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n            \"Username\": \"default+1500310460@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    },\n    {\n        \"Id\": 129,\n        \"TripId\": 12345,\n        \"UserId\": 67899,\n        \"Role\": 3,\n        \"User\": {\n            \"Id\": 67899,\n            \"FullName\": \"collaborator 1500310460\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-6.gif\",\n            \"Username\": \"collaborator+1500310460@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    }\n]```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Update TripUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "882963dc-26de-4c92-91b8-1480d2676f6d",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;\r",
+									"\r",
+									"var data = JSON.parse(responseBody);\r",
+									"\r",
+									"tests['TripUser Id matches'] = data.Id === parseInt(postman.getEnvironmentVariable(\"trip-userId\"));\r",
+									"tests['Return TripUser'] = data.Id; \r",
+									"tests['Return Role'] = data.Role;\r",
+									"tests['Return UserId'] = data.UserId;\r",
+									"tests['Return User'] = data.User;\r",
+									"tests['Return TripId'] = data.TripId === parseInt(postman.getEnvironmentVariable(\"tripId\"));\r",
+									"\r",
+									"tests['Role was updated to ReadOnly'] = data.Role === 4;\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\": 4\r\n}\r\n",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}/tripUsers/{{tripUserId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}",
+								"tripUsers",
+								"{{tripUserId}}"
+							]
+						},
+						"description": "Update the Role of a given `TripUser` on a `Trip`.\n\nNOTE: You cannot update anyone to the `Organizer` Role.  You cannot change the Role of an existing `Organizer`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.\n\n<!--### SAMPLE RESPONSE\n\n```{\n    \"Id\": 123,\n    \"TripId\": 12345,\n    \"UserId\": 67890,\n    \"Role\": 4,\n    \"User\": {\n        \"Id\": 67890,\n        \"FullName\": \"readonly 1500310460\",\n        \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n        \"Username\": \"readonly+1500310460@example.com\",\n        \"IsAgent\": false,\n        \"SubscriptionPeriodEnd\": null,\n        \"AgentSubscriptionIsActive\": false,\n        \"Title\": null,\n        \"Phone\": null,\n        \"Url\": null,\n        \"CompanyLogoUrl\": null\n    }\n}```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Update TripUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['Return some TripUsers'] = data.length > 0; ",
+									"",
+									"var firstTripUser = data[0];",
+									"",
+									"tests['Return first TripUser'] = firstTripUser.Id; ",
+									"tests['First TripUser Role Updated'] = firstTripUser.Role === 3;",
+									"",
+									"var secondTripUser = data[1];",
+									"",
+									"tests['Return second TripUser'] = secondTripUser.Id; ",
+									"tests['Second TripUser Role Updated'] = secondTripUser.Role === 2;",
+									""
+								],
+								"id": "34cac4fc-83d7-47ec-89ae-60777217a22c"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"tripUsers\":[\n    {  \n      \"id\": \"{{trip-userId}}\",\n      \"role\": \"3\"\n    },\n    {  \n      \"id\": \"{{trip-user-id2}}\",\n      \"role\": \"2\"\n    }\n  ]\n}\n",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}/tripUsers/update",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}",
+								"tripUsers",
+								"update"
+							]
+						},
+						"description": "Update the Roles of multiple `TripUsers` on a `Trip`.\n\nNOTE: You cannot update anyone to the `Organizer` Role.  You cannot change the Role of an existing `Organizer`.\n\nNOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.\n\n<!--### SAMPLE RESPONSE\n\n```[\n    {\n        \"Id\": 123,\n        \"TripId\": 12345,\n        \"UserId\": 67890,\n        \"Role\": 3,\n        \"User\": {\n            \"Id\": 67890,\n            \"FullName\": \"readonly 1500310460\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n            \"Username\": \"readonly+1500310460@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    },\n    {\n        \"Id\": 124,\n        \"TripId\": 12345,\n        \"UserId\": 67891,\n        \"Role\": 2,\n        \"User\": {\n            \"Id\": 67891,\n            \"FullName\": \"default 1500310460\",\n            \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n            \"Username\": \"default+1500310460@example.com\",\n            \"IsAgent\": false,\n            \"SubscriptionPeriodEnd\": null,\n            \"AgentSubscriptionIsActive\": false,\n            \"Title\": null,\n            \"Phone\": null,\n            \"Url\": null,\n            \"CompanyLogoUrl\": null\n        }\n    }\n]```-->"
+					},
+					"response": []
+				},
+				{
+					"name": "Remove TripUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd74e114-b603-4406-ad9d-7e26d11ada80",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;",
+									"",
+									"var data = JSON.parse(responseBody);",
+									"",
+									"tests['TripUser Id matches'] = data.Id === parseInt(postman.getEnvironmentVariable(\"trip-userId\"));",
+									"tests['Return TripUser'] = data.Id; ",
+									"tests['Return UserId'] = data.UserId;",
+									"tests['Return User'] = data.User;",
+									"tests['Return TripId'] = data.TripId === parseInt(postman.getEnvironmentVariable(\"tripId\"));",
+									"",
+									"tests[\"Role is Uninvited\"] = data.Role === 2;",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-USER-TOKEN",
+								"value": "{{user-access-token}}"
+							},
+							{
+								"key": "X-API-PUBLIC-KEY",
+								"value": "{{platformPublicKey}}"
+							},
+							{
+								"key": "X-TRIP-ID",
+								"value": "{{tripId}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {}
+							}
+						},
+						"url": {
+							"raw": "{{baseApiUrl}}/api/v1/trips/{{tripId}}/tripUsers/{{tripUserId}}",
+							"host": [
+								"{{baseApiUrl}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"trips",
+								"{{tripId}}",
+								"tripUsers",
+								"{{tripUserId}}"
+							]
+						},
+						"description": "Delete (uninvite) a given `TripUser` on a `Trip`.\n\nNOTE: You cannot remove anyone in the `Organizer` Role.\n\nNOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.\n\n<!--### SAMPLE RESPONSE\n\n```{\n    \"Id\": 123,\n    \"TripId\": 12345,\n    \"UserId\": 67890,\n    \"Role\": 2,\n    \"User\": {\n        \"Id\": 67890,\n        \"FullName\": \"readonly 1500310460\",\n        \"ImageUrl\": \"https://s3.amazonaws.com/travefy-storage/content/default-7.gif\",\n        \"Username\": \"readonly+1500310460@example.com\",\n        \"IsAgent\": false,\n        \"SubscriptionPeriodEnd\": null,\n        \"AgentSubscriptionIsActive\": false,\n        \"Title\": null,\n        \"Phone\": null,\n        \"Url\": null,\n        \"CompanyLogoUrl\": null\n    }\n}```-->"
+					},
+					"response": []
+				}
+			],
+			"description": "A `TripUser` represents a `User` on a `Trip`.  `TripUsers` can be invited to a trip and have different roles depending on your subscription level.  Here are the available Roles:\n\n| Role   |      Value      |  Notes |\n|----------|-------------|------|\n| Default |  `0` ( `null`) | Defaults to `ItineraryViewOnly` |\n| Organizer |  `1` | Has full control of the `Trip` and `TripUsers` on it |\n| Uninvited |  `2` | Cannot view or access the `Trip` |\n| Collaborator |  `3` | Can help build the itinerary and edit things on the itinerary, change `Trip` information, but can't cancel the `Trip` or invite others |\n| ItineraryViewOnly |  `4` | Can only view the shared itinerary and has no edit abilities |\n\nAvailable operations:\n- Invite 1 or more `TripUsers`\n- Retrieve a single `TripUser`\n- Retrieve all of the `TripUsers` for a `Trip`\n- Update the role of a single `TripUser`\n- Update the roles of multiple `TripUsers`\n- Remove a `TripUser` which moves them to the `Uninvited` Role\n\nNOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.  The `TripUser` endpoints use a slightly different URL structure than other `Trip` resources.  We will likely move to this type of structure in the future for all `Trip` resources.  We will version the API or allow the old style rather than making breaking changes to existing calls.\n",
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
