@@ -43,17 +43,6 @@ describe('Tests for generated sdk', () => {
     });
   });
 
-  it('should have property name as ["property_name"]', async () => {
-    await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
-      if (err) {
-        expect(err).to.be.null;
-      }
-      expect(snippet).to.be.a('string');
-      expect(snippet).to.include('this["POST_Raw_Text_Copy"]');
-      expect(snippet).to.include('"POST_Form_Data"');
-    });
-  });
-
   it('should not contain any undefined description', async () => {
     await generate(COLLECTION_INSTANCE, {}, (err, snippet) => {
       if (err) {
