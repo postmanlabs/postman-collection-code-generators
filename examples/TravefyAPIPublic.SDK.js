@@ -189,31 +189,6 @@ function SDK(config = {}) {
 
     Note: if the `User` already has an account on Travefy, they&#39;ll need to authorize your Platform on their account.  Send them to https://{{your-travefy-platform-url}}/account/authorize and they can approve access.  You can then retrieve their tokens via the Get Users call. 
 
-    &lt;!--
-    ### Sample Response
-    ```
-    {
-      &quot;User&quot;: {
-        &quot;Id&quot;: 1234,
-        &quot;FullName&quot;: &quot;Agent Level 1 User&quot;,
-        &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-4.gif&quot;,
-        &quot;Username&quot;: &quot;agent1.1491421454@example.com&quot;,
-        &quot;IsAgent&quot;: true,
-        &quot;SubscriptionPeriodEnd&quot;: &quot;2019-10-10T00:00:00&quot;,
-        &quot;AgentSubscriptionIsActive&quot;: true,
-        &quot;Title&quot;: &quot;Travel Expert&quot;,
-        &quot;Phone&quot;: &quot;555-555-1234&quot;,
-        &quot;Url&quot;: &quot;https://travefy.com/&quot;,
-        &quot;CompanyLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-      },
-      &quot;AccessToken&quot;: &quot;xxxxxxxxxxxx&quot;,
-      &quot;PublicKey&quot;: &quot;xxxxxxxxxxxx&quot;,
-      &quot;AgentSubscriptionLevel&quot;: 1,
-      &quot;IsActive&quot;: true,
-      &quot;CreatedOn&quot;: &quot;2017-04-05T19:44:13.4028771Z&quot;
-    }
-    ```
-    --&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.platformPrivateKey
@@ -257,30 +232,6 @@ function SDK(config = {}) {
     /**
     Get a `User` from the Travefy platform by their `Id`.
 
-    &lt;!--
-    ### Sample Response
-    ```
-    {
-        &quot;User&quot;: {
-            &quot;Id&quot;: 1234,
-            &quot;FullName&quot;: &quot;Agent Level 1 User&quot;,
-            &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-4.gif&quot;,
-            &quot;Username&quot;: &quot;agent1.1491422490@example.com&quot;,
-            &quot;IsAgent&quot;: true,
-            &quot;SubscriptionPeriodEnd&quot;: &quot;2019-10-10T00:00:00&quot;,
-            &quot;AgentSubscriptionIsActive&quot;: true,
-            &quot;Title&quot;: &quot;Travel Expert&quot;,
-            &quot;Phone&quot;: &quot;555-555-1234&quot;,
-            &quot;Url&quot;: &quot;https://travefy.com/&quot;,
-            &quot;CompanyLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-        },
-        &quot;AccessToken&quot;: &quot;xxxxxxxxxxxx&quot;,
-        &quot;PublicKey&quot;: &quot;xxxxxxxxxxxx&quot;,
-        &quot;AgentSubscriptionLevel&quot;: 1,
-        &quot;IsActive&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:01:27.25&quot;
-    }```
-    --&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.userId
@@ -312,30 +263,6 @@ function SDK(config = {}) {
     /**
     Update a User.  Currently, this will update Username (email), FullName, and ImageUrl.
 
-    &lt;!--
-    ### Sample Response
-    ```
-    {
-        &quot;User&quot;: {
-            &quot;Id&quot;: 1234,
-            &quot;FullName&quot;: &quot;nate test agent2&quot;,
-            &quot;ImageUrl&quot;: null,
-            &quot;Username&quot;: &quot;nate+agent1-1491422734-updated@example.com&quot;,
-            &quot;IsAgent&quot;: true,
-            &quot;SubscriptionPeriodEnd&quot;: &quot;2019-10-10T00:00:00&quot;,
-            &quot;AgentSubscriptionIsActive&quot;: true,
-            &quot;Title&quot;: &quot;Travel Expert&quot;,
-            &quot;Phone&quot;: &quot;555-555-1234&quot;,
-            &quot;Url&quot;: &quot;https://travefy.com/&quot;,
-            &quot;CompanyLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-        },
-        &quot;AccessToken&quot;: &quot;xxxxxxxxxxxx&quot;,
-        &quot;PublicKey&quot;: &quot;xxxxxxxxxxxx&quot;,
-        &quot;AgentSubscriptionLevel&quot;: 1,
-        &quot;IsActive&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:01:27.25&quot;
-    }```
-    --&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.userId
@@ -375,50 +302,6 @@ function SDK(config = {}) {
     /**
     Get all Users that your platform has access to.
 
-    &lt;!--
-    ### Sample Response
-    ```[
-      {
-        &quot;User&quot;: {
-          &quot;Id&quot;: 1234,
-          &quot;FullName&quot;: &quot;nate not agent from api!&quot;,
-          &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-pro.png&quot;,
-          &quot;Username&quot;: &quot;nate+notagentfromapi1455044172@example.com&quot;,
-          &quot;IsAgent&quot;: false,
-          &quot;SubscriptionPeriodEnd&quot;: null,
-          &quot;AgentSubscriptionIsActive&quot;: false,
-          &quot;Title&quot;: null,
-          &quot;Phone&quot;: null,
-          &quot;Url&quot;: null,
-          &quot;CompanyLogoUrl&quot;: null
-        },
-        &quot;AccessToken&quot;: &quot;xxxxxxxxxxxx&quot;,
-        &quot;PublicKey&quot;: &quot;xxxxxxxxxxxx&quot;,
-        &quot;AgentSubscriptionLevel&quot;: null,
-        &quot;IsActive&quot;: true,
-        &quot;CreatedOn&quot;: &quot;0001-01-01T00:00:00&quot;
-      },
-      {
-        &quot;User&quot;: {
-          &quot;Id&quot;: 1235,
-          &quot;FullName&quot;: &quot;nate agent from api!&quot;,
-          &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-pro.png&quot;,
-          &quot;Username&quot;: &quot;nate+notagentfromapi1455045001@example.com&quot;,
-          &quot;IsAgent&quot;: true,
-          &quot;SubscriptionPeriodEnd&quot;: 2019-10-10T00:00:00,
-          &quot;AgentSubscriptionIsActive&quot;: true,
-          &quot;Title&quot;: Travel Expert,
-          &quot;Phone&quot;: 555-555-1234,
-          &quot;Url&quot;: &quot;https://travefy.com&quot;,
-          &quot;CompanyLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-        },
-        &quot;AccessToken&quot;: &quot;xxxxxxxxxxxx&quot;,
-        &quot;PublicKey&quot;: &quot;xxxxxxxxxxxx&quot;,
-        &quot;AgentSubscriptionLevel&quot;: 1,
-        &quot;IsActive&quot;: true,
-        &quot;CreatedOn&quot;: &quot;0001-01-01T00:00:00&quot;
-      },...```
-      --&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.platformPrivateKey
@@ -460,20 +343,6 @@ function SDK(config = {}) {
     /**
     Create an empty `Trip` on the Travefy platform.
 
-    &lt;!--### Sample Response
-    ```{
-      &quot;Id&quot;: 1234,
-      &quot;VerificationKey&quot;: xxxxxxxxxxxx,
-      &quot;Name&quot;: &quot;Trip 1491423330&quot;,
-      &quot;Active&quot;: true,
-      &quot;CreatedOn&quot;: &quot;2017-04-05T20:15:26.5392324Z&quot;,
-      &quot;InviteMessage&quot;: &quot;Welcome to the trip!&quot;,
-      &quot;TripCoverPhotoUrl&quot;: &quot;http://lorempixel.com/640/480/city&quot;,
-      &quot;EstimatedCost&quot;: &quot;$1,234&quot;,
-      &quot;IsCostPerPerson&quot;: true,
-      &quot;TripDays&quot;: null,
-      &quot;SecondaryLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.platformPublicKey
@@ -513,77 +382,6 @@ function SDK(config = {}) {
     /**
     Create a `Trip` on the Travefy platform with a full itinerary (`TripDays` and `TripEvents`).
 
-    &lt;!--### Sample Response
-    ```
-    {
-        &quot;Id&quot;: 1234,
-        &quot;VerificationKey&quot;: xxxxxxxxxxxx,
-        &quot;Name&quot;: &quot;Trip 1491423686&quot;,
-        &quot;Active&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.4826361Z&quot;,
-        &quot;InviteMessage&quot;: &quot;Welcome to your trip!&quot;,
-        &quot;TripCoverPhotoUrl&quot;: &quot;http://lorempixel.com/400/200/cats/&quot;,
-        &quot;EstimatedCost&quot;: $1,234,
-        &quot;IsCostPerPerson&quot;: true,
-        &quot;TripDays&quot;: [
-            {
-                &quot;Id&quot;: 12345,
-                &quot;TripId&quot;: 1234,
-                &quot;Title&quot;: &quot;Trip Day 1491423686&quot;,
-                &quot;Date&quot;: &quot;2017-01-27T00:00:00&quot;,
-                &quot;Ordinal&quot;: 0.5,
-                &quot;IsActive&quot;: true,
-                &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.5138857Z&quot;,
-                &quot;TripEvents&quot;: [
-                    {
-                        &quot;Id&quot;: 123456,
-                        &quot;TripDayId&quot;: 12345,
-                        &quot;IsActive&quot;: true,
-                        &quot;SegmentProviderName&quot;: &quot;Lincoln Grand Hotel&quot;,
-                        &quot;SegmentProviderPhone&quot;: &quot;555-867-5309&quot;,
-                        &quot;SegmentProviderUrl&quot;: &quot;https://lincolngrandhotel.com&quot;,
-                        &quot;SegmentIdentifier&quot;: &quot;YP02XVDB&quot;,
-                        &quot;Ordinal&quot;: 0.5,
-                        &quot;Name&quot;: &quot;Trip Event 1491423686&quot;,
-                        &quot;Description&quot;: &quot;Former hotel in Lincoln Nebraska&quot;,
-                        &quot;StartTimeZoneId&quot;: null,
-                        &quot;StartTimeInMinutes&quot;: null,
-                        &quot;DurationInMinutes&quot;: null,
-                        &quot;StartTerminal&quot;: null,
-                        &quot;StartGate&quot;: null,
-                        &quot;EndTerminal&quot;: null,
-                        &quot;EndGate&quot;: null,
-                        &quot;PriceInCents&quot;: 12345,
-                        &quot;CurrencyCode&quot;: &quot;USD&quot;,
-                        &quot;TransportationIdentifier&quot;: null,
-                        &quot;EventType&quot;: 1,
-                        &quot;IsEndingEvent&quot;: true,
-                        &quot;IsArrival&quot;: false,
-                        &quot;TripIdeas&quot;: [
-                            {
-                                &quot;Id&quot;: 654,
-                                &quot;TripEventId&quot;: 123456,
-                                &quot;Name&quot;: &quot;My Place&quot;,
-                                &quot;ImageUrl&quot;: &quot;http://lorempixel.com/400/200/cats&quot;,
-                                &quot;Url&quot;: &quot;https://example.com&quot;,
-                                &quot;Description&quot;: &quot;A great place to visit!&quot;,
-                                &quot;Latitude&quot;: 34.0784796,
-                                &quot;Longitude&quot;: -107.6184694,
-                                &quot;Address&quot;: &quot;123 W Main St&quot;,
-                                &quot;City&quot;: &quot;Citytown&quot;,
-                                &quot;State&quot;: &quot;NM&quot;,
-                                &quot;ZipCode&quot;: &quot;54321&quot;,
-                                &quot;Phone&quot;: 555-555-1234,
-                                &quot;Country&quot;: &quot;US&quot;,
-                                &quot;IsActive&quot;: true
-                            }
-                        ],
-                    }
-                ],
-            }
-        ],
-        &quot;SecondaryLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.platformPublicKey
@@ -649,77 +447,6 @@ function SDK(config = {}) {
     /**
     Get a `Trip` from the Travefy platform.
 
-    &lt;!--### Sample Response
-    ```
-    {
-        &quot;Id&quot;: 1234,
-        &quot;VerificationKey&quot;: xxxxxxxxxxxx,
-        &quot;Name&quot;: &quot;Trip 1491423686&quot;,
-        &quot;Active&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.4826361Z&quot;,
-        &quot;InviteMessage&quot;: &quot;Welcome to your trip!&quot;,
-        &quot;TripCoverPhotoUrl&quot;: &quot;http://lorempixel.com/400/200/cats/&quot;,
-        &quot;EstimatedCost&quot;: $1,234,
-        &quot;IsCostPerPerson&quot;: true,
-        &quot;TripDays&quot;: [
-            {
-                &quot;Id&quot;: 12345,
-                &quot;TripId&quot;: 1234,
-                &quot;Title&quot;: &quot;Trip Day 1491423686&quot;,
-                &quot;Date&quot;: &quot;2017-01-27T00:00:00&quot;,
-                &quot;Ordinal&quot;: 0.5,
-                &quot;IsActive&quot;: true,
-                &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.5138857Z&quot;,
-                &quot;TripEvents&quot;: [
-                    {
-                        &quot;Id&quot;: 123456,
-                        &quot;TripDayId&quot;: 12345,
-                        &quot;IsActive&quot;: true,
-                        &quot;SegmentProviderName&quot;: &quot;Lincoln Grand Hotel&quot;,
-                        &quot;SegmentProviderPhone&quot;: &quot;555-867-5309&quot;,
-                        &quot;SegmentProviderUrl&quot;: &quot;https://lincolngrandhotel.com&quot;,
-                        &quot;SegmentIdentifier&quot;: &quot;YP02XVDB&quot;,
-                        &quot;Ordinal&quot;: 0.5,
-                        &quot;Name&quot;: &quot;Trip Event 1491423686&quot;,
-                        &quot;Description&quot;: &quot;Former hotel in Lincoln Nebraska&quot;,
-                        &quot;StartTimeZoneId&quot;: null,
-                        &quot;StartTimeInMinutes&quot;: null,
-                        &quot;DurationInMinutes&quot;: null,
-                        &quot;StartTerminal&quot;: null,
-                        &quot;StartGate&quot;: null,
-                        &quot;EndTerminal&quot;: null,
-                        &quot;EndGate&quot;: null,
-                        &quot;PriceInCents&quot;: 12345,
-                        &quot;CurrencyCode&quot;: &quot;USD&quot;,
-                        &quot;TransportationIdentifier&quot;: null,
-                        &quot;EventType&quot;: 1,
-                        &quot;IsEndingEvent&quot;: true,
-                        &quot;IsArrival&quot;: false,
-                        &quot;TripIdeas&quot;: [
-                            {
-                                &quot;Id&quot;: 654,
-                                &quot;TripEventId&quot;: 123456,
-                                &quot;Name&quot;: &quot;My Place&quot;,
-                                &quot;ImageUrl&quot;: &quot;http://lorempixel.com/400/200/cats&quot;,
-                                &quot;Url&quot;: &quot;https://example.com&quot;,
-                                &quot;Description&quot;: &quot;A great place to visit!&quot;,
-                                &quot;Latitude&quot;: 34.0784796,
-                                &quot;Longitude&quot;: -107.6184694,
-                                &quot;Address&quot;: &quot;123 W Main St&quot;,
-                                &quot;City&quot;: &quot;Citytown&quot;,
-                                &quot;State&quot;: &quot;NM&quot;,
-                                &quot;ZipCode&quot;: &quot;54321&quot;,
-                                &quot;Phone&quot;: 555-555-1234,
-                                &quot;Country&quot;: &quot;US&quot;,
-                                &quot;IsActive&quot;: true
-                            }
-                        ],
-                    }
-                ],
-            }
-        ],
-        &quot;SecondaryLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
@@ -777,37 +504,6 @@ function SDK(config = {}) {
     /**
     Get every `Trip` created by your platform for the given `User`.
 
-    &lt;!--### Sample Response
-
-    ```
-    [
-      {
-        &quot;Id&quot;: 10002,
-        &quot;VerificationKey&quot;: xxxxxxxxxxxx,
-        &quot;Name&quot;: &quot;Trip 1491423686&quot;,
-        &quot;Active&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.4826361Z&quot;,
-        &quot;InviteMessage&quot;: &quot;Welcome to your trip!&quot;,
-        &quot;TripCoverPhotoUrl&quot;: &quot;http://lorempixel.com/400/200/cats/&quot;,
-        &quot;EstimatedCost&quot;: null,
-        &quot;IsCostPerPerson&quot;: null,
-        &quot;TripDays&quot;: null,
-        &quot;SecondaryLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-      },
-      {
-        &quot;Id&quot;: 10001,
-        &quot;VerificationKey&quot;: xxxxxxxxxxxx,
-        &quot;Name&quot;: &quot;Trip 1491423330&quot;,
-        &quot;Active&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:15:26.54&quot;,
-        &quot;InviteMessage&quot;: &quot;Welcome to the trip!&quot;,
-        &quot;TripCoverPhotoUrl&quot;: &quot;http://lorempixel.com/640/480/city&quot;,
-        &quot;EstimatedCost&quot;: &quot;$1,234&quot;,
-        &quot;IsCostPerPerson&quot;: true,
-        &quot;TripDays&quot;: null,
-        &quot;SecondaryLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-      }
-    ]```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.platformPublicKey
@@ -837,77 +533,6 @@ function SDK(config = {}) {
 
     If you pass up _any_ `TripDays`, the entire trip itinerary information will be replaced.  Chat messages and saved `TripIdeas` will be maintained, but all `TripDays`, `TripEvents`, and `TripIdeas` on `TripEvents` will be replaced.
 
-    &lt;!--### Sample Response
-    ```
-    {
-        &quot;Id&quot;: 1234,
-        &quot;VerificationKey&quot;: xxxxxxxxxxxx,
-        &quot;Name&quot;: &quot;Updated 1491423686&quot;,
-        &quot;Active&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.4826361Z&quot;,
-        &quot;InviteMessage&quot;: &quot;Welcome to your trip!&quot;,
-        &quot;TripCoverPhotoUrl&quot;: &quot;http://lorempixel.com/400/200/cats/&quot;,
-        &quot;EstimatedCost&quot;: $1,234,
-        &quot;IsCostPerPerson&quot;: true,
-        &quot;TripDays&quot;: [
-            {
-                &quot;Id&quot;: 12345,
-                &quot;TripId&quot;: 1234,
-                &quot;Title&quot;: &quot;Updated 1491423686&quot;,
-                &quot;Date&quot;: &quot;2017-03-21T00:00:00&quot;,
-                &quot;Ordinal&quot;: 0.5,
-                &quot;IsActive&quot;: true,
-                &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.5138857Z&quot;,
-                &quot;TripEvents&quot;: [
-                    {
-                        &quot;Id&quot;: 123456,
-                        &quot;TripDayId&quot;: 12345,
-                        &quot;IsActive&quot;: true,
-                        &quot;SegmentProviderName&quot;: &quot;Lincoln Grand Hotel&quot;,
-                        &quot;SegmentProviderPhone&quot;: &quot;555-867-5309&quot;,
-                        &quot;SegmentProviderUrl&quot;: &quot;https://lincolngrandhotel.com&quot;,
-                        &quot;SegmentIdentifier&quot;: &quot;YP02XVDB&quot;,
-                        &quot;Ordinal&quot;: 0.5,
-                        &quot;Name&quot;: &quot;Updated 1491423686&quot;,
-                        &quot;Description&quot;: &quot;Former hotel in Lincoln Nebraska&quot;,
-                        &quot;StartTimeZoneId&quot;: null,
-                        &quot;StartTimeInMinutes&quot;: null,
-                        &quot;DurationInMinutes&quot;: null,
-                        &quot;StartTerminal&quot;: null,
-                        &quot;StartGate&quot;: null,
-                        &quot;EndTerminal&quot;: null,
-                        &quot;EndGate&quot;: null,
-                        &quot;PriceInCents&quot;: 13579,
-                        &quot;CurrencyCode&quot;: &quot;USD&quot;,
-                        &quot;TransportationIdentifier&quot;: null,
-                        &quot;EventType&quot;: 1,
-                        &quot;IsEndingEvent&quot;: true,
-                        &quot;IsArrival&quot;: false,
-                        &quot;TripIdeas&quot;: [
-                            {
-                                &quot;Id&quot;: 654,
-                                &quot;TripEventId&quot;: 123456,
-                                &quot;Name&quot;: &quot;My New Place&quot;,
-                                &quot;ImageUrl&quot;: &quot;http://lorempixel.com/400/200/cats&quot;,
-                                &quot;Url&quot;: &quot;https://example.com&quot;,
-                                &quot;Description&quot;: &quot;A great place to visit!&quot;,
-                                &quot;Latitude&quot;: 34.0784796,
-                                &quot;Longitude&quot;: -107.6184694,
-                                &quot;Address&quot;: &quot;123 W Main St&quot;,
-                                &quot;City&quot;: &quot;Citytown&quot;,
-                                &quot;State&quot;: &quot;NM&quot;,
-                                &quot;ZipCode&quot;: &quot;54321&quot;,
-                                &quot;Phone&quot;: 555-555-1234,
-                                &quot;Country&quot;: &quot;US&quot;,
-                                &quot;IsActive&quot;: true
-                            }
-                        ],
-                    }
-                ],
-            }
-        ],
-        &quot;SecondaryLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
@@ -971,21 +596,6 @@ function SDK(config = {}) {
     /**
     Archives the `Trip`.
 
-    &lt;!--### Sample Response
-    ```
-    {
-        &quot;Id&quot;: 1234,
-        &quot;VerificationKey&quot;: xxxxxxxxxxxx,
-        &quot;Name&quot;: &quot;Updated 1491423686&quot;,
-        &quot;Active&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.4826361Z&quot;,
-        &quot;InviteMessage&quot;: &quot;Welcome to your trip!&quot;,
-        &quot;TripCoverPhotoUrl&quot;: &quot;http://lorempixel.com/400/200/cats/&quot;,
-        &quot;EstimatedCost&quot;: $1,234,
-        &quot;IsCostPerPerson&quot;: true,
-        &quot;SecondaryLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;,
-        &quot;IsArchived&quot;: true
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
@@ -1026,19 +636,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.
 
-    &lt;!--### Sample Response
-
-    ```
-    {
-      &quot;Id&quot;: 654321,
-      &quot;TripId&quot;: 10002,
-      &quot;Title&quot;: &quot;Trip Day 1491424870&quot;,
-      &quot;Date&quot;: &quot;2017-01-15T00:00:00&quot;,
-      &quot;Ordinal&quot;: 0.75,
-      &quot;IsActive&quot;: true,
-      &quot;CreatedOn&quot;: &quot;2017-04-05T20:41:07.0284278Z&quot;,
-      &quot;TripEvents&quot;: null
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.platformPublicKey
@@ -1078,31 +675,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.
 
-    &lt;!--### Sample Response
-
-    ```
-    [
-      {
-        &quot;Id&quot;: 654321,
-        &quot;TripId&quot;: 10002,
-        &quot;Title&quot;: &quot;Updated 1491424553&quot;,
-        &quot;Date&quot;: &quot;2016-03-21T00:00:00&quot;,
-        &quot;Ordinal&quot;: 0.5,
-        &quot;IsActive&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:21:22.513&quot;,
-        &quot;TripEvents&quot;: null
-      },
-      {
-        &quot;Id&quot;: 543210,
-        &quot;TripId&quot;: 10002,
-        &quot;Title&quot;: &quot;Trip Day 1491424870&quot;,
-        &quot;Date&quot;: &quot;2017-01-15T00:00:00&quot;,
-        &quot;Ordinal&quot;: 0.75,
-        &quot;IsActive&quot;: true,
-        &quot;CreatedOn&quot;: &quot;2017-04-05T20:41:07.0284278Z&quot;,
-        &quot;TripEvents&quot;: null
-      }
-    ]```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.platformPublicKey
@@ -1135,19 +707,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.
 
-    &lt;!--### Sample Response
-
-    ```
-    {
-      &quot;Id&quot;: 654321,
-      &quot;TripId&quot;: 10002,
-      &quot;Title&quot;: &quot;Trip Day 1491424870&quot;,
-      &quot;Date&quot;: &quot;2017-01-15T00:00:00&quot;,
-      &quot;Ordinal&quot;: 0.75,
-      &quot;IsActive&quot;: true,
-      &quot;CreatedOn&quot;: &quot;2017-04-05T20:41:07.0284278Z&quot;,
-      &quot;TripEvents&quot;: null
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripDayId
@@ -1182,19 +741,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.
 
-    &lt;!--### Sample Response
-
-    ```
-    {
-      &quot;Id&quot;: 654321,
-      &quot;TripId&quot;: 10002,
-      &quot;Title&quot;: &quot;Updated Trip Day 1491425270&quot;,
-      &quot;Date&quot;: &quot;2016-02-15T00:00:00&quot;,
-      &quot;Ordinal&quot;: 0.25,
-      &quot;IsActive&quot;: true,
-      &quot;CreatedOn&quot;: &quot;2017-04-05T20:41:07.027&quot;,
-      &quot;TripEvents&quot;: null
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripDayId
@@ -1237,19 +783,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the  `TripId` from the created `Trip`.
 
-    &lt;!--### Sample Response
-
-    ```
-    {
-      &quot;Id&quot;: 654321,
-      &quot;TripId&quot;: 10002,
-      &quot;Title&quot;: &quot;Updated Trip Day 1491425270&quot;,
-      &quot;Date&quot;: &quot;2016-02-15T00:00:00&quot;,
-      &quot;Ordinal&quot;: 0.25,
-      &quot;IsActive&quot;: false,
-      &quot;CreatedOn&quot;: &quot;2017-04-05T20:41:07.027&quot;,
-      &quot;TripEvents&quot;: null
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripDayId
@@ -1313,67 +846,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.
 
-    &lt;!--### SAMPLE RESPONSE
-
-    ```[
-        {
-            &quot;Id&quot;: 123,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67890,
-            &quot;Role&quot;: 4,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67890,
-                &quot;FullName&quot;: &quot;readonly 1500310460&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-                &quot;Username&quot;: &quot;readonly+1500310460@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        },
-        {
-            &quot;Id&quot;: 124,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67891,
-            &quot;Role&quot;: 4,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67891,
-                &quot;FullName&quot;: &quot;default 1500310460&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-                &quot;Username&quot;: &quot;default+1500310460@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        },
-        {
-            &quot;Id&quot;: 125,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67892,
-            &quot;Role&quot;: 3,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67892,
-                &quot;FullName&quot;: &quot;collaborator 1500310460&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-6.gif&quot;,
-                &quot;Username&quot;: &quot;collaborator+1500310460@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        }
-    ]```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
@@ -1423,27 +895,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.
 
-    &lt;!--### SAMPLE RESPONSE
-
-    ```{
-        &quot;Id&quot;: 123,
-        &quot;TripId&quot;: 12345,
-        &quot;UserId&quot;: 67890,
-        &quot;Role&quot;: 4,
-        &quot;User&quot;: {
-            &quot;Id&quot;: 112233,
-            &quot;FullName&quot;: &quot;readonly 1500310460&quot;,
-            &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-            &quot;Username&quot;: &quot;readonly+1500310460@example.com&quot;,
-            &quot;IsAgent&quot;: false,
-            &quot;SubscriptionPeriodEnd&quot;: null,
-            &quot;AgentSubscriptionIsActive&quot;: false,
-            &quot;Title&quot;: null,
-            &quot;Phone&quot;: null,
-            &quot;Url&quot;: null,
-            &quot;CompanyLogoUrl&quot;: null
-        }
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
@@ -1476,143 +927,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.
 
-    &lt;!--### SAMPLE RESPONSE
-
-    ```[
-        {
-            &quot;Id&quot;: 123,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67890,
-            &quot;Role&quot;: 1,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67890,
-                &quot;FullName&quot;: &quot;Agent Level 1 User&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-4.gif&quot;,
-                &quot;Username&quot;: &quot;agent1.1500310214@example.com&quot;,
-                &quot;IsAgent&quot;: true,
-                &quot;SubscriptionPeriodEnd&quot;: &quot;2019-10-10T00:00:00&quot;,
-                &quot;AgentSubscriptionIsActive&quot;: true,
-                &quot;Title&quot;: &quot;Travel Expert&quot;,
-                &quot;Phone&quot;: &quot;555-555-1234&quot;,
-                &quot;Url&quot;: &quot;https://travefy.com/&quot;,
-                &quot;CompanyLogoUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/link-content/companyLogo/13551d3417bd481883931d9d8ff054aa.jpg&quot;
-            }
-        },
-        {
-            &quot;Id&quot;: 12346,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67891,
-            &quot;Role&quot;: 4,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67891,
-                &quot;FullName&quot;: &quot;Cameron Example&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-5.gif&quot;,
-                &quot;Username&quot;: &quot;cameron@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        },
-        {
-            &quot;Id&quot;: 125,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67892,
-            &quot;Role&quot;: 4,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67892,
-                &quot;FullName&quot;: &quot;Default Example&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-5.gif&quot;,
-                &quot;Username&quot;: &quot;default@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        },
-        {
-            &quot;Id&quot;: 126,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67893,
-            &quot;Role&quot;: 3,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67893,
-                &quot;FullName&quot;: &quot;Collaborator Example&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-9.gif&quot;,
-                &quot;Username&quot;: &quot;collaborator@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        },
-        {
-            &quot;Id&quot;: 127,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67894,
-            &quot;Role&quot;: 4,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67894,
-                &quot;FullName&quot;: &quot;readonly 1500310460&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-                &quot;Username&quot;: &quot;readonly+1500310460@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        },
-        {
-            &quot;Id&quot;: 128,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67895,
-            &quot;Role&quot;: 4,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67895,
-                &quot;FullName&quot;: &quot;default 1500310460&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-                &quot;Username&quot;: &quot;default+1500310460@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        },
-        {
-            &quot;Id&quot;: 129,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67899,
-            &quot;Role&quot;: 3,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67899,
-                &quot;FullName&quot;: &quot;collaborator 1500310460&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-6.gif&quot;,
-                &quot;Username&quot;: &quot;collaborator+1500310460@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        }
-    ]```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
@@ -1647,27 +961,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.
 
-    &lt;!--### SAMPLE RESPONSE
-
-    ```{
-        &quot;Id&quot;: 123,
-        &quot;TripId&quot;: 12345,
-        &quot;UserId&quot;: 67890,
-        &quot;Role&quot;: 4,
-        &quot;User&quot;: {
-            &quot;Id&quot;: 67890,
-            &quot;FullName&quot;: &quot;readonly 1500310460&quot;,
-            &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-            &quot;Username&quot;: &quot;readonly+1500310460@example.com&quot;,
-            &quot;IsAgent&quot;: false,
-            &quot;SubscriptionPeriodEnd&quot;: null,
-            &quot;AgentSubscriptionIsActive&quot;: false,
-            &quot;Title&quot;: null,
-            &quot;Phone&quot;: null,
-            &quot;Url&quot;: null,
-            &quot;CompanyLogoUrl&quot;: null
-        }
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
@@ -1709,48 +1002,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.
 
-    &lt;!--### SAMPLE RESPONSE
-
-    ```[
-        {
-            &quot;Id&quot;: 123,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67890,
-            &quot;Role&quot;: 3,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67890,
-                &quot;FullName&quot;: &quot;readonly 1500310460&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-                &quot;Username&quot;: &quot;readonly+1500310460@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        },
-        {
-            &quot;Id&quot;: 124,
-            &quot;TripId&quot;: 12345,
-            &quot;UserId&quot;: 67891,
-            &quot;Role&quot;: 2,
-            &quot;User&quot;: {
-                &quot;Id&quot;: 67891,
-                &quot;FullName&quot;: &quot;default 1500310460&quot;,
-                &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-                &quot;Username&quot;: &quot;default+1500310460@example.com&quot;,
-                &quot;IsAgent&quot;: false,
-                &quot;SubscriptionPeriodEnd&quot;: null,
-                &quot;AgentSubscriptionIsActive&quot;: false,
-                &quot;Title&quot;: null,
-                &quot;Phone&quot;: null,
-                &quot;Url&quot;: null,
-                &quot;CompanyLogoUrl&quot;: null
-            }
-        }
-    ]```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
@@ -1796,27 +1047,6 @@ function SDK(config = {}) {
 
     NOTE: You must supply the `X-TRIP-ID` header with the `TripId` from the created `Trip` and it must match the `tripId` in the URI.
 
-    &lt;!--### SAMPLE RESPONSE
-
-    ```{
-        &quot;Id&quot;: 123,
-        &quot;TripId&quot;: 12345,
-        &quot;UserId&quot;: 67890,
-        &quot;Role&quot;: 2,
-        &quot;User&quot;: {
-            &quot;Id&quot;: 67890,
-            &quot;FullName&quot;: &quot;readonly 1500310460&quot;,
-            &quot;ImageUrl&quot;: &quot;https://s3.amazonaws.com/travefy-storage/content/default-7.gif&quot;,
-            &quot;Username&quot;: &quot;readonly+1500310460@example.com&quot;,
-            &quot;IsAgent&quot;: false,
-            &quot;SubscriptionPeriodEnd&quot;: null,
-            &quot;AgentSubscriptionIsActive&quot;: false,
-            &quot;Title&quot;: null,
-            &quot;Phone&quot;: null,
-            &quot;Url&quot;: null,
-            &quot;CompanyLogoUrl&quot;: null
-        }
-    }```--&gt;
     @param {object} variables - Variables used for this request
     @param {String} variables.baseApiUrl
     @param {String} variables.tripId
