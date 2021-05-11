@@ -46,7 +46,7 @@
     "eslint-plugin-lodash": "^7.1.0",
     "eslint-plugin-security": "^1.4.0",
     "istanbul": "^0.4.5",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "mocha": "^7.2.0",
     "nyc": "^15.1.0",
     "pretty-ms": "^7.0.0",
